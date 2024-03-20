@@ -23,6 +23,14 @@ namespace {
     struct CryptoContextImplHolder{
            std::shared_ptr<CryptoContextImpl<DCRTPoly>> ptr;
     };
+
+    struct PubkeyHolder{
+           std::shared_ptr<PublicKeyImpl<DCRTPoly>> ptr;
+    };
+
+    struct PrivkeyHolder{
+           std::shared_ptr<PrivateKeyImpl<DCRTPoly>> ptr;
+    };
 }
 
 FFIParams::FFIParams(){
@@ -1204,16 +1212,44 @@ void FFICryptoContextImpl::Enable(FFIPKESchemeFeature feature) {
     
 // }
 
+FFIPublicKeyImpl::FFIPublicKeyImpl(){
+    pubkey_ptr = reinterpret_cast<void*>(
+        new PubkeyHolder{std::make_shared<PublicKeyImpl<DCRTPoly>>()});
+}
+
+void FFIPublicKeyImpl::SetKeyTag(const std::string& tag){
+    std::shared_ptr<PublicKeyImpl<DCRTPoly>> pubkey =
+        reinterpret_cast<PubkeyHolder*>(pubkey_ptr)->ptr;
+    pubkey->SetKeyTag(tag);
+}
+
+const std::string FFIPublicKeyImpl::GetKeyTag() const{
+    std::shared_ptr<const PublicKeyImpl<DCRTPoly>> pubkey =
+        reinterpret_cast<PubkeyHolder*>(pubkey_ptr)->ptr;
+    return pubkey->GetKeyTag();
+}
+
+
+FFIPrivateKeyImpl::FFIPrivateKeyImpl(){
+    privkey_ptr = reinterpret_cast<void*>(
+        new PrivkeyHolder{std::make_shared<PrivateKeyImpl<DCRTPoly>>()});
+}
+
+void FFIPrivateKeyImpl::SetKeyTag(const std::string& tag){
+    std::shared_ptr<PrivateKeyImpl<DCRTPoly>> privkey =
+        reinterpret_cast<PrivkeyHolder*>(privkey_ptr)->ptr;
+    privkey->SetKeyTag(tag);
+}
+
+const std::string FFIPrivateKeyImpl::GetKeyTag() const{
+    std::shared_ptr<const PrivateKeyImpl<DCRTPoly>> privkey =
+        reinterpret_cast<PrivkeyHolder*>(privkey_ptr)->ptr;
+    return privkey->GetKeyTag();
+}
+
+
 // void bind_keys(py::module &m)
 // {
-//     py::class_<PublicKeyImpl<DCRTPoly>, std::shared_ptr<PublicKeyImpl<DCRTPoly>>>(m, "PublicKey")
-//         .def(py::init<>())
-//         .def("GetKeyTag", &PublicKeyImpl<DCRTPoly>::GetKeyTag)
-//         .def("SetKeyTag", &PublicKeyImpl<DCRTPoly>::SetKeyTag);
-//     py::class_<PrivateKeyImpl<DCRTPoly>, std::shared_ptr<PrivateKeyImpl<DCRTPoly>>>(m, "PrivateKey")
-//         .def(py::init<>())
-//         .def("GetKeyTag", &PrivateKeyImpl<DCRTPoly>::GetKeyTag)
-//         .def("SetKeyTag", &PrivateKeyImpl<DCRTPoly>::SetKeyTag);
 //     py::class_<KeyPair<DCRTPoly>>(m, "KeyPair")
 //         .def_readwrite("publicKey", &KeyPair<DCRTPoly>::publicKey)
 //         .def_readwrite("secretKey", &KeyPair<DCRTPoly>::secretKey)

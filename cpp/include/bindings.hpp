@@ -141,6 +141,36 @@ enum CryptoContextType {
     // Add other types as needed
 };
 
+// PublicKeyImpl FFI
+
+class FFIPublicKeyImpl {
+protected:
+    void* pubkey_ptr;
+public:
+    FFIPublicKeyImpl();
+
+    void SetKeyTag(const std::string& tag);
+
+    const std::string GetKeyTag() const;
+};
+
+using FFIPublicKey = std::shared_ptr<FFIPublicKeyImpl>;
+
+// PrivateKeyImpl FFI
+
+class FFIPrivateKeyImpl {
+protected:
+    void* privkey_ptr;
+public:
+    FFIPrivateKeyImpl();
+
+    void SetKeyTag(const std::string& tag);
+
+    const std::string GetKeyTag() const;
+};
+
+using FFIPrivateKey = std::shared_ptr<FFIPrivateKeyImpl>;
+
 // Params FFI
 class FFIParams{
 protected:
@@ -315,12 +345,12 @@ public:
 
 //     KeyPair<Element> KeyGen();
 
-//     void EvalMultKeyGen(const PrivateKey<Element> key);
+//     void EvalMultKeyGen(const FFIPrivateKey key);
 
-//     void EvalMultKeysGen(const PrivateKey<Element> key);
+//     void EvalMultKeysGen(const FFIPrivateKey key);
 
-//     void EvalRotateKeyGen(const PrivateKey<Element> privateKey, const std::vector<int32_t>& indexList,
-//                           const PublicKey<Element> publicKey = nullptr);
+//     void EvalRotateKeyGen(const FFIPrivateKey privateKey, const std::vector<int32_t>& indexList,
+//                           const FFIPublicKey publicKey = nullptr);
 
 //     FFIPlaintext MakeStringPlaintext(const std::string& str) const;
 
