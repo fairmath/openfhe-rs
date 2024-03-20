@@ -12,15 +12,11 @@ mod tests {
     #[test]
     fn testCryptoContextBFVRNSCCParams() {
         unsafe {
-            let ccparams = CryptoContextBFVRNSCCParams::new();
-            
-            let ccparams_plaintext_modulus = ccparams.GetPlaintextModulus();
+            let bfv_params = FFIParams::new1(FFISCHEME_BFVRNS_SCHEME);
 
-            println!("ccparams_plaintext_modulus: {}", ccparams_plaintext_modulus);
+            println!("bfv_params: {:?}", bfv_params);
 
-            let ccparams_scheme = ccparams.GetScheme();
-
-            println!("ccparams_scheme: {}", ccparams_scheme);
+            println!("{}", bfv_params.GetThresholdNumOfParties())
         }
     }
 }
