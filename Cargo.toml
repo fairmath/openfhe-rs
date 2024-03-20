@@ -6,3 +6,6 @@ description = "Rust package of the OpenFHE Fully Homomorphic Encryption Library.
 license-file = "LICENSE"
 
 [dependencies]
+
+[build-dependencies]
+bindgen = "0.65.1"
