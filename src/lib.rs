@@ -19,4 +19,14 @@ mod tests {
             println!("{}", bfv_params.GetThresholdNumOfParties())
         }
     }
+
+    #[test]
+    fn testCryptoContext() {
+        unsafe {
+            let mut ccontext = FFICryptoContextImpl::new();
+            ccontext.SetKeyGenLevel(10);
+            println!("crypto_context keygenlevel: {:?}", ccontext.GetKeyGenLevel());
+            println!("crypto_context ringdimension: {:?}", ccontext.GetRingDimension())
+        }
+    }
 }

@@ -94,6 +94,17 @@ enum FFICOMPRESSION_LEVEL {
     SLACK   = 3   // less efficient with weaker security assumption
 };
 
+enum FFIPKESchemeFeature {
+    PKE          = 0x01,
+    KEYSWITCH    = 0x02,
+    PRE          = 0x04,
+    LEVELEDSHE   = 0x08,
+    ADVANCEDSHE  = 0x10,
+    MULTIPARTY   = 0x20,
+    FHE          = 0x40,
+    SCHEMESWITCH = 0x80,
+};
+
 // enums from stdlatticeparms.h
 
 enum FFISecurityLevel {
@@ -272,6 +283,129 @@ public:
     CryptoContextBGVRNSCCParams():FFIParams(BGVRNS_SCHEME){};
 };
 
-// };
+// CryptoContext FFI
+
+class FFICryptoContextImpl {
+protected:
+    void* cc_ptr;
+public:
+    FFICryptoContextImpl();
+
+    std::size_t GetKeyGenLevel() const;
+
+    void SetKeyGenLevel(std::size_t level);
+
+    usint GetRingDimension() const;
+
+    FFIPlaintextModulus GetPlaintextModulus() const;
+
+    double GetModulus() const;
+
+    const uint64_t GetModulusCKKS() const;
+
+    double GetScalingFactorReal(uint32_t level) const;
+
+    FFIScalingTechnique GetScalingTechnique() const;
+
+    usint GetDigitSize() const;
+
+    usint GetCyclotomicOrder() const;
+
+    void Enable(FFIPKESchemeFeature feature);
+
+//     KeyPair<Element> KeyGen();
+
+//     void EvalMultKeyGen(const PrivateKey<Element> key);
+
+//     void EvalMultKeysGen(const PrivateKey<Element> key);
+
+//     void EvalRotateKeyGen(const PrivateKey<Element> privateKey, const std::vector<int32_t>& indexList,
+//                           const PublicKey<Element> publicKey = nullptr);
+
+//     FFIPlaintext MakeStringPlaintext(const std::string& str) const;
+
+//     FFIPlaintext MakePackedPlaintext(const std::vector<int64_t>& value, std::size_t noiseScaleDeg = 1,
+//                                   uint32_t level = 0) const;
+
+//     FFIPlaintext MakeCoefPackedPlaintext(const std::vector<int64_t>& value, std::size_t noiseScaleDeg = 1,
+//                                       uint32_t level = 0) const;
+
+//     Plaintext MakeCKKSPackedPlaintext(const std::vector<std::complex<double>>& value, std::size_t scaleDeg = 1,
+//                                       uint32_t level = 0, const std::shared_ptr<ParmType> params = nullptr,
+//                                       usint slots = 0) const;
+
+//     Plaintext MakeCKKSPackedPlaintext(const std::vector<double>& value, std::size_t scaleDeg = 1, uint32_t level = 0,
+//                                       const std::shared_ptr<ParmType> params = nullptr, usint slots = 0) const;
+
+//     Ciphertext<Element> EvalRotate(ConstCiphertext<Element> ciphertext, int32_t index) const;
+
+// // const?
+//     Ciphertext<DCRTPoly> EvalFastRotationPrecompute(ConstCiphertext<DCRTPoly> ciphertext);
+// // const?
+//     Ciphertext<DCRTPoly> EvalFastRotation(ConstCiphertext<DCRTPoly> ciphertext, const usint index, const usint m,ConstCiphertext<DCRTPoly> digits);
+// // const?
+//     Ciphertext<DCRTPoly> EvalFastRotationExt(ConstCiphertext<DCRTPoly> ciphertext, const usint index, ConstCiphertext<DCRTPoly> digits, bool addFirst);
+
+//     void EvalAtIndexKeyGen(const PrivateKey<Element> privateKey, const std::vector<int32_t>& indexList,
+//                            const PublicKey<Element> publicKey = nullptr);
+
+//     Ciphertext<Element> EvalAtIndex(ConstCiphertext<Element> ciphertext, int32_t index) const;
+
+//     Ciphertext<Element> Encrypt(const PublicKey<Element> publicKey, Plaintext plaintext) const;
+
+//     DecryptResult Decrypt(ConstCiphertext<Element> ciphertext, const PrivateKey<Element> privateKey,
+//                           Plaintext* plaintext);
+
+//     inline DecryptResult Decrypt(const PrivateKey<Element> privateKey, ConstCiphertext<Element> ciphertext,
+//                                  Plaintext* plaintext);
+
+//     EvalKey<Element> KeySwitchGen(const PrivateKey<Element> oldPrivateKey,
+//                                   const PrivateKey<Element> newPrivateKey) const;
+                                  
+//     Ciphertext<Element> EvalAdd(ConstCiphertext<Element> ciphertext, double constant) const;
+
+//     Ciphertext<Element> EvalAdd(ConstCiphertext<Element> ciphertext1, ConstCiphertext<Element> ciphertext2) const;
+
+//     Ciphertext<Element> EvalAdd(ConstCiphertext<Element> ciphertext, ConstPlaintext plaintext) const;
+
+//     void EvalAddInPlace(Ciphertext<Element>& ciphertext, ConstPlaintext plaintext) const;
+
+//     void EvalAddInPlace(ConstPlaintext plaintext, Ciphertext<Element>& ciphertext) const;
+
+//     void EvalAddInPlace(Ciphertext<Element>& ciphertext1, ConstCiphertext<Element> ciphertext2) const;
+
+//     Ciphertext<Element> EvalAddMutable(Ciphertext<Element>& ciphertext1, Ciphertext<Element>& ciphertext2) const;
+
+//     Ciphertext<Element> EvalAddMutable(Ciphertext<Element>& ciphertext, Plaintext plaintext) const;
+
+//     Ciphertext<Element> EvalAddMutable(Plaintext plaintext, Ciphertext<Element>& ciphertext) const;
+
+//     void EvalAddMutableInPlace(Ciphertext<Element>& ciphertext1, Ciphertext<Element>& ciphertext2) const;
+
+//     Ciphertext<Element> EvalSub(ConstCiphertext<Element> ciphertext1, ConstCiphertext<Element> ciphertext2) const;
+
+//     Ciphertext<Element> EvalSub(ConstCiphertext<Element> ciphertext, ConstPlaintext plaintext) const;
+
+//     Ciphertext<Element> EvalSub(ConstPlaintext plaintext, ConstCiphertext<Element> ciphertext) const;
+
+//     Ciphertext<Element> EvalSub(ConstCiphertext<Element> ciphertext, double constant) const;
+
+//     Ciphertext<Element> EvalSub(double constant, ConstCiphertext<Element> ciphertext) const;
+
+//     void EvalSubInPlace(Ciphertext<Element>& ciphertext, double constant) const;
+
+//     void EvalSubInPlace(double constant, Ciphertext<Element>& ciphertext) const;
+
+//     void EvalSubInPlace(Ciphertext<Element>& ciphertext1, ConstCiphertext<Element> ciphertext2) const;
+
+//     Ciphertext<Element> EvalSubMutable(Ciphertext<Element>& ciphertext1, Ciphertext<Element>& ciphertext2) const;
+
+//     Ciphertext<Element> EvalSubMutable(Ciphertext<Element>& ciphertext, Plaintext plaintext) const;
+
+//     Ciphertext<Element> EvalSubMutable(Plaintext plaintext, Ciphertext<Element>& ciphertext) const;
+
+//     void EvalSubMutableInPlace(Ciphertext<Element>& ciphertext1, Ciphertext<Element>& ciphertext2) const;
+};
+
 
 #endif // OPENFHE_BINDINGS_H

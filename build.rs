@@ -4,7 +4,7 @@ use std::path::PathBuf;
 fn main() {
     println!("cargo:rustc-link-search=cpp/build/src/");
     
-    println!("cargo:rustc-link-lib=fhecomponents");
+    println!("cargo:rustc-link-lib=openfhesys");
 
     let bindings = bindgen::Builder::default()
         .header("cpp/include/bindings.hpp")

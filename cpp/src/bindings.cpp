@@ -19,6 +19,10 @@ namespace {
     struct ParamsHolder{
            std::shared_ptr<Params> ptr;
     };
+
+    struct CryptoContextImplHolder{
+           std::shared_ptr<CryptoContextImpl<DCRTPoly>> ptr;
+    };
 }
 
 FFIParams::FFIParams(){
@@ -28,7 +32,7 @@ FFIParams::FFIParams(){
 
 FFIParams::FFIParams(FFISCHEME scheme){
     params_ptr = reinterpret_cast<void*>(
-        new ParamsHolder{std::make_shared<Params>(lbcrypto:SCHEME(scheme))});
+        new ParamsHolder{std::make_shared<Params>(lbcrypto::SCHEME(scheme))});
 }
 
 // getters
@@ -389,61 +393,80 @@ void FFIParams::SetInteractiveBootCompressionLevel(FFICOMPRESSION_LEVEL interact
     cc_params->SetInteractiveBootCompressionLevel(lbcrypto::COMPRESSION_LEVEL(interactiveBootCompressionLevel));
 }
 
-// template<typename DCRTPoly>
-// class BoundCryptoContextImpl{
-//     CryptoContextImpl<DCRTPoly> instance;
-// public:
-//     BoundCryptoContextImpl():instance(){}
-//     size_t GetKeyGenLevel() const {
-//         return instance.m_keyGenLevel;
-//     }
+FFICryptoContextImpl::FFICryptoContextImpl(){
+    cc_ptr = reinterpret_cast<void*>(
+        new CryptoContextImplHolder{std::make_shared<CryptoContextImpl<DCRTPoly>>()});
+}
 
-//     void SetKeyGenLevel() const {
-//         instance.SetKeyGenLevel();
-//     }
+std::size_t FFICryptoContextImpl::GetKeyGenLevel() const{
+    std::shared_ptr<const CryptoContextImpl<DCRTPoly>> cc =
+        reinterpret_cast<const CryptoContextImplHolder*>(cc_ptr)->ptr;
+    return cc->GetKeyGenLevel();
+}
 
-//     usint GetRingDimension() const {
-//         return instance.GetRingDimension();
-//     }
+void FFICryptoContextImpl::SetKeyGenLevel(std::size_t level){
+    std::shared_ptr<CryptoContextImpl<DCRTPoly>> cc =
+        reinterpret_cast<CryptoContextImplHolder*>(cc_ptr)->ptr;
+    cc->SetKeyGenLevel(level);
+}
 
-//     // GetPlaintextModulus
+usint FFICryptoContextImpl::GetRingDimension() const{
+    std::shared_ptr<const CryptoContextImpl<DCRTPoly>> cc =
+        reinterpret_cast<const CryptoContextImplHolder*>(cc_ptr)->ptr;
+    return cc->GetRingDimension();
+}
 
-//     const double GetModulus() const {
-//         return GetModulusWrapper(instance);
-//     }
+FFIPlaintextModulus FFICryptoContextImpl::GetPlaintextModulus() const{
+    std::shared_ptr<CryptoContextImpl<DCRTPoly>> cc =
+        reinterpret_cast<const CryptoContextImplHolder*>(cc_ptr)->ptr;
+    return FFIPlaintextModulus(GetPlaintextModulusWrapper(cc));
+}
 
-//     const uint64_t GetModulusCKKS() const{
-//         return GetModulusCKKSWrapper(instance);
-//     }
+double FFICryptoContextImpl::GetModulus() const {
+    std::shared_ptr<CryptoContextImpl<DCRTPoly>> cc =
+        reinterpret_cast<const CryptoContextImplHolder*>(cc_ptr)->ptr;
+    return GetModulusWrapper(cc);
+}
 
-//     const double GetScalingFactorRealWrapper(uint32_t l) const {
-//         return GetScalingFactorRealWrapper(instance, l);
-//     }
-    
+const uint64_t FFICryptoContextImpl::GetModulusCKKS() const{
+    std::shared_ptr<CryptoContextImpl<DCRTPoly>> cc =
+        reinterpret_cast<const CryptoContextImplHolder*>(cc_ptr)->ptr;
+    return GetModulusCKKSWrapper(cc);
+}
 
-// };
+double FFICryptoContextImpl::GetScalingFactorReal(uint32_t level) const{
+    std::shared_ptr<CryptoContextImpl<DCRTPoly>> cc =
+        reinterpret_cast<const CryptoContextImplHolder*>(cc_ptr)->ptr;
+    return GetScalingFactorRealWrapper(cc, level);
+}
+
+FFIScalingTechnique FFICryptoContextImpl::GetScalingTechnique() const{
+    std::shared_ptr<CryptoContextImpl<DCRTPoly>> cc =
+        reinterpret_cast<const CryptoContextImplHolder*>(cc_ptr)->ptr;
+    return FFIScalingTechnique(GetScalingTechniqueWrapper(cc));
+}
+
+usint FFICryptoContextImpl::GetDigitSize() const{
+    std::shared_ptr<CryptoContextImpl<DCRTPoly>> cc =
+        reinterpret_cast<const CryptoContextImplHolder*>(cc_ptr)->ptr;
+    return GetDigitSizeWrapper(cc);
+}
+
+usint FFICryptoContextImpl::GetCyclotomicOrder() const{
+    std::shared_ptr<const CryptoContextImpl<DCRTPoly>> cc =
+        reinterpret_cast<const CryptoContextImplHolder*>(cc_ptr)->ptr;
+    return cc->GetCyclotomicOrder();
+}
+
+void FFICryptoContextImpl::Enable(FFIPKESchemeFeature feature) {
+    std::shared_ptr<CryptoContextImpl<DCRTPoly>> cc =
+        reinterpret_cast<CryptoContextImplHolder*>(cc_ptr)->ptr;
+    cc->Enable(PKESchemeFeature(feature));
+}
 
 // void bind_crypto_context(py::module &m)
 // {
 //     py::class_<CryptoContextImpl<DCRTPoly>, std::shared_ptr<CryptoContextImpl<DCRTPoly>>>(m, "CryptoContext")
-//         .def(py::init<>())
-//         .def("GetKeyGenLevel", &CryptoContextImpl<DCRTPoly>::GetKeyGenLevel, cc_GetKeyGenLevel_docs)
-//         .def("SetKeyGenLevel", &CryptoContextImpl<DCRTPoly>::SetKeyGenLevel, cc_SetKeyGenLevel_docs,
-//              py::arg("level"))
-//         .def("get_ptr", [](const CryptoContext<DCRTPoly> &self)
-//              { std::cout << "CC shared ptr (python cc)" << self << std::endl; })
-//         //.def("GetScheme",&CryptoContextImpl<DCRTPoly>::GetScheme)
-//         //.def("GetCryptoParameters", &CryptoContextImpl<DCRTPoly>::GetCryptoParameters)
-//         .def("GetRingDimension", &CryptoContextImpl<DCRTPoly>::GetRingDimension, cc_GetRingDimension_docs)
-//         .def("GetPlaintextModulus", &GetPlaintextModulusWrapper, cc_GetPlaintextModulus_docs)
-//         .def("GetModulus", &GetModulusWrapper, cc_GetModulus_docs)
-//         .def("GetModulusCKKS", &GetModulusCKKSWrapper)
-//         .def("GetScalingFactorReal", &GetScalingFactorRealWrapper, cc_GetScalingFactorReal_docs)
-//         .def("GetScalingTechnique",&GetScalingTechniqueWrapper)
-//         .def("GetDigitSize", &GetDigitSizeWrapper)
-//         .def("GetCyclotomicOrder", &CryptoContextImpl<DCRTPoly>::GetCyclotomicOrder, cc_GetCyclotomicOrder_docs)
-//         .def("Enable", static_cast<void (CryptoContextImpl<DCRTPoly>::*)(PKESchemeFeature)>(&CryptoContextImpl<DCRTPoly>::Enable), cc_Enable_docs,
-//              py::arg("feature"))
 //         .def("KeyGen", &CryptoContextImpl<DCRTPoly>::KeyGen, cc_KeyGen_docs)
 //         .def("EvalMultKeyGen", &CryptoContextImpl<DCRTPoly>::EvalMultKeyGen,
 //              cc_EvalMultKeyGen_docs,
@@ -632,7 +655,7 @@ void FFIParams::SetInteractiveBootCompressionLevel(FFICOMPRESSION_LEVEL interact
 //             "",
 //             py::arg("plaintext"),
 //             py::arg("ciphertext"))
-//         .def("EvalSubMutableInPlace", &CryptoContextImpl<DCRTPoly>::EvalSubMutableInPlace,
+//IAMHERE:         .def("EvalSubMutableInPlace", &CryptoContextImpl<DCRTPoly>::EvalSubMutableInPlace,
 //             cc_EvalSubMutableInPlace_docs,
 //             py::arg("ciphertext1"),
 //             py::arg("ciphertext2"))
@@ -1157,36 +1180,6 @@ void FFIParams::SetInteractiveBootCompressionLevel(FFICOMPRESSION_LEVEL interact
 // void bind_enums_and_constants(py::module &m)
 // {
 //     /* ---- PKE enums ---- */ 
-//     // Scheme Types
-//     py::enum_<SCHEME>(m, "SCHEME")
-//         .value("INVALID_SCHEME", SCHEME::INVALID_SCHEME)
-//         .value("CKKSRNS_SCHEME", SCHEME::CKKSRNS_SCHEME)
-//         .value("BFVRNS_SCHEME", SCHEME::BFVRNS_SCHEME)
-//         .value("BGVRNS_SCHEME", SCHEME::BGVRNS_SCHEME);
-//     m.attr("INVALID_SCHEME") = py::cast(SCHEME::INVALID_SCHEME);
-//     m.attr("CKKSRNS_SCHEME") = py::cast(SCHEME::CKKSRNS_SCHEME);
-//     m.attr("BFVRNS_SCHEME") = py::cast(SCHEME::BFVRNS_SCHEME);
-//     m.attr("BGVRNS_SCHEME") = py::cast(SCHEME::BGVRNS_SCHEME);
-
-//     // PKE Features
-//     py::enum_<PKESchemeFeature>(m, "PKESchemeFeature")
-//         .value("PKE", PKESchemeFeature::PKE)
-//         .value("KEYSWITCH", PKESchemeFeature::KEYSWITCH)
-//         .value("PRE", PKESchemeFeature::PRE)
-//         .value("LEVELEDSHE", PKESchemeFeature::LEVELEDSHE)
-//         .value("ADVANCEDSHE", PKESchemeFeature::ADVANCEDSHE)
-//         .value("MULTIPARTY", PKESchemeFeature::MULTIPARTY)
-//         .value("FHE", PKESchemeFeature::FHE)
-//         .value("SCHEMESWITCH", PKESchemeFeature::SCHEMESWITCH);
-//     m.attr("PKE") = py::cast(PKESchemeFeature::PKE);
-//     m.attr("KEYSWITCH") = py::cast(PKESchemeFeature::KEYSWITCH);
-//     m.attr("PRE") = py::cast(PKESchemeFeature::PRE);
-//     m.attr("LEVELEDSHE") = py::cast(PKESchemeFeature::LEVELEDSHE);
-//     m.attr("ADVANCEDSHE") = py::cast(PKESchemeFeature::ADVANCEDSHE);
-//     m.attr("MULTIPARTY") = py::cast(PKESchemeFeature::MULTIPARTY);
-//     m.attr("FHE") = py::cast(PKESchemeFeature::FHE);
-//     m.attr("SCHEMESWITCH") = py::cast(PKESchemeFeature::SCHEMESWITCH);
-
 //     // Plaintext enums
 //     py::enum_<Format>(m, "Format")
 //         .value("EVALUATION", Format::EVALUATION)
@@ -1199,112 +1192,7 @@ void FFIParams::SetInteractiveBootCompressionLevel(FFICOMPRESSION_LEVEL interact
 //     m.attr("JSON") = py::cast(SerType::JSON);
 //     m.attr("BINARY") = py::cast(SerType::BINARY);
 
-//     // Scaling Techniques
-//     py::enum_<ScalingTechnique>(m, "ScalingTechnique")
-//        .value("FIXEDMANUAL", ScalingTechnique::FIXEDMANUAL)
-//        .value("FIXEDAUTO", ScalingTechnique::FIXEDAUTO)
-//        .value("FLEXIBLEAUTO", ScalingTechnique::FLEXIBLEAUTO)
-//        .value("FLEXIBLEAUTOEXT", ScalingTechnique::FLEXIBLEAUTOEXT)
-//        .value("NORESCALE", ScalingTechnique::NORESCALE)
-//        .value("INVALID_RS_TECHNIQUE", ScalingTechnique::INVALID_RS_TECHNIQUE);
-//     m.attr("FIXEDMANUAL") = py::cast(ScalingTechnique::FIXEDMANUAL);
-//     m.attr("FIXEDAUTO") = py::cast(ScalingTechnique::FIXEDAUTO);
-//     m.attr("FLEXIBLEAUTO") = py::cast(ScalingTechnique::FLEXIBLEAUTO);
-//     m.attr("FLEXIBLEAUTOEXT") = py::cast(ScalingTechnique::FLEXIBLEAUTOEXT);
-//     m.attr("NORESCALE") = py::cast(ScalingTechnique::NORESCALE);
-//     m.attr("INVALID_RS_TECHNIQUE") = py::cast(ScalingTechnique::INVALID_RS_TECHNIQUE);
-
-//     // Key Switching Techniques
-//     py::enum_<KeySwitchTechnique>(m, "KeySwitchTechnique")
-//         .value("INVALID_KS_TECH", KeySwitchTechnique::INVALID_KS_TECH)
-//         .value("BV", KeySwitchTechnique::BV)
-//         .value("HYBRID", KeySwitchTechnique::HYBRID);
-//     m.attr("INVALID_KS_TECH") = py::cast(KeySwitchTechnique::INVALID_KS_TECH);
-//     m.attr("BV") = py::cast(KeySwitchTechnique::BV);
-//     m.attr("HYBRID") = py::cast(KeySwitchTechnique::HYBRID);
-
-//     // Secret Key Dist
-//     py::enum_<SecretKeyDist>(m, "SecretKeyDist")
-//         .value("GAUSSIAN", SecretKeyDist::GAUSSIAN)
-//         .value("UNIFORM_TERNARY", SecretKeyDist::UNIFORM_TERNARY)
-//         .value("SPARSE_TERNARY", SecretKeyDist::SPARSE_TERNARY);
-//     m.attr("GAUSSIAN") = py::cast(SecretKeyDist::GAUSSIAN);
-//     m.attr("UNIFORM_TERNARY") = py::cast(SecretKeyDist::UNIFORM_TERNARY);
-//     m.attr("SPARSE_TERNARY") = py::cast(SecretKeyDist::SPARSE_TERNARY);
-
-//     // ProxyReEncryptionMode
-//     py::enum_<ProxyReEncryptionMode>(m, "ProxyReEncryptionMode")
-//         .value("NOT_SET", ProxyReEncryptionMode::NOT_SET)
-//         .value("INDCPA", ProxyReEncryptionMode::INDCPA)
-//         .value("FIXED_NOISE_HRA", ProxyReEncryptionMode::FIXED_NOISE_HRA)
-//         .value("NOISE_FLOODING_HRA", ProxyReEncryptionMode::NOISE_FLOODING_HRA)
-//         .value("DIVIDE_AND_ROUND_HRA", ProxyReEncryptionMode::DIVIDE_AND_ROUND_HRA);
-//     m.attr("NOT_SET") = py::cast(ProxyReEncryptionMode::NOT_SET);
-//     m.attr("INDCPA") = py::cast(ProxyReEncryptionMode::INDCPA);
-//     m.attr("FIXED_NOISE_HRA") = py::cast(ProxyReEncryptionMode::FIXED_NOISE_HRA);
-//     m.attr("NOISE_FLOODING_HRA") = py::cast(ProxyReEncryptionMode::NOISE_FLOODING_HRA);
-//     m.attr("DIVIDE_AND_ROUND_HRA") = py::cast(ProxyReEncryptionMode::DIVIDE_AND_ROUND_HRA);
-    
-//     // MultipartyMode
-//     py::enum_<MultipartyMode>(m, "MultipartyMode")
-//         .value("INVALID_MULTIPARTY_MODE", MultipartyMode::INVALID_MULTIPARTY_MODE)
-//         .value("FIXED_NOISE_MULTIPARTY", MultipartyMode::FIXED_NOISE_MULTIPARTY)
-//         .value("NOISE_FLOODING_MULTIPARTY", MultipartyMode::NOISE_FLOODING_MULTIPARTY);
-//     m.attr("INVALID_MULTIPARTY_MODE") = py::cast(MultipartyMode::INVALID_MULTIPARTY_MODE);
-//     m.attr("FIXED_NOISE_MULTIPARTY") = py::cast(MultipartyMode::FIXED_NOISE_MULTIPARTY);
-//     m.attr("NOISE_FLOODING_MULTIPARTY") = py::cast(MultipartyMode::NOISE_FLOODING_MULTIPARTY);
-
-//     // ExecutionMode
-//     py::enum_<ExecutionMode>(m, "ExecutionMode")
-//         .value("EXEC_EVALUATION", ExecutionMode::EXEC_EVALUATION)
-//         .value("EXEC_NOISE_ESTIMATION", ExecutionMode::EXEC_NOISE_ESTIMATION);
-//     m.attr("EXEC_EVALUATION") = py::cast(ExecutionMode::EXEC_EVALUATION);
-//     m.attr("EXEC_NOISE_ESTIMATION") = py::cast(ExecutionMode::EXEC_NOISE_ESTIMATION);
-
-//     // DecryptionNoiseMode
-//     py::enum_<DecryptionNoiseMode>(m, "DecryptionNoiseMode")
-//         .value("FIXED_NOISE_DECRYPT", DecryptionNoiseMode::FIXED_NOISE_DECRYPT)
-//         .value("NOISE_FLOODING_DECRYPT", DecryptionNoiseMode::NOISE_FLOODING_DECRYPT);
-//     m.attr("FIXED_NOISE_DECRYPT") = py::cast(DecryptionNoiseMode::FIXED_NOISE_DECRYPT);
-//     m.attr("NOISE_FLOODING_DECRYPT") = py::cast(DecryptionNoiseMode::NOISE_FLOODING_DECRYPT);
-
-//     // EncryptionTechnique
-//     py::enum_<EncryptionTechnique>(m, "EncryptionTechnique")
-//         .value("STANDARD", EncryptionTechnique::STANDARD)
-//         .value("EXTENDED", EncryptionTechnique::EXTENDED);
-//     m.attr("STANDARD") = py::cast(EncryptionTechnique::STANDARD);
-//     m.attr("EXTENDED") = py::cast(EncryptionTechnique::EXTENDED);
-
-//     // MultiplicationTechnique
-//     py::enum_<MultiplicationTechnique>(m, "MultiplicationTechnique")
-//         .value("BEHZ", MultiplicationTechnique::BEHZ)
-//         .value("HPS", MultiplicationTechnique::HPS)
-//         .value("HPSPOVERQ", MultiplicationTechnique::HPSPOVERQ)
-//         .value("HPSPOVERQLEVELED", MultiplicationTechnique::HPSPOVERQLEVELED);
-//     m.attr("BEHZ") = py::cast(MultiplicationTechnique::BEHZ);
-//     m.attr("HPS") = py::cast(MultiplicationTechnique::HPS);
-//     m.attr("HPSPOVERQ") = py::cast(MultiplicationTechnique::HPSPOVERQ);
-//     m.attr("HPSPOVERQLEVELED") = py::cast(MultiplicationTechnique::HPSPOVERQLEVELED);
-
-//     // Compression Leval
-//     py::enum_<COMPRESSION_LEVEL>(m,"COMPRESSION_LEVEL")
-//         .value("COMPACT", COMPRESSION_LEVEL::COMPACT)
-//         .value("SLACK", COMPRESSION_LEVEL::SLACK);
-//     m.attr("COMPACT") = py::cast(COMPRESSION_LEVEL::COMPACT);
-//     m.attr("SLACK") = py::cast(COMPRESSION_LEVEL::SLACK);
-        
-//     /* ---- CORE enums ---- */ 
-//     // Security Level
-//     py::enum_<SecurityLevel>(m,"SecurityLevel")
-//         .value("HEStd_128_classic", SecurityLevel::HEStd_128_classic)
-//         .value("HEStd_192_classic", SecurityLevel::HEStd_192_classic)
-//         .value("HEStd_256_classic", SecurityLevel::HEStd_256_classic)
-//         .value("HEStd_NotSet", SecurityLevel::HEStd_NotSet);
-//     m.attr("HEStd_128_classic") = py::cast(SecurityLevel::HEStd_128_classic);
-//     m.attr("HEStd_192_classic") = py::cast(SecurityLevel::HEStd_192_classic);
-//     m.attr("HEStd_256_classic") = py::cast(SecurityLevel::HEStd_256_classic);
-//     m.attr("HEStd_NotSet") = py::cast(SecurityLevel::HEStd_NotSet);
-    
+//     /* ---- CORE enums ---- */     
 //     //Parameters Type
 //     /*TODO (Oliveira): If we expose Poly's and ParmType, this block will go somewhere else */
 //     using ParmType = typename DCRTPoly::Params;
