@@ -14,9 +14,7 @@ mod tests {
         unsafe {
             let bfv_params = FFIParams::new1(FFISCHEME_BFVRNS_SCHEME);
 
-            println!("bfv_params: {:?}", bfv_params);
-
-            println!("{}", bfv_params.GetThresholdNumOfParties())
+            println!("bfv_params numofparties{}", bfv_params.GetThresholdNumOfParties())
         }
     }
 
@@ -26,7 +24,15 @@ mod tests {
             let mut ccontext = FFICryptoContextImpl::new();
             ccontext.SetKeyGenLevel(10);
             println!("crypto_context keygenlevel: {:?}", ccontext.GetKeyGenLevel());
-            println!("crypto_context ringdimension: {:?}", ccontext.GetRingDimension())
+            // println!("crypto_context ringdimension: {:?}", ccontext.GetRingDimension())
+        }
+    }
+
+    #[test]
+    fn testKeyPair() {
+        unsafe {
+            let mut key_pair = FFIKeyPair::new();
+            println!("keypair is_good: {:?}", key_pair.is_good());
         }
     }
 }

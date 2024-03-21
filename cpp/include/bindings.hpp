@@ -141,6 +141,10 @@ enum CryptoContextType {
     // Add other types as needed
 };
 
+// KeyPair FFI forwad declaration
+
+class FFIKeyPair;
+
 // PublicKeyImpl FFI
 
 class FFIPublicKeyImpl {
@@ -149,12 +153,14 @@ protected:
 public:
     FFIPublicKeyImpl();
 
-    void SetKeyTag(const std::string& tag);
+    explicit FFIPublicKeyImpl(void* new_pubkey_ptr);
 
-    const std::string GetKeyTag() const;
+    void SetKeyTag(const char*& tag);
+
+    const char* GetKeyTag() const;
+
+    friend class FFIKeyPair;
 };
-
-using FFIPublicKey = std::shared_ptr<FFIPublicKeyImpl>;
 
 // PrivateKeyImpl FFI
 
@@ -164,12 +170,32 @@ protected:
 public:
     FFIPrivateKeyImpl();
 
-    void SetKeyTag(const std::string& tag);
+    explicit FFIPrivateKeyImpl(void* new_privkey_ptr);
 
-    const std::string GetKeyTag() const;
+    void SetKeyTag(const char*& tag);
+
+    const char* GetKeyTag() const;
+
+    friend class FFIKeyPair;
 };
 
-using FFIPrivateKey = std::shared_ptr<FFIPrivateKeyImpl>;
+// KeyPair FFI
+
+class FFIKeyPair {
+protected:
+    void* keypair_ptr;
+public:
+    FFIKeyPair();
+
+    explicit FFIKeyPair(const FFIPublicKeyImpl& publicKey, const FFIPrivateKeyImpl& privateKey);
+    
+    // TODO make it a const method
+    bool is_good() ;
+
+    FFIPublicKeyImpl GetPublicKey() const;
+
+    FFIPrivateKeyImpl GetPrivateKey() const;
+};
 
 // Params FFI
 class FFIParams{

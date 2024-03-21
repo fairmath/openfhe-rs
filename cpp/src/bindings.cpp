@@ -31,6 +31,10 @@ namespace {
     struct PrivkeyHolder{
            std::shared_ptr<PrivateKeyImpl<DCRTPoly>> ptr;
     };
+
+    struct KeyPairHolder{
+           std::shared_ptr<KeyPair<DCRTPoly>> ptr;
+    };
 }
 
 FFIParams::FFIParams(){
@@ -1217,43 +1221,85 @@ FFIPublicKeyImpl::FFIPublicKeyImpl(){
         new PubkeyHolder{std::make_shared<PublicKeyImpl<DCRTPoly>>()});
 }
 
-void FFIPublicKeyImpl::SetKeyTag(const std::string& tag){
+FFIPublicKeyImpl::FFIPublicKeyImpl(void * newpubkey_ptr){
+    pubkey_ptr = newpubkey_ptr;
+}
+
+void FFIPublicKeyImpl::SetKeyTag(const char*& tag){
     std::shared_ptr<PublicKeyImpl<DCRTPoly>> pubkey =
         reinterpret_cast<PubkeyHolder*>(pubkey_ptr)->ptr;
     pubkey->SetKeyTag(tag);
 }
 
-const std::string FFIPublicKeyImpl::GetKeyTag() const{
+const char* FFIPublicKeyImpl::GetKeyTag() const{
     std::shared_ptr<const PublicKeyImpl<DCRTPoly>> pubkey =
         reinterpret_cast<PubkeyHolder*>(pubkey_ptr)->ptr;
-    return pubkey->GetKeyTag();
+    return pubkey->GetKeyTag().c_str();
 }
-
 
 FFIPrivateKeyImpl::FFIPrivateKeyImpl(){
     privkey_ptr = reinterpret_cast<void*>(
         new PrivkeyHolder{std::make_shared<PrivateKeyImpl<DCRTPoly>>()});
 }
 
-void FFIPrivateKeyImpl::SetKeyTag(const std::string& tag){
+FFIPrivateKeyImpl::FFIPrivateKeyImpl(void * newprivkey_ptr){
+    privkey_ptr = newprivkey_ptr;
+}
+
+void FFIPrivateKeyImpl::SetKeyTag(const char*& tag){
     std::shared_ptr<PrivateKeyImpl<DCRTPoly>> privkey =
         reinterpret_cast<PrivkeyHolder*>(privkey_ptr)->ptr;
     privkey->SetKeyTag(tag);
 }
 
-const std::string FFIPrivateKeyImpl::GetKeyTag() const{
+const char* FFIPrivateKeyImpl::GetKeyTag() const{
     std::shared_ptr<const PrivateKeyImpl<DCRTPoly>> privkey =
         reinterpret_cast<PrivkeyHolder*>(privkey_ptr)->ptr;
-    return privkey->GetKeyTag();
+    return privkey->GetKeyTag().c_str();
 }
 
+FFIKeyPair::FFIKeyPair(){
+    keypair_ptr = reinterpret_cast<void*>(
+        new KeyPairHolder{std::make_shared<KeyPair<DCRTPoly>>()});
+}
+
+FFIKeyPair::FFIKeyPair(const FFIPublicKeyImpl& pubkey, const FFIPrivateKeyImpl& privkey){
+    keypair_ptr = reinterpret_cast<void*>(
+        new KeyPairHolder{std::make_shared<KeyPair<DCRTPoly>>(
+            reinterpret_cast<PubkeyHolder*>(pubkey.pubkey_ptr)->ptr,
+            reinterpret_cast<PrivkeyHolder*>(privkey.privkey_ptr)->ptr)});
+}
+
+bool FFIKeyPair::is_good() {
+    // TODO make it const method
+    // std::shared_ptr<const KeyPair<DCRTPoly>> keypair =
+    std::shared_ptr<KeyPair<DCRTPoly>> keypair =
+        reinterpret_cast<KeyPairHolder*>(keypair_ptr)->ptr;
+    return keypair->good();
+}
+
+FFIPublicKeyImpl FFIKeyPair::GetPublicKey() const{
+    std::shared_ptr<const KeyPair<DCRTPoly>> keypair =
+        reinterpret_cast<KeyPairHolder*>(keypair_ptr)->ptr;
+
+    void* pubkey_ptr = 
+        reinterpret_cast<void*>(
+            new PubkeyHolder{std::make_shared<PublicKeyImpl<DCRTPoly>>(*(keypair->publicKey))});
+    return FFIPublicKeyImpl{pubkey_ptr};
+}
+
+FFIPrivateKeyImpl FFIKeyPair::GetPrivateKey() const{
+    std::shared_ptr<const KeyPair<DCRTPoly>> keypair =
+        reinterpret_cast<KeyPairHolder*>(keypair_ptr)->ptr;
+
+    void* privkey_ptr = 
+        reinterpret_cast<void*>(
+            new PrivkeyHolder{std::make_shared<PrivateKeyImpl<DCRTPoly>>(*(keypair->secretKey))});
+    return FFIPrivateKeyImpl{privkey_ptr};
+}
 
 // void bind_keys(py::module &m)
 // {
-//     py::class_<KeyPair<DCRTPoly>>(m, "KeyPair")
-//         .def_readwrite("publicKey", &KeyPair<DCRTPoly>::publicKey)
-//         .def_readwrite("secretKey", &KeyPair<DCRTPoly>::secretKey)
-//         .def("good", &KeyPair<DCRTPoly>::good,kp_good_docs);
 //     py::class_<EvalKeyImpl<DCRTPoly>, std::shared_ptr<EvalKeyImpl<DCRTPoly>>>(m, "EvalKey")
 //     .def(py::init<>())
 //         .def("GetKeyTag", &EvalKeyImpl<DCRTPoly>::GetKeyTag)
