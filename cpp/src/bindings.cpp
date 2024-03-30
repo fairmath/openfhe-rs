@@ -476,16 +476,44 @@ void FFICryptoContextImpl::Enable(FFIPKESchemeFeature feature) {
     cc->Enable(PKESchemeFeature(feature));
 }
 
+FFIKeyPair FFICryptoContextImpl::KeyGen(){
+    // TODO make it const method
+    // std::shared_ptr<const CryptoContextImpl<DCRTPoly>> cc =
+    std::shared_ptr<CryptoContextImpl<DCRTPoly>> cc =
+        reinterpret_cast<CryptoContextImplHolder*>(cc_ptr)->ptr;
+    cc->KeyGen();
+    void* keypair_ptr = reinterpret_cast<void*>(
+        new KeyPairHolder{std::make_shared<KeyPair<DCRTPoly>>(cc->KeyGen())});
+    
+    return FFIKeyPair(keypair_ptr);
+}
+
+void FFICryptoContextImpl::EvalMultKeyGen(const FFIPrivateKeyImpl key){
+    std::shared_ptr<CryptoContextImpl<DCRTPoly>> cc =
+        reinterpret_cast<CryptoContextImplHolder*>(cc_ptr)->ptr;
+    const std::shared_ptr<PrivateKeyImpl<DCRTPoly>> cc_key = 
+        reinterpret_cast<PrivkeyHolder*>(key.privkey_ptr)->ptr;
+    cc->EvalMultKeyGen(cc_key);
+}
+
+void FFICryptoContextImpl::EvalMultKeysGen(const FFIPrivateKeyImpl key){
+    std::shared_ptr<CryptoContextImpl<DCRTPoly>> cc =
+        reinterpret_cast<CryptoContextImplHolder*>(cc_ptr)->ptr;
+    const std::shared_ptr<PrivateKeyImpl<DCRTPoly>> cc_key = 
+        reinterpret_cast<PrivkeyHolder*>(key.privkey_ptr)->ptr;
+    cc->EvalMultKeysGen(cc_key);
+}
+
+//void FFICryptoContextImpl::EvalRotateKeyGen(const FFIPrivateKey privateKey, const std::vector<int32_t>& indexList,
+//      const FFIPublicKey publicKey = nullptr){
+//    std::shared_ptr<CryptoContextImpl<DCRTPoly>> cc =
+//        reinterpret_cast<CryptoContextImplHolder*>(cc_ptr)->ptr;
+//    cc->EvalRotateKeyGen();
+//}
+
 // void bind_crypto_context(py::module &m)
 // {
 //     py::class_<CryptoContextImpl<DCRTPoly>, std::shared_ptr<CryptoContextImpl<DCRTPoly>>>(m, "CryptoContext")
-//         .def("KeyGen", &CryptoContextImpl<DCRTPoly>::KeyGen, cc_KeyGen_docs)
-//         .def("EvalMultKeyGen", &CryptoContextImpl<DCRTPoly>::EvalMultKeyGen,
-//              cc_EvalMultKeyGen_docs,
-//              py::arg("privateKey"))
-//         .def("EvalMultKeysGen", &CryptoContextImpl<DCRTPoly>::EvalMultKeysGen,
-//              cc_EvalMultKeysGen_docs,
-//              py::arg("privateKey"))
 //         .def("EvalRotateKeyGen", &CryptoContextImpl<DCRTPoly>::EvalRotateKeyGen,
 //              cc_EvalRotateKeyGen_docs,
 //              py::arg("privateKey"),
@@ -1170,16 +1198,45 @@ void FFICryptoContextImpl::Enable(FFIPKESchemeFeature feature) {
 //                         cc_DeserializeEvalAutomorphismKey_docs,
 //                         py::arg("filename"), py::arg("sertype"));
 
-//     // Generator Functions
-//     m.def("GenCryptoContext", &GenCryptoContext<CryptoContextBFVRNS>,
-//         py::arg("params"));
-//     m.def("GenCryptoContext", &GenCryptoContext<CryptoContextBGVRNS>,
-//         py::arg("params"));
-//     m.def("GenCryptoContext", &GenCryptoContext<CryptoContextCKKSRNS>,
-//         py::arg("params"));
-//     m.def("ReleaseAllContexts", &CryptoContextFactory<DCRTPoly>::ReleaseAllContexts);
-//     m.def("GetAllContexts", &CryptoContextFactory<DCRTPoly>::GetAllContexts);
-// }
+FFICryptoContextImpl GenCryptoContext(FFIParams params){
+    FFISCHEME scheme = params.GetScheme();
+    std::shared_ptr<Params> cc_params =
+        reinterpret_cast<ParamsHolder*>(params.params_ptr)->ptr;
+
+    FFICryptoContextImpl cc;
+
+    switch(scheme){
+        case FFISCHEME::BFVRNS_SCHEME:{
+            CCParams<CryptoContextBFVRNS> bfv_cc_params_instance = CCParams<CryptoContextBFVRNS>(*cc_params);
+
+            cc.cc_ptr = reinterpret_cast<void*>(
+                new CryptoContextImplHolder{GenCryptoContext<CryptoContextBFVRNS>(
+                    bfv_cc_params_instance)});
+            break;
+        }
+        case FFISCHEME::BGVRNS_SCHEME:{
+            CCParams<CryptoContextBGVRNS> bgv_cc_params_instance = CCParams<CryptoContextBGVRNS>(*cc_params);
+
+            cc.cc_ptr = reinterpret_cast<void*>(
+                new CryptoContextImplHolder{GenCryptoContext<CryptoContextBGVRNS>(
+                    bgv_cc_params_instance)});
+            break;
+        }
+        case FFISCHEME::CKKSRNS_SCHEME:{
+            CCParams<CryptoContextCKKSRNS> ckks_cc_params_instance = CCParams<CryptoContextCKKSRNS>(*cc_params);
+
+            cc.cc_ptr = reinterpret_cast<void*>(
+                new CryptoContextImplHolder{GenCryptoContext<CryptoContextCKKSRNS>(
+                    ckks_cc_params_instance)});
+            break;
+        }
+        case FFISCHEME::INVALID_SCHEME:
+        default:
+            throw std::invalid_argument("Invalid scheme");
+    }
+
+    return cc;
+}
 
 // int get_native_int(){
 //     #if NATIVEINT == 128 && !defined(__EMSCRIPTEN__)

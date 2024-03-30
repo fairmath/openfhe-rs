@@ -30,6 +30,13 @@
 
 #include <cstdint>
 
+// forward declarations
+class FFIPublicKeyImpl;
+class FFIPrivateKeyImpl;
+class FFIKeyPair;
+class FFIParams;
+class FFICryptoContextImpl;
+
 typedef std::uint32_t usint;
 typedef std::uint64_t FFIPlaintextModulus;
 
@@ -160,6 +167,7 @@ public:
     const char* GetKeyTag() const;
 
     friend class FFIKeyPair;
+    friend class FFICryptoContextImpl;
 };
 
 // PrivateKeyImpl FFI
@@ -177,6 +185,7 @@ public:
     const char* GetKeyTag() const;
 
     friend class FFIKeyPair;
+    friend class FFICryptoContextImpl;
 };
 
 // KeyPair FFI
@@ -186,6 +195,10 @@ protected:
     void* keypair_ptr;
 public:
     FFIKeyPair();
+    
+    explicit FFIKeyPair(void* new_keypair_ptr){
+        keypair_ptr = new_keypair_ptr;
+    }
 
     explicit FFIKeyPair(const FFIPublicKeyImpl& publicKey, const FFIPrivateKeyImpl& privateKey);
     
@@ -206,9 +219,9 @@ public:
 
     FFIParams(FFISCHEME scheme);
 
-    virtual FFIPlaintextModulus GetPlaintextModulus() const;
+    FFIPlaintextModulus GetPlaintextModulus() const;
 
-    virtual FFISCHEME GetScheme() const;
+    FFISCHEME GetScheme() const;
 
     usint GetDigitSize() const;
 
@@ -325,19 +338,21 @@ public:
     void SetInteractiveBootCompressionLevel(FFICOMPRESSION_LEVEL interactiveBootCompressionLevel);
 
 //     std::stream str();  
+
+    friend FFICryptoContextImpl GenCryptoContext(FFIParams params);
 };
 
-class CryptoContextBFVRNSCCParams : public FFIParams {
-public:
-    // CryptoContextBFVRNSCCParams();
-    CryptoContextBFVRNSCCParams():FFIParams(BFVRNS_SCHEME){};
-};
+// class CryptoContextBFVRNSCCParams : public FFIParams {
+// public:
+//     // CryptoContextBFVRNSCCParams();
+//     CryptoContextBFVRNSCCParams():FFIParams(BFVRNS_SCHEME){};
+// };
 
-class CryptoContextBGVRNSCCParams : public FFIParams {
-public:
-    // CryptoContextBGVRNSCCParams();
-    CryptoContextBGVRNSCCParams():FFIParams(BGVRNS_SCHEME){};
-};
+// class CryptoContextBGVRNSCCParams : public FFIParams {
+// public:
+//     // CryptoContextBGVRNSCCParams();
+//     CryptoContextBGVRNSCCParams():FFIParams(BGVRNS_SCHEME){};
+// };
 
 // CryptoContext FFI
 
@@ -369,14 +384,14 @@ public:
 
     void Enable(FFIPKESchemeFeature feature);
 
-//     KeyPair<Element> KeyGen();
+    FFIKeyPair KeyGen();
 
-//     void EvalMultKeyGen(const FFIPrivateKey key);
+    void EvalMultKeyGen(const FFIPrivateKeyImpl key);
 
-//     void EvalMultKeysGen(const FFIPrivateKey key);
+    void EvalMultKeysGen(const FFIPrivateKeyImpl key);
 
-//     void EvalRotateKeyGen(const FFIPrivateKey privateKey, const std::vector<int32_t>& indexList,
-//                           const FFIPublicKey publicKey = nullptr);
+//     void EvalRotateKeyGen(const FFIPrivateKeyImpl privateKey, const std::vector<int32_t>& indexList,
+//      const FFIPublicKey publicKey = nullptr);
 
 //     FFIPlaintext MakeStringPlaintext(const std::string& str) const;
 
@@ -461,7 +476,9 @@ public:
 //     Ciphertext<Element> EvalSubMutable(Plaintext plaintext, Ciphertext<Element>& ciphertext) const;
 
 //     void EvalSubMutableInPlace(Ciphertext<Element>& ciphertext1, Ciphertext<Element>& ciphertext2) const;
+    friend FFICryptoContextImpl GenCryptoContext(FFIParams params);
 };
 
+FFICryptoContextImpl GenCryptoContext(FFIParams params);
 
 #endif // OPENFHE_BINDINGS_H
