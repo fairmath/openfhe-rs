@@ -209,6 +209,31 @@ public:
     FFIPrivateKeyImpl GetPrivateKey() const;
 };
 
+// Ciphertext FFI
+
+class FFICiphertext {
+protected:
+    void* ciphertext_ptr;
+public:
+    FFICiphertext();
+
+    explicit FFICiphertext(void* new_ciphertext_ptr){
+        ciphertext_ptr = new_ciphertext_ptr;
+    }
+
+    std::size_t GetLevel() const;
+
+    void SetLevel(std::size_t level);
+
+   FFICiphertext Clone() const;
+
+//  TODO add RemoveElement method from wrappers
+
+    std::size_t GetSlots() const;
+
+    void SetSlots(std::size_t slots);
+};
+
 // Params FFI
 class FFIParams{
 protected:

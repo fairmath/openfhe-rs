@@ -35,6 +35,10 @@ namespace {
     struct KeyPairHolder{
            std::shared_ptr<KeyPair<DCRTPoly>> ptr;
     };
+
+    struct CiphertextHolder{
+           std::shared_ptr<CiphertextImpl<DCRTPoly>> ptr;
+    };
 }
 
 FFIParams::FFIParams(){
@@ -1424,29 +1428,43 @@ FFIPrivateKeyImpl FFIKeyPair::GetPrivateKey() const{
 //         return ss.str(); });
 // }
 
-// void bind_ciphertext(py::module &m)
-// {
-//     py::class_<CiphertextImpl<DCRTPoly>, std::shared_ptr<CiphertextImpl<DCRTPoly>>>(m, "Ciphertext")
-//         .def(py::init<>())
-//         .def("__add__", [](const Ciphertext<DCRTPoly> &a, const Ciphertext<DCRTPoly> &b)
-//              {return a + b; },py::is_operator(),pybind11::keep_alive<0, 1>())
-//        // .def(py::self + py::self);
-//     // .def("GetDepth", &CiphertextImpl<DCRTPoly>::GetDepth)
-//     // .def("SetDepth", &CiphertextImpl<DCRTPoly>::SetDepth)
-//      .def("GetLevel", &CiphertextImpl<DCRTPoly>::GetLevel,
-//         ctx_GetLevel_docs)
-//      .def("SetLevel", &CiphertextImpl<DCRTPoly>::SetLevel,
-//         ctx_SetLevel_docs,
-//         py::arg("level"))
-//      .def("Clone", &CiphertextImpl<DCRTPoly>::Clone)
-//      .def("RemoveElement", &RemoveElementWrapper, cc_RemoveElement_docs)
-//     // .def("GetHopLevel", &CiphertextImpl<DCRTPoly>::GetHopLevel)
-//     // .def("SetHopLevel", &CiphertextImpl<DCRTPoly>::SetHopLevel)
-//     // .def("GetScalingFactor", &CiphertextImpl<DCRTPoly>::GetScalingFactor)
-//     // .def("SetScalingFactor", &CiphertextImpl<DCRTPoly>::SetScalingFactor)
-//      .def("GetSlots", &CiphertextImpl<DCRTPoly>::GetSlots)
-//      .def("SetSlots", &CiphertextImpl<DCRTPoly>::SetSlots);
-// }
+FFICiphertext::FFICiphertext(){
+    ciphertext_ptr = reinterpret_cast<void*>(
+        new CiphertextHolder{std::make_shared<CiphertextImpl<DCRTPoly>>()});
+}
+
+std::size_t FFICiphertext::GetLevel() const{
+    std::shared_ptr<const CiphertextImpl<DCRTPoly>> ciphertext =
+        reinterpret_cast<CiphertextHolder*>(ciphertext_ptr)->ptr;
+    return ciphertext->GetLevel();
+}
+
+void FFICiphertext::SetLevel(std::size_t level){
+    std::shared_ptr<CiphertextImpl<DCRTPoly>> ciphertext =
+        reinterpret_cast<CiphertextHolder*>(ciphertext_ptr)->ptr;
+    ciphertext->SetLevel(level);
+}
+
+FFICiphertext FFICiphertext::Clone() const{
+    std::shared_ptr<CiphertextImpl<DCRTPoly>> ciphertext =
+        reinterpret_cast<CiphertextHolder*>(ciphertext_ptr)->ptr;
+    void* new_ciphertext_ptr =
+        reinterpret_cast<void*>(
+            new CiphertextHolder{ciphertext->Clone()});
+    return FFICiphertext{new_ciphertext_ptr};
+}
+
+std::size_t FFICiphertext::GetSlots() const{
+    std::shared_ptr<const CiphertextImpl<DCRTPoly>> ciphertext =
+        reinterpret_cast<CiphertextHolder*>(ciphertext_ptr)->ptr;
+    return ciphertext->GetSlots();
+}
+
+void FFICiphertext::SetSlots(std::size_t slots){
+    std::shared_ptr<CiphertextImpl<DCRTPoly>> ciphertext =
+        reinterpret_cast<CiphertextHolder*>(ciphertext_ptr)->ptr;
+    ciphertext->SetSlots(slots);
+}
 
 // void bind_schemes(py::module &m){
 //     /*Bind schemes specific functionalities like bootstrapping functions and multiparty*/
