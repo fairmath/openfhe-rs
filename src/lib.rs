@@ -7,32 +7,31 @@ include!(concat!(env!("OUT_DIR"), "/bindings.rs"));
 #[cfg(test)]
 mod tests {
     use super::*;
-    use std::mem;
 
     #[test]
     fn testCryptoContextBFVRNSCCParams() {
         unsafe {
-            let bfv_params = FFIParams::new1(FFISCHEME_BFVRNS_SCHEME);
+            let ccparams = FFIParams::new1(FFISCHEME_CKKSRNS_SCHEME);
 
-            println!("bfv_params numofparties{}", bfv_params.GetThresholdNumOfParties())
-        }
-    }
+            let mut ccontext = GenCryptoContext(ccparams);
 
-    #[test]
-    fn testCryptoContext() {
-        unsafe {
-            let mut ccontext = FFICryptoContextImpl::new();
-            ccontext.SetKeyGenLevel(10);
-            println!("crypto_context keygenlevel: {:?}", ccontext.GetKeyGenLevel());
-            // println!("crypto_context ringdimension: {:?}", ccontext.GetRingDimension())
+            ccontext.Enable(FFIPKESchemeFeature_PKE);
+            ccontext.Enable(FFIPKESchemeFeature_KEYSWITCH);
+            ccontext.Enable(FFIPKESchemeFeature_LEVELEDSHE);
+
+            let key_pair = ccontext.KeyGen();
+
+            println!("keypair is_allocated: {:?}", key_pair.is_allocated());
+             
+            ccontext.EvalMultKeyGen(key_pair.GetPrivateKey());
         }
     }
 
     #[test]
     fn testKeyPair() {
         unsafe {
-            let mut key_pair = FFIKeyPair::new();
-            println!("keypair is_good: {:?}", key_pair.is_good());
+            let key_pair = FFIKeyPair::new();
+            println!("keypair is_allocated: {:?}", key_pair.is_allocated());
         }
     }
 }

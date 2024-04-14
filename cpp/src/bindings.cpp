@@ -476,10 +476,9 @@ void FFICryptoContextImpl::Enable(FFIPKESchemeFeature feature) {
     cc->Enable(PKESchemeFeature(feature));
 }
 
-FFIKeyPair FFICryptoContextImpl::KeyGen(){
-    // TODO make it const method
-    // std::shared_ptr<const CryptoContextImpl<DCRTPoly>> cc =
-    std::shared_ptr<CryptoContextImpl<DCRTPoly>> cc =
+FFIKeyPair FFICryptoContextImpl::KeyGen() const{
+    std::shared_ptr<const CryptoContextImpl<DCRTPoly>> cc =
+    // std::shared_ptr<CryptoContextImpl<DCRTPoly>> cc =
         reinterpret_cast<CryptoContextImplHolder*>(cc_ptr)->ptr;
     cc->KeyGen();
     void* keypair_ptr = reinterpret_cast<void*>(
@@ -1327,12 +1326,10 @@ FFIKeyPair::FFIKeyPair(const FFIPublicKeyImpl& pubkey, const FFIPrivateKeyImpl& 
             reinterpret_cast<PrivkeyHolder*>(privkey.privkey_ptr)->ptr)});
 }
 
-bool FFIKeyPair::is_good() {
-    // TODO make it const method
-    // std::shared_ptr<const KeyPair<DCRTPoly>> keypair =
-    std::shared_ptr<KeyPair<DCRTPoly>> keypair =
+bool FFIKeyPair::is_allocated() const{
+    std::shared_ptr<const KeyPair<DCRTPoly>> keypair =
         reinterpret_cast<KeyPairHolder*>(keypair_ptr)->ptr;
-    return keypair->good();
+    return keypair->is_allocated();
 }
 
 FFIPublicKeyImpl FFIKeyPair::GetPublicKey() const{

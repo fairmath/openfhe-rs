@@ -202,8 +202,7 @@ public:
 
     explicit FFIKeyPair(const FFIPublicKeyImpl& publicKey, const FFIPrivateKeyImpl& privateKey);
     
-    // TODO make it a const method
-    bool is_good() ;
+    bool is_allocated() const;
 
     FFIPublicKeyImpl GetPublicKey() const;
 
@@ -384,7 +383,7 @@ public:
 
     void Enable(FFIPKESchemeFeature feature);
 
-    FFIKeyPair KeyGen();
+    FFIKeyPair KeyGen() const;
 
     void EvalMultKeyGen(const FFIPrivateKeyImpl key);
 
