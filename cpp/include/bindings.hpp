@@ -209,6 +209,39 @@ public:
     FFIPrivateKeyImpl GetPrivateKey() const;
 };
 
+// Plaintext FFI
+
+class FFIPlaintext {
+protected:
+    void* plaintext_ptr;
+public:
+    explicit FFIPlaintext(void* new_plaintext_ptr){
+        plaintext_ptr = new_plaintext_ptr;
+    }
+
+    double GetScalingFactor() const;
+
+    void SetScalingFactor(double sf);
+
+    FFISCHEME GetSchemeID() const;
+
+    std::size_t GetLength() const;
+
+    void SetLength(std::size_t newSize);
+
+    bool IsEncoded() const;
+
+    double GetLogPrecision() const;
+
+    void Encode();
+
+    void Decode();
+
+    std::int64_t LowBound() const;
+
+    std::int64_t HighBound() const;
+};
+
 // Ciphertext FFI
 
 class FFICiphertext {
@@ -232,6 +265,8 @@ public:
     std::size_t GetSlots() const;
 
     void SetSlots(std::size_t slots);
+
+    friend class FFICryptoContextImpl;
 };
 
 // Params FFI
@@ -432,7 +467,7 @@ public:
 //     Plaintext MakeCKKSPackedPlaintext(const std::vector<double>& value, std::size_t scaleDeg = 1, uint32_t level = 0,
 //                                       const std::shared_ptr<ParmType> params = nullptr, usint slots = 0) const;
 
-//     Ciphertext<Element> EvalRotate(ConstCiphertext<Element> ciphertext, int32_t index) const;
+    FFICiphertext EvalRotate(const FFICiphertext ciphertext, std::int32_t index) const;
 
 // // const?
 //     Ciphertext<DCRTPoly> EvalFastRotationPrecompute(ConstCiphertext<DCRTPoly> ciphertext);
@@ -446,7 +481,7 @@ public:
 
 //     Ciphertext<Element> EvalAtIndex(ConstCiphertext<Element> ciphertext, int32_t index) const;
 
-//     Ciphertext<Element> Encrypt(const PublicKey<Element> publicKey, Plaintext plaintext) const;
+    // FFICiphertext Encrypt(const FFIPublicKeyImpl publicKey, FFIPlaintext plaintext) const;
 
 //     DecryptResult Decrypt(ConstCiphertext<Element> ciphertext, const PrivateKey<Element> privateKey,
 //                           Plaintext* plaintext);
