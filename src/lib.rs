@@ -15,9 +15,9 @@ mod tests {
 
             let mut ccontext = GenCryptoContext(ccparams);
 
-            ccontext.Enable(FFIPKESchemeFeature_PKE);
-            ccontext.Enable(FFIPKESchemeFeature_KEYSWITCH);
-            ccontext.Enable(FFIPKESchemeFeature_LEVELEDSHE);
+            ccontext.Enable(lbcrypto_PKESchemeFeature_PKE);
+            ccontext.Enable(lbcrypto_PKESchemeFeature_KEYSWITCH);
+            ccontext.Enable(lbcrypto_PKESchemeFeature_LEVELEDSHE);
 
             let key_pair = ccontext.KeyGen();
 

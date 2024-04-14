@@ -29,6 +29,7 @@
 #define OPENFHE_BINDINGS_H
 
 #include <cstdint>
+#include "constants-fwd.h"
 
 // forward declarations
 class FFIPublicKeyImpl;
@@ -39,78 +40,6 @@ class FFICryptoContextImpl;
 
 typedef std::uint32_t usint;
 typedef std::uint64_t FFIPlaintextModulus;
-
-// enums from constants.h
-
-enum FFIMultipartyMode {
-    INVALID_MULTIPARTY_MODE = 0,
-    FIXED_NOISE_MULTIPARTY,
-    NOISE_FLOODING_MULTIPARTY,
-};
-
-enum FFIProxyReEncryptionMode {
-    NOT_SET = 0,
-    INDCPA,
-    FIXED_NOISE_HRA,
-    NOISE_FLOODING_HRA,
-    DIVIDE_AND_ROUND_HRA,
-};
-
-enum FFIExecutionMode {
-    EXEC_EVALUATION = 0,
-    EXEC_NOISE_ESTIMATION,
-};
-
-enum FFIDecryptionNoiseMode {
-    FIXED_NOISE_DECRYPT = 0,
-    NOISE_FLOODING_DECRYPT,
-};
-
-enum FFIKeySwitchTechnique {
-    INVALID_KS_TECH = 0,
-    BV,
-    HYBRID,
-};
-
-enum FFIScalingTechnique {
-    FIXEDMANUAL = 0,
-    FIXEDAUTO,
-    FLEXIBLEAUTO,
-    FLEXIBLEAUTOEXT,
-    NORESCALE,
-    INVALID_RS_TECHNIQUE,  // TODO (dsuponit): make this the first value
-};
-
-enum FFIEncryptionTechnique {
-    STANDARD = 0,
-    EXTENDED,
-};
-
-enum FFIMultiplicationTechnique {
-    BEHZ = 0,
-    HPS,
-    HPSPOVERQ,
-    HPSPOVERQLEVELED,
-};
-
-enum FFICOMPRESSION_LEVEL {
-    // we don't support 0 or 1 compression levels
-    // do not change values here
-
-    COMPACT = 2,  // more efficient with stronger security assumption
-    SLACK   = 3   // less efficient with weaker security assumption
-};
-
-enum FFIPKESchemeFeature {
-    PKE          = 0x01,
-    KEYSWITCH    = 0x02,
-    PRE          = 0x04,
-    LEVELEDSHE   = 0x08,
-    ADVANCEDSHE  = 0x10,
-    MULTIPARTY   = 0x20,
-    FHE          = 0x40,
-    SCHEMESWITCH = 0x80,
-};
 
 // enums from stdlatticeparms.h
 
@@ -290,13 +219,13 @@ public:
 
     usint GetMaxRelinSkDeg() const;
 
-    FFIProxyReEncryptionMode GetPREMode() const;
+    lbcrypto::ProxyReEncryptionMode GetPREMode() const;
 
-    FFIMultipartyMode GetMultipartyMode() const;
+    lbcrypto::MultipartyMode GetMultipartyMode() const;
 
-    FFIExecutionMode GetExecutionMode() const;
+    lbcrypto::ExecutionMode GetExecutionMode() const;
 
-    FFIDecryptionNoiseMode GetDecryptionNoiseMode() const;
+    lbcrypto::DecryptionNoiseMode GetDecryptionNoiseMode() const;
 
     double GetNoiseEstimate() const;
 
@@ -308,9 +237,9 @@ public:
 
     usint GetThresholdNumOfParties() const;
 
-    FFIKeySwitchTechnique GetKeySwitchTechnique() const;
+    lbcrypto::KeySwitchTechnique GetKeySwitchTechnique() const;
 
-    FFIScalingTechnique GetScalingTechnique() const;
+    lbcrypto::ScalingTechnique GetScalingTechnique() const;
 
     usint GetBatchSize() const;
 
@@ -330,13 +259,13 @@ public:
 
     usint GetKeySwitchCount() const;
 
-    FFIEncryptionTechnique GetEncryptionTechnique() const;
+    lbcrypto::EncryptionTechnique GetEncryptionTechnique() const;
 
-    FFIMultiplicationTechnique GetMultiplicationTechnique() const;
+    lbcrypto::MultiplicationTechnique GetMultiplicationTechnique() const;
 
     usint GetMultiHopModSize() const;
 
-    FFICOMPRESSION_LEVEL GetInteractiveBootCompressionLevel() const;
+    lbcrypto::COMPRESSION_LEVEL GetInteractiveBootCompressionLevel() const;
 
     void SetPlaintextModulus(FFIPlaintextModulus ptModulus);
 
@@ -348,13 +277,13 @@ public:
 
     void SetMaxRelinSkDeg(usint maxRelinSkDeg);
 
-    void SetPREMode(FFIProxyReEncryptionMode preMode);
+    void SetPREMode(lbcrypto::ProxyReEncryptionMode preMode);
 
-    void SetMultipartyMode(FFIMultipartyMode multipartyMode);
+    void SetMultipartyMode(lbcrypto::MultipartyMode multipartyMode);
 
-    void SetExecutionMode(FFIExecutionMode executionMode);
+    void SetExecutionMode(lbcrypto::ExecutionMode executionMode);
 
-    void SetDecryptionNoiseMode(FFIDecryptionNoiseMode decryptionNoiseMode);
+    void SetDecryptionNoiseMode(lbcrypto::DecryptionNoiseMode decryptionNoiseMode);
 
     void SetNoiseEstimate(double noiseEstimate);
 
@@ -366,9 +295,9 @@ public:
 
     void SetThresholdNumOfParties(uint32_t thresholdNumOfParties);
 
-    void SetKeySwitchTechnique(FFIKeySwitchTechnique keySwitchTechnique);
+    void SetKeySwitchTechnique(lbcrypto::KeySwitchTechnique keySwitchTechnique);
 
-    void SetScalingTechnique(FFIScalingTechnique scalingTechnique);
+    void SetScalingTechnique(lbcrypto::ScalingTechnique scalingTechnique);
 
     void SetBatchSize(usint batchSize);
 
@@ -388,13 +317,13 @@ public:
 
     void SetKeySwitchCount(usint keySwitchCount);
 
-    void SetEncryptionTechnique(FFIEncryptionTechnique encryptionTechnique);
+    void SetEncryptionTechnique(lbcrypto::EncryptionTechnique encryptionTechnique);
 
-    void SetMultiplicationTechnique(FFIMultiplicationTechnique multiplicationTechnique);
+    void SetMultiplicationTechnique(lbcrypto::MultiplicationTechnique multiplicationTechnique);
 
     void SetMultiHopModSize(usint multiHopModSize);
 
-    void SetInteractiveBootCompressionLevel(FFICOMPRESSION_LEVEL interactiveBootCompressionLevel);
+    void SetInteractiveBootCompressionLevel(lbcrypto::COMPRESSION_LEVEL interactiveBootCompressionLevel);
 
 //     std::stream str();  
 
@@ -435,13 +364,13 @@ public:
 
     double GetScalingFactorReal(uint32_t level) const;
 
-    FFIScalingTechnique GetScalingTechnique() const;
+    lbcrypto::ScalingTechnique GetScalingTechnique() const;
 
     usint GetDigitSize() const;
 
     usint GetCyclotomicOrder() const;
 
-    void Enable(FFIPKESchemeFeature feature);
+    void Enable(lbcrypto::PKESchemeFeature feature);
 
     FFIKeyPair KeyGen() const;
 

@@ -97,28 +97,28 @@ usint FFIParams::GetMaxRelinSkDeg() const{
     return cc_params->GetMaxRelinSkDeg();
 }
 
-FFIProxyReEncryptionMode FFIParams::GetPREMode() const{
+lbcrypto::ProxyReEncryptionMode FFIParams::GetPREMode() const{
     std::shared_ptr<const Params> cc_params =
         reinterpret_cast<const ParamsHolder*>(params_ptr)->ptr;
-    return FFIProxyReEncryptionMode(cc_params->GetPREMode());
+    return cc_params->GetPREMode();
 }
 
-FFIMultipartyMode FFIParams::GetMultipartyMode() const{
+lbcrypto::MultipartyMode FFIParams::GetMultipartyMode() const{
     std::shared_ptr<const Params> cc_params =
         reinterpret_cast<const ParamsHolder*>(params_ptr)->ptr;
-    return FFIMultipartyMode(cc_params->GetMultipartyMode());
+    return cc_params->GetMultipartyMode();
 }
 
-FFIExecutionMode FFIParams::GetExecutionMode() const{
+lbcrypto::ExecutionMode FFIParams::GetExecutionMode() const{
     std::shared_ptr<const Params> cc_params =
         reinterpret_cast<const ParamsHolder*>(params_ptr)->ptr;
-    return FFIExecutionMode(cc_params->GetExecutionMode());
+    return cc_params->GetExecutionMode();
 }
 
-FFIDecryptionNoiseMode FFIParams::GetDecryptionNoiseMode() const{
+lbcrypto::DecryptionNoiseMode FFIParams::GetDecryptionNoiseMode() const{
     std::shared_ptr<const Params> cc_params =
         reinterpret_cast<const ParamsHolder*>(params_ptr)->ptr;
-    return FFIDecryptionNoiseMode(cc_params->GetDecryptionNoiseMode());
+    return cc_params->GetDecryptionNoiseMode();
 }
 
 double FFIParams::GetNoiseEstimate() const{
@@ -151,16 +151,16 @@ usint FFIParams::GetThresholdNumOfParties() const{
     return cc_params->GetThresholdNumOfParties();
 }
 
-FFIKeySwitchTechnique FFIParams::GetKeySwitchTechnique() const{
+lbcrypto::KeySwitchTechnique FFIParams::GetKeySwitchTechnique() const{
     std::shared_ptr<const Params> cc_params =
         reinterpret_cast<const ParamsHolder*>(params_ptr)->ptr;
-    return FFIKeySwitchTechnique(cc_params->GetKeySwitchTechnique());
+    return cc_params->GetKeySwitchTechnique();
 }
 
-FFIScalingTechnique FFIParams::GetScalingTechnique() const{
+lbcrypto::ScalingTechnique FFIParams::GetScalingTechnique() const{
     std::shared_ptr<const Params> cc_params =
         reinterpret_cast<const ParamsHolder*>(params_ptr)->ptr;
-    return FFIScalingTechnique(cc_params->GetScalingTechnique());
+    return cc_params->GetScalingTechnique();
 }
 
 usint FFIParams::GetBatchSize() const{
@@ -217,16 +217,16 @@ usint FFIParams::GetKeySwitchCount() const{
     return cc_params->GetKeySwitchCount();
 }
 
-FFIEncryptionTechnique FFIParams::GetEncryptionTechnique() const{
+lbcrypto::EncryptionTechnique FFIParams::GetEncryptionTechnique() const{
     std::shared_ptr<const Params> cc_params =
         reinterpret_cast<const ParamsHolder*>(params_ptr)->ptr;
-    return FFIEncryptionTechnique(cc_params->GetEncryptionTechnique());
+    return cc_params->GetEncryptionTechnique();
 }
 
-FFIMultiplicationTechnique FFIParams::GetMultiplicationTechnique() const{
+lbcrypto::MultiplicationTechnique FFIParams::GetMultiplicationTechnique() const{
     std::shared_ptr<const Params> cc_params =
         reinterpret_cast<const ParamsHolder*>(params_ptr)->ptr;
-    return FFIMultiplicationTechnique(cc_params->GetMultiplicationTechnique());
+    return cc_params->GetMultiplicationTechnique();
 }
 
 usint FFIParams::GetMultiHopModSize() const{
@@ -235,10 +235,10 @@ usint FFIParams::GetMultiHopModSize() const{
     return cc_params->GetMultiHopModSize();
 }
 
-FFICOMPRESSION_LEVEL FFIParams::GetInteractiveBootCompressionLevel() const{
+lbcrypto::COMPRESSION_LEVEL FFIParams::GetInteractiveBootCompressionLevel() const{
     std::shared_ptr<const Params> cc_params =
         reinterpret_cast<const ParamsHolder*>(params_ptr)->ptr;
-    return FFICOMPRESSION_LEVEL(cc_params->GetInteractiveBootCompressionLevel());
+    return cc_params->GetInteractiveBootCompressionLevel();
 }
 
 // setters
@@ -273,28 +273,28 @@ void FFIParams::SetMaxRelinSkDeg(usint maxRelinSkDeg){
     cc_params->SetMaxRelinSkDeg(maxRelinSkDeg);
 }
 
-void FFIParams::SetPREMode(FFIProxyReEncryptionMode preMode){
+void FFIParams::SetPREMode(lbcrypto::ProxyReEncryptionMode preMode){
     std::shared_ptr<Params> cc_params =
         reinterpret_cast<ParamsHolder*>(params_ptr)->ptr;
-    cc_params->SetPREMode(lbcrypto::ProxyReEncryptionMode(preMode));
+    cc_params->SetPREMode(preMode);
 }
 
-void FFIParams::SetMultipartyMode(FFIMultipartyMode multipartyMode){
+void FFIParams::SetMultipartyMode(lbcrypto::MultipartyMode multipartyMode){
     std::shared_ptr<Params> cc_params =
         reinterpret_cast<ParamsHolder*>(params_ptr)->ptr;
-    cc_params->SetMultipartyMode(lbcrypto::MultipartyMode(multipartyMode));
+    cc_params->SetMultipartyMode(multipartyMode);
 }
 
-void FFIParams::SetExecutionMode(FFIExecutionMode executionMode){
+void FFIParams::SetExecutionMode(lbcrypto::ExecutionMode executionMode){
     std::shared_ptr<Params> cc_params =
         reinterpret_cast<ParamsHolder*>(params_ptr)->ptr;
-    cc_params->SetExecutionMode(lbcrypto::ExecutionMode(executionMode));
+    cc_params->SetExecutionMode(executionMode);
 }
 
-void FFIParams::SetDecryptionNoiseMode(FFIDecryptionNoiseMode decryptionNoiseMode){
+void FFIParams::SetDecryptionNoiseMode(lbcrypto::DecryptionNoiseMode decryptionNoiseMode){
     std::shared_ptr<Params> cc_params =
         reinterpret_cast<ParamsHolder*>(params_ptr)->ptr;
-    cc_params->SetDecryptionNoiseMode(lbcrypto::DecryptionNoiseMode(decryptionNoiseMode));
+    cc_params->SetDecryptionNoiseMode(decryptionNoiseMode);
 }
 
 void FFIParams::SetNoiseEstimate(double noiseEstimate){
@@ -327,16 +327,16 @@ void FFIParams::SetThresholdNumOfParties(uint32_t thresholdNumOfParties){
     cc_params->SetThresholdNumOfParties(thresholdNumOfParties);
 }
 
-void FFIParams::SetKeySwitchTechnique(FFIKeySwitchTechnique keySwitchTechnique){
+void FFIParams::SetKeySwitchTechnique(lbcrypto::KeySwitchTechnique keySwitchTechnique){
     std::shared_ptr<Params> cc_params =
         reinterpret_cast<ParamsHolder*>(params_ptr)->ptr;
-    cc_params->SetKeySwitchTechnique(lbcrypto::KeySwitchTechnique(keySwitchTechnique));
+    cc_params->SetKeySwitchTechnique(keySwitchTechnique);
 }
 
-void FFIParams::SetScalingTechnique(FFIScalingTechnique scalingTechnique){
+void FFIParams::SetScalingTechnique(lbcrypto::ScalingTechnique scalingTechnique){
     std::shared_ptr<Params> cc_params =
         reinterpret_cast<ParamsHolder*>(params_ptr)->ptr;
-    cc_params->SetScalingTechnique(lbcrypto::ScalingTechnique(scalingTechnique));
+    cc_params->SetScalingTechnique(scalingTechnique);
 }
 
 void FFIParams::SetBatchSize(usint batchSize){
@@ -393,16 +393,16 @@ void FFIParams::SetKeySwitchCount(usint keySwitchCount){
     cc_params->SetKeySwitchCount(keySwitchCount);
 }
 
-void FFIParams::SetEncryptionTechnique(FFIEncryptionTechnique encryptionTechnique){
+void FFIParams::SetEncryptionTechnique(lbcrypto::EncryptionTechnique encryptionTechnique){
     std::shared_ptr<Params> cc_params =
         reinterpret_cast<ParamsHolder*>(params_ptr)->ptr;
-    cc_params->SetEncryptionTechnique(lbcrypto::EncryptionTechnique(encryptionTechnique));
+    cc_params->SetEncryptionTechnique(encryptionTechnique);
 }
 
-void FFIParams::SetMultiplicationTechnique(FFIMultiplicationTechnique multiplicationTechnique){
+void FFIParams::SetMultiplicationTechnique(lbcrypto::MultiplicationTechnique multiplicationTechnique){
     std::shared_ptr<Params> cc_params =
         reinterpret_cast<ParamsHolder*>(params_ptr)->ptr;
-    cc_params->SetMultiplicationTechnique(lbcrypto::MultiplicationTechnique(multiplicationTechnique));
+    cc_params->SetMultiplicationTechnique(multiplicationTechnique);
 }
 
 void FFIParams::SetMultiHopModSize(usint multiHopModSize){
@@ -411,10 +411,10 @@ void FFIParams::SetMultiHopModSize(usint multiHopModSize){
     cc_params->SetMultiHopModSize(multiHopModSize);
 }
 
-void FFIParams::SetInteractiveBootCompressionLevel(FFICOMPRESSION_LEVEL interactiveBootCompressionLevel){
+void FFIParams::SetInteractiveBootCompressionLevel(lbcrypto::COMPRESSION_LEVEL interactiveBootCompressionLevel){
     std::shared_ptr<Params> cc_params =
         reinterpret_cast<ParamsHolder*>(params_ptr)->ptr;
-    cc_params->SetInteractiveBootCompressionLevel(lbcrypto::COMPRESSION_LEVEL(interactiveBootCompressionLevel));
+    cc_params->SetInteractiveBootCompressionLevel(interactiveBootCompressionLevel);
 }
 
 FFICryptoContextImpl::FFICryptoContextImpl(){
@@ -464,10 +464,10 @@ double FFICryptoContextImpl::GetScalingFactorReal(uint32_t level) const{
     return GetScalingFactorRealWrapper(cc, level);
 }
 
-FFIScalingTechnique FFICryptoContextImpl::GetScalingTechnique() const{
+lbcrypto::ScalingTechnique FFICryptoContextImpl::GetScalingTechnique() const{
     std::shared_ptr<CryptoContextImpl<DCRTPoly>> cc =
         reinterpret_cast<const CryptoContextImplHolder*>(cc_ptr)->ptr;
-    return FFIScalingTechnique(GetScalingTechniqueWrapper(cc));
+    return GetScalingTechniqueWrapper(cc);
 }
 
 usint FFICryptoContextImpl::GetDigitSize() const{
@@ -482,7 +482,7 @@ usint FFICryptoContextImpl::GetCyclotomicOrder() const{
     return cc->GetCyclotomicOrder();
 }
 
-void FFICryptoContextImpl::Enable(FFIPKESchemeFeature feature) {
+void FFICryptoContextImpl::Enable(lbcrypto::PKESchemeFeature feature) {
     std::shared_ptr<CryptoContextImpl<DCRTPoly>> cc =
         reinterpret_cast<CryptoContextImplHolder*>(cc_ptr)->ptr;
     cc->Enable(PKESchemeFeature(feature));
