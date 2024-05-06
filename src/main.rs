@@ -110,98 +110,112 @@ mod ffi
         SCHEMESWITCH = 0x80,
     }
 
-    // lbcrypto::Params
     unsafe extern "C++"
     {
         include!("openfhe_rs_dev/src/direct.hpp");
         type SCHEME;
-        type params;
-        fn GetParamsByScheme(scheme: SCHEME) -> UniquePtr<params>;
-        fn GetParamsByVectorOfString(vals: &CxxVector<CxxString>) -> UniquePtr<params>;
-
-        // getters
-        fn GetScheme(self: &params) -> SCHEME;
-        fn GetPlaintextModulus(self: &params) -> u64; // PlaintextModulus
-        fn GetDigitSize(self: &params) -> u32; // usint
-        fn GetStandardDeviation(self: &params) -> f32;
+        type Params;
         type SecretKeyDist;
-        fn GetSecretKeyDist(self: &params) -> SecretKeyDist;
-        fn GetMaxRelinSkDeg(self: &params) -> u32;
         type ProxyReEncryptionMode;
-        fn GetPREMode(self: &params) -> ProxyReEncryptionMode;
         type MultipartyMode;
-        fn GetMultipartyMode(self: &params) -> MultipartyMode;
         type ExecutionMode;
-        fn GetExecutionMode(self: &params) -> ExecutionMode;
         type DecryptionNoiseMode;
-        fn GetDecryptionNoiseMode(self: &params) -> DecryptionNoiseMode;
-        fn GetNoiseEstimate(self: &params) -> f64;
-        fn GetDesiredPrecision(self: &params) -> f64;
-        fn GetStatisticalSecurity(self: &params) -> f64;
-        fn GetNumAdversarialQueries(self: &params) -> f64;
-        fn GetThresholdNumOfParties(self: &params) -> u32;
         type KeySwitchTechnique;
-        fn GetKeySwitchTechnique(self: &params) -> KeySwitchTechnique;
         type ScalingTechnique;
-        fn GetScalingTechnique(self: &params) -> ScalingTechnique;
-        fn GetBatchSize(self: &params) -> u32;
-        fn GetFirstModSize(self: &params) -> u32;
-        fn GetNumLargeDigits(self: &params) -> u32;
-        fn GetMultiplicativeDepth(self: &params) -> u32;
-        fn GetScalingModSize(self: &params) -> u32;
         type SecurityLevel;
-        fn GetSecurityLevel(self: &params) -> SecurityLevel;
-        fn GetRingDim(self: &params) -> u32;
-        fn GetEvalAddCount(self: &params) -> u32;
-        fn GetKeySwitchCount(self: &params) -> u32;
         type EncryptionTechnique;
-        fn GetEncryptionTechnique(self: &params) -> EncryptionTechnique;
         type MultiplicationTechnique;
-        fn GetMultiplicationTechnique(self: &params) -> MultiplicationTechnique;
-        fn GetMultiHopModSize(self: &params) -> u32;
         type COMPRESSION_LEVEL;
-        fn GetInteractiveBootCompressionLevel(self: &params) -> COMPRESSION_LEVEL;
-
-        // setters
-        fn SetPlaintextModulus(self: Pin<&mut params>, ptModulus0: u64); // PlaintextModulus
-        fn SetDigitSize(self: Pin<&mut params>, digitSize0: u32);
-        fn SetStandardDeviation(self: Pin<&mut params>, standardDeviation0: f32);
-        fn SetSecretKeyDist(self: Pin<&mut params>, secretKeyDist0: SecretKeyDist);
-        fn SetMaxRelinSkDeg(self: Pin<&mut params>, maxRelinSkDeg0: u32);
-        fn SetPREMode(self: Pin<&mut params>, PREMode0: ProxyReEncryptionMode);
-        fn SetMultipartyMode(self: Pin<&mut params>, multipartyMode0: MultipartyMode);
-        fn SetExecutionMode(self: Pin<&mut params>, executionMode0: ExecutionMode);
-        fn SetDecryptionNoiseMode(self: Pin<&mut params>, decryptionNoiseMode0: DecryptionNoiseMode);
-        fn SetNoiseEstimate(self: Pin<&mut params>, noiseEstimate0: f64);
-        fn SetDesiredPrecision(self: Pin<&mut params>, desiredPrecision0: f64);
-        fn SetStatisticalSecurity(self: Pin<&mut params>, statisticalSecurity0: u32);
-        fn SetNumAdversarialQueries(self: Pin<&mut params>, numAdversarialQueries0: u32);
-        fn SetThresholdNumOfParties(self: Pin<&mut params>, thresholdNumOfParties0: u32);
-        fn SetKeySwitchTechnique(self: Pin<&mut params>, ksTech0: KeySwitchTechnique);
-        fn SetScalingTechnique(self: Pin<&mut params>, scalTech0: ScalingTechnique);
-        fn SetBatchSize(self: Pin<&mut params>, batchSize0: u32);
-        fn SetFirstModSize(self: Pin<&mut params>, firstModSize0: u32);
-        fn SetNumLargeDigits(self: Pin<&mut params>, numLargeDigits0: u32);
-        fn SetMultiplicativeDepth(self: Pin<&mut params>, multiplicativeDepth0: u32);
-        fn SetScalingModSize(self: Pin<&mut params>, scalingModSize0: u32);
-        fn SetSecurityLevel(self: Pin<&mut params>, securityLevel0: SecurityLevel);
-        fn SetRingDim(self: Pin<&mut params>, ringDim0: u32);
-        fn SetEvalAddCount(self: Pin<&mut params>, evalAddCount0: u32);
-        fn SetKeySwitchCount(self: Pin<&mut params>, keySwitchCount0: u32);
-        fn SetEncryptionTechnique(self: Pin<&mut params>, encryptionTechnique0: EncryptionTechnique);
-        fn SetMultiplicationTechnique(self: Pin<&mut params>, multiplicationTechnique0: MultiplicationTechnique);
-        fn SetMultiHopModSize(self: Pin<&mut params>, multiHopModSize0: u32);
-        fn SetInteractiveBootCompressionLevel(self: Pin<&mut params>, interactiveBootCompressionLevel0: COMPRESSION_LEVEL);
+        type ParamsBFVRNS;
+        type ParamsBGVRNS;
+        type ParamsCKKSRNS;
+        type CryptoContextDCRTPoly;
+        type PKESchemeFeature;
+        type KeyPairDCRTPoly;
+        type PrivateKeyImpl;
+        type PublicKeyImpl;
+        type PlaintextImpl;
+        type Plaintext;
+        type CiphertextImpl;
+        type CiphertextDCRTPoly;
+        type DecryptResult;
+        type DCRTPolyParams;
     }
 
-    // lbcrypto::CCParams<lbcrypto::CryptoContextBFVRNS>
+    // Params
     unsafe extern "C++"
     {
-        //include!("openfhe_rs_dev/src/direct.hpp");
-        type ParamsBFVRNS;
+        fn GetParamsByScheme(scheme: SCHEME) -> UniquePtr<Params>;
+        fn GetParamsByVectorOfString(vals: &CxxVector<CxxString>) -> UniquePtr<Params>;
+
+        // getters
+        fn GetScheme(self: &Params) -> SCHEME;
+        fn GetPlaintextModulus(self: &Params) -> u64; // PlaintextModulus
+        fn GetDigitSize(self: &Params) -> u32; // usint
+        fn GetStandardDeviation(self: &Params) -> f32;
+        fn GetSecretKeyDist(self: &Params) -> SecretKeyDist;
+        fn GetMaxRelinSkDeg(self: &Params) -> u32;
+        fn GetPREMode(self: &Params) -> ProxyReEncryptionMode;
+        fn GetMultipartyMode(self: &Params) -> MultipartyMode;
+        fn GetExecutionMode(self: &Params) -> ExecutionMode;
+        fn GetDecryptionNoiseMode(self: &Params) -> DecryptionNoiseMode;
+        fn GetNoiseEstimate(self: &Params) -> f64;
+        fn GetDesiredPrecision(self: &Params) -> f64;
+        fn GetStatisticalSecurity(self: &Params) -> f64;
+        fn GetNumAdversarialQueries(self: &Params) -> f64;
+        fn GetThresholdNumOfParties(self: &Params) -> u32;
+        fn GetKeySwitchTechnique(self: &Params) -> KeySwitchTechnique;
+        fn GetScalingTechnique(self: &Params) -> ScalingTechnique;
+        fn GetBatchSize(self: &Params) -> u32;
+        fn GetFirstModSize(self: &Params) -> u32;
+        fn GetNumLargeDigits(self: &Params) -> u32;
+        fn GetMultiplicativeDepth(self: &Params) -> u32;
+        fn GetScalingModSize(self: &Params) -> u32;
+        fn GetSecurityLevel(self: &Params) -> SecurityLevel;
+        fn GetRingDim(self: &Params) -> u32;
+        fn GetEvalAddCount(self: &Params) -> u32;
+        fn GetKeySwitchCount(self: &Params) -> u32;
+        fn GetEncryptionTechnique(self: &Params) -> EncryptionTechnique;
+        fn GetMultiplicationTechnique(self: &Params) -> MultiplicationTechnique;
+        fn GetMultiHopModSize(self: &Params) -> u32;
+        fn GetInteractiveBootCompressionLevel(self: &Params) -> COMPRESSION_LEVEL;
+        // setters
+        fn SetPlaintextModulus(self: Pin<&mut Params>, ptModulus0: u64); // PlaintextModulus
+        fn SetDigitSize(self: Pin<&mut Params>, digitSize0: u32);
+        fn SetStandardDeviation(self: Pin<&mut Params>, standardDeviation0: f32);
+        fn SetSecretKeyDist(self: Pin<&mut Params>, secretKeyDist0: SecretKeyDist);
+        fn SetMaxRelinSkDeg(self: Pin<&mut Params>, maxRelinSkDeg0: u32);
+        fn SetPREMode(self: Pin<&mut Params>, PREMode0: ProxyReEncryptionMode);
+        fn SetMultipartyMode(self: Pin<&mut Params>, multipartyMode0: MultipartyMode);
+        fn SetExecutionMode(self: Pin<&mut Params>, executionMode0: ExecutionMode);
+        fn SetDecryptionNoiseMode(self: Pin<&mut Params>, decryptionNoiseMode0: DecryptionNoiseMode);
+        fn SetNoiseEstimate(self: Pin<&mut Params>, noiseEstimate0: f64);
+        fn SetDesiredPrecision(self: Pin<&mut Params>, desiredPrecision0: f64);
+        fn SetStatisticalSecurity(self: Pin<&mut Params>, statisticalSecurity0: u32);
+        fn SetNumAdversarialQueries(self: Pin<&mut Params>, numAdversarialQueries0: u32);
+        fn SetThresholdNumOfParties(self: Pin<&mut Params>, thresholdNumOfParties0: u32);
+        fn SetKeySwitchTechnique(self: Pin<&mut Params>, ksTech0: KeySwitchTechnique);
+        fn SetScalingTechnique(self: Pin<&mut Params>, scalTech0: ScalingTechnique);
+        fn SetBatchSize(self: Pin<&mut Params>, batchSize0: u32);
+        fn SetFirstModSize(self: Pin<&mut Params>, firstModSize0: u32);
+        fn SetNumLargeDigits(self: Pin<&mut Params>, numLargeDigits0: u32);
+        fn SetMultiplicativeDepth(self: Pin<&mut Params>, multiplicativeDepth0: u32);
+        fn SetScalingModSize(self: Pin<&mut Params>, scalingModSize0: u32);
+        fn SetSecurityLevel(self: Pin<&mut Params>, securityLevel0: SecurityLevel);
+        fn SetRingDim(self: Pin<&mut Params>, ringDim0: u32);
+        fn SetEvalAddCount(self: Pin<&mut Params>, evalAddCount0: u32);
+        fn SetKeySwitchCount(self: Pin<&mut Params>, keySwitchCount0: u32);
+        fn SetEncryptionTechnique(self: Pin<&mut Params>, encryptionTechnique0: EncryptionTechnique);
+        fn SetMultiplicationTechnique(self: Pin<&mut Params>, multiplicationTechnique0: MultiplicationTechnique);
+        fn SetMultiHopModSize(self: Pin<&mut Params>, multiHopModSize0: u32);
+        fn SetInteractiveBootCompressionLevel(self: Pin<&mut Params>, interactiveBootCompressionLevel0: COMPRESSION_LEVEL);
+    }
+
+    // ParamsBFVRNS
+    unsafe extern "C++"
+    {
         fn GetParamsBFVRNS() -> UniquePtr<ParamsBFVRNS>;
         fn GetParamsBFVRNSbyVectorOfString(vals: &CxxVector<CxxString>) -> UniquePtr<ParamsBFVRNS>;
-
         // getters
         fn GetScheme(self: &ParamsBFVRNS) -> SCHEME;
         fn GetPlaintextModulus(self: &ParamsBFVRNS) -> u64; // PlaintextModulus
@@ -233,7 +247,6 @@ mod ffi
         fn GetMultiplicationTechnique(self: &ParamsBFVRNS) -> MultiplicationTechnique;
         fn GetMultiHopModSize(self: &ParamsBFVRNS) -> u32;
         fn GetInteractiveBootCompressionLevel(self: &ParamsBFVRNS) -> COMPRESSION_LEVEL;
-
         // setters
         fn SetPlaintextModulus(self: Pin<&mut ParamsBFVRNS>, ptModulus0: u64); // PlaintextModulus
         fn SetDigitSize(self: Pin<&mut ParamsBFVRNS>, digitSize0: u32);
@@ -266,14 +279,11 @@ mod ffi
         fn SetInteractiveBootCompressionLevel(self: Pin<&mut ParamsBFVRNS>, interactiveBootCompressionLevel0: COMPRESSION_LEVEL);
     }
 
-    // lbcrypto::CCParams<lbcrypto::CryptoContextBGVRNS>
+    // ParamsBGVRNS
     unsafe extern "C++"
     {
-        //include!("openfhe_rs_dev/src/direct.hpp");
-        type ParamsBGVRNS;
         fn GetParamsBGVRNS() -> UniquePtr<ParamsBGVRNS>;
         fn GetParamsBGVRNSbyVectorOfString(vals: &CxxVector<CxxString>) -> UniquePtr<ParamsBGVRNS>;
-
         // getters
         fn GetScheme(self: &ParamsBGVRNS) -> SCHEME;
         fn GetPlaintextModulus(self: &ParamsBGVRNS) -> u64; // PlaintextModulus
@@ -305,7 +315,6 @@ mod ffi
         fn GetMultiplicationTechnique(self: &ParamsBGVRNS) -> MultiplicationTechnique;
         fn GetMultiHopModSize(self: &ParamsBGVRNS) -> u32;
         fn GetInteractiveBootCompressionLevel(self: &ParamsBGVRNS) -> COMPRESSION_LEVEL;
-
         // setters
         fn SetPlaintextModulus(self: Pin<&mut ParamsBGVRNS>, ptModulus0: u64); // PlaintextModulus
         fn SetDigitSize(self: Pin<&mut ParamsBGVRNS>, digitSize0: u32);
@@ -338,14 +347,11 @@ mod ffi
         fn SetInteractiveBootCompressionLevel(self: Pin<&mut ParamsBGVRNS>, interactiveBootCompressionLevel0: COMPRESSION_LEVEL);
     }
 
-    // lbcrypto::CCParams<lbcrypto::CryptoContextCKKSRNS>
+    // ParamsCKKSRNS
     unsafe extern "C++"
     {
-        //include!("openfhe_rs_dev/src/direct.hpp");
-        type ParamsCKKSRNS;
         fn GetParamsCKKSRNS() -> UniquePtr<ParamsCKKSRNS>;
         fn GetParamsCKKSRNSbyVectorOfString(vals: &CxxVector<CxxString>) -> UniquePtr<ParamsCKKSRNS>;
-
         // getters
         fn GetScheme(self: &ParamsCKKSRNS) -> SCHEME;
         fn GetPlaintextModulus(self: &ParamsCKKSRNS) -> u64; // PlaintextModulus
@@ -377,7 +383,6 @@ mod ffi
         fn GetMultiplicationTechnique(self: &ParamsCKKSRNS) -> MultiplicationTechnique;
         fn GetMultiHopModSize(self: &ParamsCKKSRNS) -> u32;
         fn GetInteractiveBootCompressionLevel(self: &ParamsCKKSRNS) -> COMPRESSION_LEVEL;
-
         // setters
         fn SetPlaintextModulus(self: Pin<&mut ParamsCKKSRNS>, ptModulus0: u64); // PlaintextModulus
         fn SetDigitSize(self: Pin<&mut ParamsCKKSRNS>, digitSize0: u32);
@@ -410,46 +415,147 @@ mod ffi
         fn SetInteractiveBootCompressionLevel(self: Pin<&mut ParamsCKKSRNS>, interactiveBootCompressionLevel0: COMPRESSION_LEVEL);
     }
 
-    // lbcrypto::CryptoContextImpl<lbcrypto::DCRTPoly>
+    // KeyPairDCRTPoly
     unsafe extern "C++"
     {
-        //include!("openfhe_rs_dev/src/direct.hpp");
-        type CryptoContextDCRTPoly;
+        fn GetPrivateKey(self: &KeyPairDCRTPoly) -> SharedPtr<PrivateKeyImpl>;
+        fn GetPublicKey(self: &KeyPairDCRTPoly) -> SharedPtr<PublicKeyImpl>;
+    }
+
+    // Plaintext
+    unsafe extern "C++"
+    {
+        fn GenEmptyPlainText() -> UniquePtr<Plaintext>;
+        fn GetPlainText(self: &Plaintext) -> SharedPtr<PlaintextImpl>;
+        fn SetLength(self: &Plaintext, newSize: usize);
+        fn GetString(self: &Plaintext) -> String;
+        fn GetLogPrecision(self: &Plaintext) -> f64;
+    }
+
+    // CiphertextDCRTPoly
+    unsafe extern "C++"
+    {
+        fn GetCipherText(self: &CiphertextDCRTPoly) -> SharedPtr<CiphertextImpl>;
+    }
+
+    // CryptoContextDCRTPoly
+    unsafe extern "C++"
+    {
         fn GenCryptoContextByParamsBFVRNS(params: &ParamsBFVRNS) -> UniquePtr<CryptoContextDCRTPoly>;
         fn GenCryptoContextByParamsBGVRNS(params: &ParamsBGVRNS) -> UniquePtr<CryptoContextDCRTPoly>;
         fn GenCryptoContextByParamsCKKSRNS(params: &ParamsCKKSRNS) -> UniquePtr<CryptoContextDCRTPoly>;
-        type PKESchemeFeature;
+
         fn Enable(self: &CryptoContextDCRTPoly, feature: PKESchemeFeature);
-
-        type KeyPairDCRTPoly;
         fn KeyGen(self: &CryptoContextDCRTPoly) -> UniquePtr<KeyPairDCRTPoly>;
-        type PrivateKeyImpl;
-        fn GetPrivateKey(self: &KeyPairDCRTPoly) -> SharedPtr<PrivateKeyImpl>;
-        type PublicKeyImpl;
-        fn GetPublicKey(self: &KeyPairDCRTPoly) -> SharedPtr<PublicKeyImpl>;
-
         fn EvalMultKeyGen(self: &CryptoContextDCRTPoly, key: SharedPtr<PrivateKeyImpl>);
         fn EvalRotateKeyGen(self: &CryptoContextDCRTPoly, privateKey: SharedPtr<PrivateKeyImpl>, indexList: &CxxVector<i32>, publicKey: SharedPtr<PublicKeyImpl>);
-        
-        type PlaintextImpl;
-        type Plaintext;
-        fn GenEmptyPlainText() -> UniquePtr<Plaintext>;
-        fn GetPlainText(self: &Plaintext) -> SharedPtr<PlaintextImpl>;
         fn MakePackedPlaintext(self: &CryptoContextDCRTPoly, value: &CxxVector<i64>, noiseScaleDeg: usize, level: u32) -> UniquePtr<Plaintext>; // noiseScaleDeg = 1, level = 0
-        fn SetLength(self: &Plaintext, newSize: usize);
-        fn GetString(self: &Plaintext) -> String;
-
-        type CiphertextImpl;
-        type CiphertextDCRTPoly;
-        fn GetCipherText(self: &CiphertextDCRTPoly) -> SharedPtr<CiphertextImpl>;
         fn Encrypt(self: &CryptoContextDCRTPoly, publicKey: SharedPtr<PublicKeyImpl>, plaintext: SharedPtr<PlaintextImpl>) -> UniquePtr<CiphertextDCRTPoly>;
         fn EvalAdd(self: &CryptoContextDCRTPoly, ciphertext1: SharedPtr<CiphertextImpl>, ciphertext2: SharedPtr<CiphertextImpl>) -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalSub(self: &CryptoContextDCRTPoly, ciphertext1: SharedPtr<CiphertextImpl>, ciphertext2: SharedPtr<CiphertextImpl>) -> UniquePtr<CiphertextDCRTPoly>;
         fn EvalMult(self: &CryptoContextDCRTPoly, ciphertext1: SharedPtr<CiphertextImpl>, ciphertext2: SharedPtr<CiphertextImpl>) -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalMultByConst(self: &CryptoContextDCRTPoly, ciphertext: SharedPtr<CiphertextImpl>, constant: f64) -> UniquePtr<CiphertextDCRTPoly>;
         fn EvalRotate(self: &CryptoContextDCRTPoly, ciphertext: SharedPtr<CiphertextImpl>, index: i32) -> UniquePtr<CiphertextDCRTPoly>;
-                
-        type DecryptResult;
-        fn Decrypt(self: &CryptoContextDCRTPoly, privateKey: SharedPtr<PrivateKeyImpl>, ciphertext: SharedPtr<CiphertextImpl>, plaintext: Pin<&mut Plaintext>) -> UniquePtr<DecryptResult>;
+        fn Decrypt(self: &CryptoContextDCRTPoly, privateKey: SharedPtr<PrivateKeyImpl>, ciphertext: SharedPtr<CiphertextImpl>,
+                   plaintext: Pin<&mut Plaintext>) -> UniquePtr<DecryptResult>;
+        fn GetRingDimension(self: &CryptoContextDCRTPoly) -> u32;
+        fn MakeCKKSPackedPlaintext(self: &CryptoContextDCRTPoly, value: &CxxVector<f64>, scaleDeg: usize, level: u32,
+                                   params: SharedPtr<DCRTPolyParams>, slots: u32) -> UniquePtr<Plaintext>;
     }
+}
+
+fn SimpleRealNumbersExample()
+{
+    let _mult_depth: u32 = 1;
+    let _scale_mod_size: u32 = 50;
+    let _batch_size: u32 = 8;
+
+    let mut _cc_params_ckksrns = ffi::GetParamsCKKSRNS();
+    _cc_params_ckksrns.pin_mut().SetMultiplicativeDepth(_mult_depth);
+    _cc_params_ckksrns.pin_mut().SetScalingModSize(_scale_mod_size);
+    _cc_params_ckksrns.pin_mut().SetBatchSize(_batch_size);
+
+    let mut _cc = ffi::GenCryptoContextByParamsCKKSRNS(&_cc_params_ckksrns);
+    _cc.Enable(ffi::PKESchemeFeature::PKE);
+    _cc.Enable(ffi::PKESchemeFeature::KEYSWITCH);
+    _cc.Enable(ffi::PKESchemeFeature::LEVELEDSHE);
+
+    println!("CKKS scheme is using ring dimension {}\n", _cc.GetRingDimension());
+
+    let mut _key_pair = _cc.KeyGen();
+    _cc.EvalMultKeyGen(_key_pair.GetPrivateKey());
+    let mut _index_list = CxxVector::<i32>::new();
+    _index_list.pin_mut().push(1);
+    _index_list.pin_mut().push(-2);
+    _cc.EvalRotateKeyGen(_key_pair.GetPrivateKey(), &_index_list, SharedPtr::<ffi::PublicKeyImpl>::null());
+
+    let mut _x_1 = CxxVector::<f64>::new();
+    _x_1.pin_mut().push(0.25);
+    _x_1.pin_mut().push(0.5);
+    _x_1.pin_mut().push(0.75);
+    _x_1.pin_mut().push(1.0);
+    _x_1.pin_mut().push(2.0);
+    _x_1.pin_mut().push(3.0);
+    _x_1.pin_mut().push(4.0);
+    _x_1.pin_mut().push(5.0);
+
+    let mut _x_2 = CxxVector::<f64>::new();
+    _x_2.pin_mut().push(5.0);
+    _x_2.pin_mut().push(4.0);
+    _x_2.pin_mut().push(3.0);
+    _x_2.pin_mut().push(2.0);
+    _x_2.pin_mut().push(1.0);
+    _x_2.pin_mut().push(0.75);
+    _x_2.pin_mut().push(0.5);
+    _x_2.pin_mut().push(0.25);
+
+    let mut _p_txt_1 = _cc.MakeCKKSPackedPlaintext(&_x_1, 1, 0, SharedPtr::<ffi::DCRTPolyParams>::null(), 0);
+    let mut _p_txt_2 = _cc.MakeCKKSPackedPlaintext(&_x_2, 1, 0, SharedPtr::<ffi::DCRTPolyParams>::null(), 0);
+
+    println!("Input x1: {}", _p_txt_1.GetString());
+    println!("Input x2: {}", _p_txt_2.GetString());
+
+    let mut _c1 = _cc.Encrypt(_key_pair.GetPublicKey(), _p_txt_1.GetPlainText());
+    let mut _c2 = _cc.Encrypt(_key_pair.GetPublicKey(), _p_txt_2.GetPlainText());
+
+    let mut _c_add = _cc.EvalAdd(_c1.GetCipherText(), _c2.GetCipherText());
+    let mut _c_sub = _cc.EvalSub(_c1.GetCipherText(), _c2.GetCipherText());
+    let mut _c_scalar = _cc.EvalMultByConst(_c1.GetCipherText(), 4.0);
+    let mut _c_mul = _cc.EvalMult(_c1.GetCipherText(), _c2.GetCipherText());
+    let mut _c_rot_1 = _cc.EvalRotate(_c1.GetCipherText(), 1);
+    let mut _c_rot_2 = _cc.EvalRotate(_c1.GetCipherText(), -2);
+
+    let mut _result = ffi::GenEmptyPlainText();
+    println!("\nResults of homomorphic computations:");
+
+    _cc.Decrypt(_key_pair.GetPrivateKey(), _c1.GetCipherText(), _result.pin_mut());
+    _result.SetLength(_batch_size.try_into().unwrap());
+    println!("x1 = {}Estimated precision in bits: {}", _result.GetString(), _result.GetLogPrecision());
+
+    _cc.Decrypt(_key_pair.GetPrivateKey(), _c_add.GetCipherText(), _result.pin_mut());
+    _result.SetLength(_batch_size.try_into().unwrap());
+    println!("x1 + x2 = {}Estimated precision in bits: {}",_result.GetString(), _result.GetLogPrecision());
+
+    _cc.Decrypt(_key_pair.GetPrivateKey(), _c_sub.GetCipherText(), _result.pin_mut());
+    _result.SetLength(_batch_size.try_into().unwrap());
+    println!("x1 - x2 = {}", _result.GetString());
+
+    _cc.Decrypt(_key_pair.GetPrivateKey(), _c_scalar.GetCipherText(), _result.pin_mut());
+    _result.SetLength(_batch_size.try_into().unwrap());
+    println!("4 * x1 = {}", _result.GetString());
+
+    _cc.Decrypt(_key_pair.GetPrivateKey(), _c_mul.GetCipherText(), _result.pin_mut());
+    _result.SetLength(_batch_size.try_into().unwrap());
+    println!("x1 * x2 = {}", _result.GetString());
+
+    _cc.Decrypt(_key_pair.GetPrivateKey(), _c_rot_1.GetCipherText(), _result.pin_mut());
+    _result.SetLength(_batch_size.try_into().unwrap());
+    println!("\nIn rotations, very small outputs (~10^-10 here) correspond to 0's:");
+    println!("x1 rotate by 1 = {}", _result.GetString());
+
+    _cc.Decrypt(_key_pair.GetPrivateKey(), _c_rot_2.GetCipherText(), _result.pin_mut());
+    _result.SetLength(_batch_size.try_into().unwrap());
+    println!("x1 rotate by -2 = {}", _result.GetString());
 }
 
 fn SimpleIntegersExample()
@@ -567,4 +673,5 @@ fn SimpleIntegersExample()
 fn main()
 {
     SimpleIntegersExample();
+    SimpleRealNumbersExample();
 }

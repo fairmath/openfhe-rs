@@ -35,7 +35,7 @@ namespace openfhe_rs_dev
     using ParamsBFVRNS = lbcrypto::CCParams<lbcrypto::CryptoContextBFVRNS>;
     using ParamsBGVRNS = lbcrypto::CCParams<lbcrypto::CryptoContextBGVRNS>;
     using ParamsCKKSRNS = lbcrypto::CCParams<lbcrypto::CryptoContextCKKSRNS>;
-    using params = lbcrypto::Params;
+    using Params = lbcrypto::Params;
     using SCHEME = lbcrypto::SCHEME;
     using SecretKeyDist = lbcrypto::SecretKeyDist;
     using ProxyReEncryptionMode = lbcrypto::ProxyReEncryptionMode;
@@ -49,13 +49,13 @@ namespace openfhe_rs_dev
     using MultiplicationTechnique = lbcrypto::MultiplicationTechnique;
     using COMPRESSION_LEVEL = lbcrypto::COMPRESSION_LEVEL;
     using PKESchemeFeature = lbcrypto::PKESchemeFeature;
-    std::unique_ptr<params> GetParamsByScheme(const SCHEME scheme)
+    std::unique_ptr<Params> GetParamsByScheme(const SCHEME scheme)
     {
-        return std::make_unique<params>(scheme);
+        return std::make_unique<Params>(scheme);
     }
-    std::unique_ptr<params> GetParamsByVectorOfString(const std::vector<std::string>& vals)
+    std::unique_ptr<Params> GetParamsByVectorOfString(const std::vector<std::string>& vals)
     {
-        return std::make_unique<params>(vals);
+        return std::make_unique<Params>(vals);
     }
     std::unique_ptr<ParamsBFVRNS> GetParamsBFVRNS()
     {
@@ -81,10 +81,6 @@ namespace openfhe_rs_dev
     {
         return std::make_unique<ParamsCKKSRNS>(vals);
     }
-
-    // CryptContext related stuff
-    // using PublicKey = std::shared_ptr<PublicKeyImpl<Element>>;
-    // using PrivateKey = std::shared_ptr<PrivateKeyImpl<Element>>;
 
     using PublicKeyImpl = lbcrypto::PublicKeyImpl<lbcrypto::DCRTPoly>;
     using PrivateKeyImpl = lbcrypto::PrivateKeyImpl<lbcrypto::DCRTPoly>;
@@ -140,6 +136,10 @@ namespace openfhe_rs_dev
                 m_plaintext->SetLength(newSize);
             }
         }
+        double GetLogPrecision() const
+        {
+            return m_plaintext->GetLogPrecision();
+        }
         rust::String GetString() const
         {
             if (m_plaintext)
@@ -177,6 +177,7 @@ namespace openfhe_rs_dev
     };
 
     using DecryptResult = lbcrypto::DecryptResult;
+    using DCRTPolyParams = lbcrypto::DCRTPoly::Params;
     class CryptoContextDCRTPoly final
     {
     private:
@@ -223,10 +224,20 @@ namespace openfhe_rs_dev
         {
             return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalAdd(ciphertext1, ciphertext2));
         }
+        std::unique_ptr<CiphertextDCRTPoly> EvalSub(std::shared_ptr<lbcrypto::CiphertextImpl<lbcrypto::DCRTPoly>> ciphertext1,
+                                                    std::shared_ptr<lbcrypto::CiphertextImpl<lbcrypto::DCRTPoly>> ciphertext2) const
+        {
+            return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalSub(ciphertext1, ciphertext2));
+        }
+
         std::unique_ptr<CiphertextDCRTPoly> EvalMult(std::shared_ptr<lbcrypto::CiphertextImpl<lbcrypto::DCRTPoly>> ciphertext1,
                                                      std::shared_ptr<lbcrypto::CiphertextImpl<lbcrypto::DCRTPoly>> ciphertext2) const
         {
             return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalMult(ciphertext1, ciphertext2));
+        }
+        std::unique_ptr<CiphertextDCRTPoly> EvalMultByConst(std::shared_ptr<lbcrypto::CiphertextImpl<lbcrypto::DCRTPoly>> ciphertext, const double constant) const
+        {
+            return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalMult(ciphertext, constant));
         }
         std::unique_ptr<CiphertextDCRTPoly> EvalRotate(std::shared_ptr<lbcrypto::CiphertextImpl<lbcrypto::DCRTPoly>> ciphertext, const int32_t index) const
         {
@@ -239,6 +250,16 @@ namespace openfhe_rs_dev
             std::unique_ptr<DecryptResult> result = std::make_unique<DecryptResult>(m_cryptoContextImplSharedPtr->Decrypt(privateKey, ciphertext, &res));
             plaintext = res;
             return result;
+        }
+        uint32_t GetRingDimension() const
+        {
+            return m_cryptoContextImplSharedPtr->GetRingDimension();
+        }
+        std::unique_ptr<Plaintext> MakeCKKSPackedPlaintext(const std::vector<double>& value, const size_t scaleDeg, const uint32_t level,
+                                                           const std::shared_ptr<DCRTPolyParams> params, const uint32_t slots) const
+                                                           // scaleDeg = 1, level = 0, params = nullptr, slots = 0
+        {
+            return std::make_unique<Plaintext>(m_cryptoContextImplSharedPtr->MakeCKKSPackedPlaintext(value, scaleDeg, level, params, slots));
         }
     };
 
