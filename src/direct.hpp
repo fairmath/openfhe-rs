@@ -31,7 +31,6 @@
 
 namespace openfhe_rs_dev
 {
-    // Parameter related stuff
     using ParamsBFVRNS = lbcrypto::CCParams<lbcrypto::CryptoContextBFVRNS>;
     using ParamsBGVRNS = lbcrypto::CCParams<lbcrypto::CryptoContextBGVRNS>;
     using ParamsCKKSRNS = lbcrypto::CCParams<lbcrypto::CryptoContextCKKSRNS>;
@@ -49,41 +48,14 @@ namespace openfhe_rs_dev
     using MultiplicationTechnique = lbcrypto::MultiplicationTechnique;
     using COMPRESSION_LEVEL = lbcrypto::COMPRESSION_LEVEL;
     using PKESchemeFeature = lbcrypto::PKESchemeFeature;
-    std::unique_ptr<Params> GetParamsByScheme(const SCHEME scheme)
-    {
-        return std::make_unique<Params>(scheme);
-    }
-    std::unique_ptr<Params> GetParamsByVectorOfString(const std::vector<std::string>& vals)
-    {
-        return std::make_unique<Params>(vals);
-    }
-    std::unique_ptr<ParamsBFVRNS> GetParamsBFVRNS()
-    {
-        return std::make_unique<ParamsBFVRNS>();
-    }
-    std::unique_ptr<ParamsBFVRNS> GetParamsBFVRNSbyVectorOfString(const std::vector<std::string>& vals)
-    {
-        return std::make_unique<ParamsBFVRNS>(vals);
-    }
-    std::unique_ptr<ParamsBGVRNS> GetParamsBGVRNS()
-    {
-        return std::make_unique<ParamsBGVRNS>();
-    }
-    std::unique_ptr<ParamsBGVRNS> GetParamsBGVRNSbyVectorOfString(const std::vector<std::string>& vals)
-    {
-        return std::make_unique<ParamsBGVRNS>(vals);
-    }
-    std::unique_ptr<ParamsCKKSRNS> GetParamsCKKSRNS()
-    {
-        return std::make_unique<ParamsCKKSRNS>();
-    }
-    std::unique_ptr<ParamsCKKSRNS> GetParamsCKKSRNSbyVectorOfString(const std::vector<std::string>& vals)
-    {
-        return std::make_unique<ParamsCKKSRNS>(vals);
-    }
-
     using PublicKeyImpl = lbcrypto::PublicKeyImpl<lbcrypto::DCRTPoly>;
     using PrivateKeyImpl = lbcrypto::PrivateKeyImpl<lbcrypto::DCRTPoly>;
+    using PlaintextImpl = lbcrypto::PlaintextImpl;
+    using CiphertextImpl = lbcrypto::CiphertextImpl<lbcrypto::DCRTPoly>;
+    using DecryptResult = lbcrypto::DecryptResult;
+    using DCRTPolyParams = lbcrypto::DCRTPoly::Params;
+    struct ComplexPair;
+    using VectorOfComplexNumbers = std::vector<std::complex<double>>;
 
     class KeyPairDCRTPoly final
     {
@@ -108,7 +80,6 @@ namespace openfhe_rs_dev
         // TODO: implement necessary member functions
     };
 
-    using PlaintextImpl = lbcrypto::PlaintextImpl;
     class Plaintext final
     {
     private:
@@ -153,12 +124,8 @@ namespace openfhe_rs_dev
         // TODO: implement necessary member functions
     };
 
-    std::unique_ptr<Plaintext> GenEmptyPlainText()
-    {
-        return std::make_unique<Plaintext>();
-    }
 
-    using CiphertextImpl = lbcrypto::CiphertextImpl<lbcrypto::DCRTPoly>;
+
     class CiphertextDCRTPoly final
     {
     private:
@@ -176,8 +143,6 @@ namespace openfhe_rs_dev
         // TODO: implement necessary member functions
     };
 
-    using DecryptResult = lbcrypto::DecryptResult;
-    using DCRTPolyParams = lbcrypto::DCRTPoly::Params;
     class CryptoContextDCRTPoly final
     {
     private:
@@ -261,19 +226,30 @@ namespace openfhe_rs_dev
         {
             return std::make_unique<Plaintext>(m_cryptoContextImplSharedPtr->MakeCKKSPackedPlaintext(value, scaleDeg, level, params, slots));
         }
+        std::unique_ptr<Plaintext> MakeCKKSPackedPlaintextByVectorOfComplexNumbers(const std::vector<std::complex<double>>& value, const size_t scaleDeg, const uint32_t level,
+                                                                                   const std::shared_ptr<DCRTPolyParams> params, const uint32_t slots) const
+                                                                                   // scaleDeg = 1, level = 0, params = nullptr, slots = 0
+        {
+            return std::make_unique<Plaintext>(m_cryptoContextImplSharedPtr->MakeCKKSPackedPlaintext(value, scaleDeg, level, params, slots));
+        }
+        std::unique_ptr<CiphertextDCRTPoly> EvalPoly(std::shared_ptr<lbcrypto::CiphertextImpl<lbcrypto::DCRTPoly>> ciphertext, const std::vector<double>& coefficients) const
+        {
+            return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalPoly(ciphertext, coefficients));
+        }
     };
 
-    std::unique_ptr<CryptoContextDCRTPoly> GenCryptoContextByParamsBFVRNS(const ParamsBFVRNS& params)
-    {
-        return std::make_unique<CryptoContextDCRTPoly>(params);
-    }
-    std::unique_ptr<CryptoContextDCRTPoly> GenCryptoContextByParamsBGVRNS(const ParamsBGVRNS& params)
-    {
-        return std::make_unique<CryptoContextDCRTPoly>(params);
-    }
-    std::unique_ptr<CryptoContextDCRTPoly> GenCryptoContextByParamsCKKSRNS(const ParamsCKKSRNS& params)
-    {
-        return std::make_unique<CryptoContextDCRTPoly>(params);
-    }
+    std::unique_ptr<VectorOfComplexNumbers> GenVectorOfComplexNumbers(const std::vector<ComplexPair>& vals);
+    std::unique_ptr<Params> GetParamsByScheme(const SCHEME scheme);
+    std::unique_ptr<Params> GetParamsByVectorOfString(const std::vector<std::string>& vals);
+    std::unique_ptr<ParamsBFVRNS> GetParamsBFVRNS();
+    std::unique_ptr<ParamsBFVRNS> GetParamsBFVRNSbyVectorOfString(const std::vector<std::string>& vals);
+    std::unique_ptr<ParamsBGVRNS> GetParamsBGVRNS();
+    std::unique_ptr<ParamsBGVRNS> GetParamsBGVRNSbyVectorOfString(const std::vector<std::string>& vals);
+    std::unique_ptr<ParamsCKKSRNS> GetParamsCKKSRNS();
+    std::unique_ptr<ParamsCKKSRNS> GetParamsCKKSRNSbyVectorOfString(const std::vector<std::string>& vals);
+    std::unique_ptr<Plaintext> GenEmptyPlainText();
+    std::unique_ptr<CryptoContextDCRTPoly> GenCryptoContextByParamsBFVRNS(const ParamsBFVRNS& params);
+    std::unique_ptr<CryptoContextDCRTPoly> GenCryptoContextByParamsBGVRNS(const ParamsBGVRNS& params);
+    std::unique_ptr<CryptoContextDCRTPoly> GenCryptoContextByParamsCKKSRNS(const ParamsCKKSRNS& params);
 } // openfhe_rs_dev
 
