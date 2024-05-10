@@ -1,7 +1,7 @@
 fn main()
 {
-    cxx_build::bridge("src/main.rs")
-        .file("src/direct.cc")
+    cxx_build::bridge("src/lib.rs")
+        .file("src/bindings.cc")
         .include("/usr/local/include/openfhe")
         .include("/usr/local/include/openfhe/third-party/include")
         .include("/usr/local/include/openfhe/core")
@@ -18,11 +18,12 @@ fn main()
         .flag_if_supported("-fPIE")
         .flag_if_supported("-Wno-unused-parameter") // [-Wunused-parameter]
         .flag_if_supported("-Wno-missing-field-initializers") // [-Wmissing-field-initializers]
+        .flag_if_supported("-Wno-unused-function") // [-Wunused-function]
         .compile("openfhe_rs_dev");
 
-    println!("cargo::rerun-if-changed=src/main.rs");
-    println!("cargo::rerun-if-changed=src/direct.hpp");
-    println!("cargo::rerun-if-changed=src/direct.cc");
+    println!("cargo::rerun-if-changed=src/lib.rs");
+    println!("cargo::rerun-if-changed=src/bindings.hpp");
+    println!("cargo::rerun-if-changed=src/bindings.cc");
 
     // linking additional shared libraries
     println!("cargo::rustc-link-arg=-L/usr/local/lib");
