@@ -29,6 +29,16 @@
 #include "openfhe/pke/encoding/plaintext.h"
 #include "openfhe/pke/schemebase/decrypt-result.h"
 
+#include "openfhe/pke/cryptocontext-ser.h"
+#include "openfhe/core/utils/serial.h"
+#include "openfhe/pke/key/publickey.h"
+
+enum SerialMode
+{
+    BINARY = 0,
+    JSON = 1,
+};
+
 namespace openfhe_rs_dev
 {
     using ParamsBFVRNS = lbcrypto::CCParams<lbcrypto::CryptoContextBFVRNS>;
@@ -55,7 +65,22 @@ namespace openfhe_rs_dev
     using DecryptResult = lbcrypto::DecryptResult;
     using DCRTPolyParams = lbcrypto::DCRTPoly::Params;
     struct ComplexPair;
-    using VectorOfComplexNumbers = std::vector<std::complex<double>>;
+    using VectorOfComplexNumbers = std::vector<std::complex<double>>; // TODO: Think about vector of opaque C++ type
+    using ::SerialMode;
+
+    class PublicKeyDCRTPoly final
+    {
+    private:
+        std::shared_ptr<PublicKeyImpl> m_publicKey;
+
+    public:
+        friend bool SerializePublicKeyToFile(const std::string& publicKeyLocation, const PublicKeyDCRTPoly& publicKey, const SerialMode serialMode);
+        friend bool DeserializePublicKeyFromFile(const std::string& publicKeyLocation, PublicKeyDCRTPoly& publicKey, const SerialMode serialMode);
+        // TODO: think about all special functions of class
+        explicit PublicKeyDCRTPoly()
+            : m_publicKey(std::make_shared<PublicKeyImpl>())
+        { }
+    };
 
     class KeyPairDCRTPoly final
     {
@@ -83,20 +108,20 @@ namespace openfhe_rs_dev
     class Plaintext final
     {
     private:
-        std::shared_ptr<lbcrypto::PlaintextImpl> m_plaintext;
+        std::shared_ptr<PlaintextImpl> m_plaintext;
 
     public:
         // TODO: think about all special functions of class
         explicit Plaintext() = default;
-        explicit Plaintext(std::shared_ptr<lbcrypto::PlaintextImpl> plaintext)
+        explicit Plaintext(std::shared_ptr<PlaintextImpl> plaintext)
             : m_plaintext(plaintext)
         { }
-        Plaintext& operator=(std::shared_ptr<lbcrypto::PlaintextImpl> plaintext)
+        Plaintext& operator=(std::shared_ptr<PlaintextImpl> plaintext)
         {
             m_plaintext = plaintext;
             return *this;
         }
-        std::shared_ptr<lbcrypto::PlaintextImpl> GetPlainText() const
+        std::shared_ptr<PlaintextImpl> GetPlainText() const
         {
             return m_plaintext;
         }
@@ -124,19 +149,22 @@ namespace openfhe_rs_dev
         // TODO: implement necessary member functions
     };
 
-
-
     class CiphertextDCRTPoly final
     {
     private:
-        std::shared_ptr<lbcrypto::CiphertextImpl<lbcrypto::DCRTPoly>> m_ciphertext;
+        std::shared_ptr<CiphertextImpl> m_ciphertext;
 
     public:
+        friend bool SerializeCiphertextToFile(const std::string& ciphertextLocation, const CiphertextDCRTPoly& ciphertext, const SerialMode serialMode);
+        friend bool DeserializeCiphertextFromFile(const std::string& ciphertextLocation, CiphertextDCRTPoly& ciphertext, const SerialMode serialMode);
         // TODO: think about all special functions of class
-        explicit CiphertextDCRTPoly(std::shared_ptr<lbcrypto::CiphertextImpl<lbcrypto::DCRTPoly>> ciphertext)
+        explicit CiphertextDCRTPoly()
+            : m_ciphertext(std::make_shared<CiphertextImpl>())
+        { }
+        explicit CiphertextDCRTPoly(std::shared_ptr<CiphertextImpl> ciphertext)
             : m_ciphertext(ciphertext)
         { }
-        std::shared_ptr<lbcrypto::CiphertextImpl<lbcrypto::DCRTPoly>> GetCipherText() const
+        std::shared_ptr<CiphertextImpl> GetCipherText() const
         {
             return m_ciphertext;
         }
@@ -149,7 +177,15 @@ namespace openfhe_rs_dev
         std::shared_ptr<lbcrypto::CryptoContextImpl<lbcrypto::DCRTPoly>> m_cryptoContextImplSharedPtr;
 
     public:
+        friend bool SerializeCryptoContextToFile(const std::string& ccLocation, const CryptoContextDCRTPoly& cryptoContext, const SerialMode serialMode);
+        friend bool DeserializeCryptoContextFromFile(const std::string& ccLocation, CryptoContextDCRTPoly& cryptoContext, const SerialMode serialMode);
+        friend bool SerializeEvalMultKeyToFile(const std::string& multKeyLocation, const CryptoContextDCRTPoly& cryptoContext, const SerialMode serialMode);
+        friend bool SerializeEvalSumKeyToFile(const std::string& sumKeyLocation, const CryptoContextDCRTPoly& cryptoContext, const SerialMode serialMode);
+        friend bool SerializeEvalAutomorphismKeyToFile(const std::string& automorphismKeyLocation, const CryptoContextDCRTPoly& cryptoContext, const SerialMode serialMode);
+
         // TODO: think about all special functions of class
+        // TODO: about nullptr check in member functions
+        explicit CryptoContextDCRTPoly() = default;
         explicit CryptoContextDCRTPoly(const ParamsBFVRNS& params)
             : m_cryptoContextImplSharedPtr(lbcrypto::GenCryptoContext(params))
         { }
@@ -172,7 +208,7 @@ namespace openfhe_rs_dev
             m_cryptoContextImplSharedPtr->EvalMultKeyGen(key);
         }
         void EvalRotateKeyGen(const std::shared_ptr<lbcrypto::PrivateKeyImpl<lbcrypto::DCRTPoly>> privateKey, const std::vector<int32_t>& indexList,
-							                const std::shared_ptr<lbcrypto::PublicKeyImpl<lbcrypto::DCRTPoly>> publicKey) const // publicKey = nullptr in original. Rust don't support default args.
+                              const std::shared_ptr<lbcrypto::PublicKeyImpl<lbcrypto::DCRTPoly>> publicKey) const // publicKey = nullptr in original. Rust don't support default args.
         {
             m_cryptoContextImplSharedPtr->EvalRotateKeyGen(privateKey, indexList, publicKey);
         }
@@ -184,32 +220,33 @@ namespace openfhe_rs_dev
         {
             return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->Encrypt(publicKey, plaintext));
         }
-        std::unique_ptr<CiphertextDCRTPoly> EvalAdd(std::shared_ptr<lbcrypto::CiphertextImpl<lbcrypto::DCRTPoly>> ciphertext1,
-                                                    std::shared_ptr<lbcrypto::CiphertextImpl<lbcrypto::DCRTPoly>> ciphertext2) const
+        std::unique_ptr<CiphertextDCRTPoly> EvalAdd(std::shared_ptr<CiphertextImpl> ciphertext1, std::shared_ptr<CiphertextImpl> ciphertext2) const
         {
             return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalAdd(ciphertext1, ciphertext2));
         }
-        std::unique_ptr<CiphertextDCRTPoly> EvalSub(std::shared_ptr<lbcrypto::CiphertextImpl<lbcrypto::DCRTPoly>> ciphertext1,
-                                                    std::shared_ptr<lbcrypto::CiphertextImpl<lbcrypto::DCRTPoly>> ciphertext2) const
+        std::unique_ptr<CiphertextDCRTPoly> EvalSub(std::shared_ptr<CiphertextImpl> ciphertext1, std::shared_ptr<CiphertextImpl> ciphertext2) const
         {
             return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalSub(ciphertext1, ciphertext2));
         }
-
-        std::unique_ptr<CiphertextDCRTPoly> EvalMult(std::shared_ptr<lbcrypto::CiphertextImpl<lbcrypto::DCRTPoly>> ciphertext1,
-                                                     std::shared_ptr<lbcrypto::CiphertextImpl<lbcrypto::DCRTPoly>> ciphertext2) const
+        std::unique_ptr<CiphertextDCRTPoly> EvalMult(std::shared_ptr<CiphertextImpl> ciphertext1, std::shared_ptr<CiphertextImpl> ciphertext2) const
         {
             return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalMult(ciphertext1, ciphertext2));
         }
-        std::unique_ptr<CiphertextDCRTPoly> EvalMultByConst(std::shared_ptr<lbcrypto::CiphertextImpl<lbcrypto::DCRTPoly>> ciphertext, const double constant) const
+        std::unique_ptr<CiphertextDCRTPoly> EvalMultByConst(std::shared_ptr<CiphertextImpl> ciphertext, const double constant) const
         {
             return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalMult(ciphertext, constant));
         }
-        std::unique_ptr<CiphertextDCRTPoly> EvalRotate(std::shared_ptr<lbcrypto::CiphertextImpl<lbcrypto::DCRTPoly>> ciphertext, const int32_t index) const
+        std::unique_ptr<CiphertextDCRTPoly> EvalRotate(std::shared_ptr<CiphertextImpl> ciphertext, const int32_t index) const
         {
             return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalRotate(ciphertext, index));
         }
+        std::unique_ptr<CiphertextDCRTPoly> EvalChebyshevSeries(std::shared_ptr<CiphertextImpl> ciphertext, const std::vector<double>& coefficients,
+                                                                const double a, const double b) const
+        {
+            return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalChebyshevSeries(ciphertext, coefficients, a, b));
+        }
         std::unique_ptr<DecryptResult> Decrypt(const std::shared_ptr<lbcrypto::PrivateKeyImpl<lbcrypto::DCRTPoly>> privateKey,
-                                               std::shared_ptr<lbcrypto::CiphertextImpl<lbcrypto::DCRTPoly>> ciphertext, Plaintext& plaintext) const
+                                               std::shared_ptr<CiphertextImpl> ciphertext, Plaintext& plaintext) const
         {
             std::shared_ptr<lbcrypto::PlaintextImpl> res;
             std::unique_ptr<DecryptResult> result = std::make_unique<DecryptResult>(m_cryptoContextImplSharedPtr->Decrypt(privateKey, ciphertext, &res));
@@ -232,11 +269,27 @@ namespace openfhe_rs_dev
         {
             return std::make_unique<Plaintext>(m_cryptoContextImplSharedPtr->MakeCKKSPackedPlaintext(value, scaleDeg, level, params, slots));
         }
-        std::unique_ptr<CiphertextDCRTPoly> EvalPoly(std::shared_ptr<lbcrypto::CiphertextImpl<lbcrypto::DCRTPoly>> ciphertext, const std::vector<double>& coefficients) const
+        std::unique_ptr<CiphertextDCRTPoly> EvalPoly(std::shared_ptr<CiphertextImpl> ciphertext, const std::vector<double>& coefficients) const
         {
             return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalPoly(ciphertext, coefficients));
         }
     };
+
+    bool SerializeCryptoContextToFile(const std::string& ccLocation, const CryptoContextDCRTPoly& cryptoContext, const SerialMode serialMode);
+    bool DeserializeCryptoContextFromFile(const std::string& ccLocation, CryptoContextDCRTPoly& cryptoContext, const SerialMode serialMode);
+    bool SerializeEvalMultKeyToFile(const std::string& multKeyLocation, const CryptoContextDCRTPoly& cryptoContext, const SerialMode serialMode);
+    bool SerializeEvalMultKeyByIdToFile(const std::string& multKeyLocation, const SerialMode serialMode, const std::string& id);
+    bool DeserializeEvalMultKeyFromFile(const std::string& multKeyLocation, const SerialMode serialMode);
+    bool SerializeEvalSumKeyToFile(const std::string& sumKeyLocation, const CryptoContextDCRTPoly& cryptoContext, const SerialMode serialMode);
+    bool SerializeEvalSumKeyByIdToFile(const std::string& sumKeyLocation, const SerialMode serialMode, const std::string& id);
+    bool DeserializeEvalSumKeyFromFile(const std::string& sumKeyLocation, const SerialMode serialMode);
+    bool SerializeEvalAutomorphismKeyToFile(const std::string& automorphismKeyLocation, const CryptoContextDCRTPoly& cryptoContext, const SerialMode serialMode);
+    bool SerializeEvalAutomorphismKeyByIdToFile(const std::string& automorphismKeyLocation, const SerialMode serialMode, const std::string& id);
+    bool DeserializeEvalAutomorphismKeyFromFile(const std::string& automorphismKeyLocation, const SerialMode serialMode);
+    bool SerializeCiphertextToFile(const std::string& ciphertextLocation, const CiphertextDCRTPoly& ciphertext, const SerialMode serialMode);
+    bool DeserializeCiphertextFromFile(const std::string& ciphertextLocation, CiphertextDCRTPoly& ciphertext, const SerialMode serialMode);
+    bool SerializePublicKeyToFile(const std::string& publicKeyLocation, const PublicKeyDCRTPoly& publicKey, const SerialMode serialMode);
+    bool DeserializePublicKeyFromFile(const std::string& publicKeyLocation, PublicKeyDCRTPoly& publicKey, const SerialMode serialMode);
 
     std::unique_ptr<VectorOfComplexNumbers> GenVectorOfComplexNumbers(const std::vector<ComplexPair>& vals);
     std::unique_ptr<Params> GetParamsByScheme(const SCHEME scheme);
@@ -248,8 +301,10 @@ namespace openfhe_rs_dev
     std::unique_ptr<ParamsCKKSRNS> GetParamsCKKSRNS();
     std::unique_ptr<ParamsCKKSRNS> GetParamsCKKSRNSbyVectorOfString(const std::vector<std::string>& vals);
     std::unique_ptr<Plaintext> GenEmptyPlainText();
+    std::unique_ptr<CryptoContextDCRTPoly> GenEmptyCryptoContext();
     std::unique_ptr<CryptoContextDCRTPoly> GenCryptoContextByParamsBFVRNS(const ParamsBFVRNS& params);
     std::unique_ptr<CryptoContextDCRTPoly> GenCryptoContextByParamsBGVRNS(const ParamsBGVRNS& params);
     std::unique_ptr<CryptoContextDCRTPoly> GenCryptoContextByParamsCKKSRNS(const ParamsCKKSRNS& params);
+    std::unique_ptr<PublicKeyDCRTPoly> GenDefaultConstructedPublicKey();
+    std::unique_ptr<CiphertextDCRTPoly> GenDefaultConstructedCiphertext();
 } // openfhe_rs_dev
-
