@@ -101,6 +101,10 @@ void CryptoContextDCRTPoly::EvalMultKeyGen(const std::shared_ptr<PrivateKeyImpl>
 {
     m_cryptoContextImplSharedPtr->EvalMultKeyGen(key);
 }
+void CryptoContextDCRTPoly::EvalMultKeysGen(const std::shared_ptr<PrivateKeyImpl> key) const
+{
+    m_cryptoContextImplSharedPtr->EvalMultKeysGen(key);
+}
 void CryptoContextDCRTPoly::EvalRotateKeyGen(
     const std::shared_ptr<PrivateKeyImpl> privateKey, const std::vector<int32_t>& indexList,
     const std::shared_ptr<PublicKeyImpl> publicKey) const
@@ -138,6 +142,18 @@ std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalMult(
 {
     return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalMult(
         ciphertext1, ciphertext2));
+}
+std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalMultNoRelin(
+    std::shared_ptr<CiphertextImpl> ciphertext1, std::shared_ptr<CiphertextImpl> ciphertext2) const
+{
+    return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalMultNoRelin(
+        ciphertext1, ciphertext2));
+}
+std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalMultAndRelinearize(
+    std::shared_ptr<CiphertextImpl> ciphertext1, std::shared_ptr<CiphertextImpl> ciphertext2) const
+{
+    return std::make_unique<CiphertextDCRTPoly>(
+        m_cryptoContextImplSharedPtr->EvalMultAndRelinearize(ciphertext1, ciphertext2));
 }
 std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalMultByConst(
     std::shared_ptr<CiphertextImpl> ciphertext, const double constant) const

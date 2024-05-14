@@ -118,6 +118,8 @@ public:
     [[nodiscard]] std::shared_ptr<CiphertextImpl> GetCipherText() const;
 };
 
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
 class CryptoContextDCRTPoly final
 {
     std::shared_ptr<lbcrypto::CryptoContextImpl<lbcrypto::DCRTPoly>> m_cryptoContextImplSharedPtr;
@@ -145,6 +147,7 @@ public:
     void Enable(const PKESchemeFeature feature) const;
     [[nodiscard]] std::unique_ptr<KeyPairDCRTPoly> KeyGen() const;
     void EvalMultKeyGen(const std::shared_ptr<PrivateKeyImpl> key) const;
+    void EvalMultKeysGen(const std::shared_ptr<PrivateKeyImpl> key) const;
     void EvalRotateKeyGen(
         const std::shared_ptr<PrivateKeyImpl> privateKey, const std::vector<int32_t>& indexList,
         const std::shared_ptr<PublicKeyImpl> publicKey /* nullptr */) const;
@@ -159,6 +162,12 @@ public:
         std::shared_ptr<CiphertextImpl> ciphertext1,
         std::shared_ptr<CiphertextImpl> ciphertext2) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalMult(
+        std::shared_ptr<CiphertextImpl> ciphertext1,
+        std::shared_ptr<CiphertextImpl> ciphertext2) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalMultNoRelin(
+        std::shared_ptr<CiphertextImpl> ciphertext1,
+        std::shared_ptr<CiphertextImpl> ciphertext2) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalMultAndRelinearize(
         std::shared_ptr<CiphertextImpl> ciphertext1,
         std::shared_ptr<CiphertextImpl> ciphertext2) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalMultByConst(
