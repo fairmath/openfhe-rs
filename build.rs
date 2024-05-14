@@ -19,7 +19,7 @@ fn main()
         .flag_if_supported("-Wno-unused-parameter") // [-Wunused-parameter]
         .flag_if_supported("-Wno-missing-field-initializers") // [-Wmissing-field-initializers]
         .flag_if_supported("-Wno-unused-function") // [-Wunused-function]
-        .compile("openfhe_rs_dev");
+        .compile("openfhe");
 
     println!("cargo::rerun-if-changed=src/lib.rs");
     println!("cargo::rerun-if-changed=src/bindings.hpp");
