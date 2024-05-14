@@ -4,7 +4,7 @@
 
 use cxx::{CxxVector, SharedPtr, let_cxx_string};
 
-#[cxx::bridge(namespace = "openfhe_rs_dev")]
+#[cxx::bridge(namespace = "openfhe")]
 mod ffi
 {
     #[repr(i32)]
@@ -119,7 +119,7 @@ mod ffi
 
     unsafe extern "C++"
     {
-        include!("openfhe_rs_dev/src/bindings.hpp");
+        include!("openfhe/src/bindings.hpp");
         type SCHEME;
         type Params;
         type SecretKeyDist;

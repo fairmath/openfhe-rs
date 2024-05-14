@@ -11,13 +11,13 @@ Whether you're building secure data processing apps or privacy-focused tools, Op
 
 # Current status
 
-The library is under development and the ETA is Q2 2024.
+The library is under development and the ETA of the first version is set to Q2 2024.
 
-# Instructions for running examples:
+# Installation from source
 
-1. Build and install OpenFHE library (for more info refer to https://openfhe-development.readthedocs.io/en/latest/sphinx_rsts/intro/installation/installation.html#):
-   1.1. Build OpenFHE as shared libraries;
-   1.2. Don't specify an installation path (If no installation path is provided in Ubuntu (and many other Unix-based OSes),
+1. Build and install OpenFHE library using the [official docs](https://openfhe-development.readthedocs.io/en/latest/sphinx_rsts/intro/installation/installation.html#):
+   1. Build OpenFHE as shared libraries;
+   2. Don't specify an installation path (If no installation path is provided in Ubuntu (and many other Unix-based OSes),
         the header and library binary files will be placed in /usr/local/include/openfhe and /usr/local/lib, respectively);
-2. Make sure that "build.rs" file has the correct paths to shared libraries(OpenFHE) and libgomp(GNU Offloading and Multi Processing Runtime Library);
-3. run "cargo run".
+2. Make sure that `build.rs` file has the correct paths to shared libraries(OpenFHE) and libgomp(GNU Offloading and Multi Processing Runtime Library);
+3. run `cargo build`

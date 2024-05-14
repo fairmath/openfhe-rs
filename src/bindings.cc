@@ -1,8 +1,8 @@
-#include "openfhe_rs_dev/src/lib.rs.h"
+#include "openfhe/src/lib.rs.h"
 
 #include "openfhe/pke/gen-cryptocontext.h"
 
-namespace openfhe_rs_dev
+namespace openfhe
 {
 PublicKeyDCRTPoly::PublicKeyDCRTPoly()
     : m_publicKey(std::make_shared<PublicKeyImpl>())
@@ -548,4 +548,4 @@ bool DeserializePublicKeyFromFile(const std::string& publicKeyLocation,
     }
     return false;
 }
-} // openfhe_rs_dev
+} // openfhe
