@@ -15,9 +15,70 @@ The library is under development and the ETA of the first version is set to Q2 2
 
 # Installation from source
 
-1. Build and install OpenFHE library using the [official docs](https://openfhe-development.readthedocs.io/en/latest/sphinx_rsts/intro/installation/installation.html#):
-   1. Build OpenFHE as shared libraries;
-   2. Don't specify an installation path (If no installation path is provided in Ubuntu (and many other Unix-based OSes),
-        the header and library binary files will be placed in /usr/local/include/openfhe and /usr/local/lib, respectively);
-2. Make sure that `build.rs` file has the correct paths to shared libraries(OpenFHE) and libgomp(GNU Offloading and Multi Processing Runtime Library);
-3. run `cargo build`
+## Install Dependencies
+    
+* CMake >= 3.5.1
+* Clang >= 12.0 or GCC >= 11.4
+* Rust >= 1.78
+* Git
+
+### Unix
+
+On Debian systems, everything can be installed with the following command:
+
+```bash
+sudo apt install build-essential libssl-dev cmake clang git
+```
+
+## Installation process
+
+1. Build and install OpenFHE library. Right now you need to use the Fair Math fork. It contains required features, which will be included in the next planned release (v1.1.5):
+
+   1. Clone the repository
+
+   ```bash
+   git clone https://github.com/fairmath/openfhe.git
+   cd openfhe
+   ```
+
+   2. Configure CMake
+
+   ```bash
+   cmake -B ${OPENFHE_BUILD:-build} -DBUILD_EXAMPLES=ON -DBUILD_EXTRAS=ON -DBUILD_SHARED=ON .       
+   ```
+
+   3. Build and install the C++ OpenFHE library
+
+   ```bash
+   make -C ${OPENFHE_BUILD:-build} -j$(nproc)
+   make -C ${OPENFHE_BUILD:-build} install
+   ```
+2. Make sure you have [rustc](https://www.rust-lang.org/tools/install) with `cargo` installed first.
+
+3. Clone the Fair Math [openfhe-rs](https://github.com/fairmath/openfhe-rs) repo to your local machine and build:
+   1. Clone the repository
+   ```bash
+   git clone https://github.com/fairmath/openfhe-rs.git
+   cd openfhe-rs
+   ```
+
+   2. Configure your dynamic linker
+   ```bash
+   sudo ldconfig
+   ```
+
+   3. Build the library
+   ```bash
+   cargo build
+   ```
+
+   4. Run tests
+   ```bash
+   cargo test -- --test-threads=1
+   ```
+
+   5. Run the examples
+
+   ```bash
+   cargo run --example polynomial_evaluation
+   ```
