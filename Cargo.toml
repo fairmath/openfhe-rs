@@ -1,7 +1,10 @@
 [package]
-name = "openfhe_rs_dev"
+name = "openfhe"
 version = "0.1.0"
 edition = "2021"
+description = "Rust package of the OpenFHE Fully Homomorphic Encryption Library."
+license-file = "LICENSE"
+repository = "https://github.com/fairmath/openfhe-rs"
 
 [dependencies]
 cxx = "1.0"

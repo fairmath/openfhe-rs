@@ -12,7 +12,7 @@ enum SerialMode
     JSON = 1,
 };
 
-namespace openfhe_rs_dev
+namespace openfhe
 {
 using ParamsBFVRNS = lbcrypto::CCParams<lbcrypto::CryptoContextBFVRNS>;
 using ParamsBGVRNS = lbcrypto::CCParams<lbcrypto::CryptoContextBGVRNS>;
@@ -240,4 +240,4 @@ bool SerializePublicKeyToFile(const std::string& publicKeyLocation,
     const PublicKeyDCRTPoly& publicKey, const SerialMode serialMode);
 bool DeserializePublicKeyFromFile(const std::string& publicKeyLocation,
     PublicKeyDCRTPoly& publicKey, const SerialMode serialMode);
-} // openfhe_rs_dev
+} // openfhe
