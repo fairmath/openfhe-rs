@@ -505,6 +505,7 @@ pub mod ffi
         fn Enable(self: &CryptoContextDCRTPoly, feature: PKESchemeFeature);
         fn KeyGen(self: &CryptoContextDCRTPoly) -> UniquePtr<KeyPairDCRTPoly>;
         fn EvalMultKeyGen(self: &CryptoContextDCRTPoly, key: SharedPtr<PrivateKeyImpl>);
+        fn EvalMultKeysGen(self: &CryptoContextDCRTPoly, key: SharedPtr<PrivateKeyImpl>);
         fn EvalRotateKeyGen(self: &CryptoContextDCRTPoly, privateKey: SharedPtr<PrivateKeyImpl>,
                             indexList: &CxxVector<i32>, publicKey: SharedPtr<PublicKeyImpl>);
         fn MakePackedPlaintext(self: &CryptoContextDCRTPoly, value: &CxxVector<i64>,
@@ -518,6 +519,13 @@ pub mod ffi
                    ciphertext2: SharedPtr<CiphertextImpl>) -> UniquePtr<CiphertextDCRTPoly>;
         fn EvalMult(self: &CryptoContextDCRTPoly, ciphertext1: SharedPtr<CiphertextImpl>,
                     ciphertext2: SharedPtr<CiphertextImpl>) -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalMultNoRelin(self: &CryptoContextDCRTPoly, ciphertext1: SharedPtr<CiphertextImpl>,
+                           ciphertext2: SharedPtr<CiphertextImpl>)
+                           -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalMultAndRelinearize(self: &CryptoContextDCRTPoly,
+                                  ciphertext1: SharedPtr<CiphertextImpl>,
+                                  ciphertext2: SharedPtr<CiphertextImpl>)
+                                  -> UniquePtr<CiphertextDCRTPoly>;
         fn EvalMultByConst(self: &CryptoContextDCRTPoly, ciphertext: SharedPtr<CiphertextImpl>,
                            constant: f64) -> UniquePtr<CiphertextDCRTPoly>;
         fn EvalRotate(self: &CryptoContextDCRTPoly, ciphertext: SharedPtr<CiphertextImpl>,
