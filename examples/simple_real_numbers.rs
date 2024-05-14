@@ -2,7 +2,8 @@ extern crate openfhe;
 use cxx::{CxxVector, SharedPtr};
 use openfhe::ffi as ffi;
 
-fn main(){
+fn main()
+{
     let _mult_depth: u32 = 1;
     let _scale_mod_size: u32 = 50;
     let _batch_size: u32 = 8;
