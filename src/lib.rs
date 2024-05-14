@@ -5,7 +5,7 @@
 use cxx::{CxxVector, SharedPtr, let_cxx_string};
 
 #[cxx::bridge(namespace = "openfhe")]
-mod ffi
+pub mod ffi
 {
     #[repr(i32)]
     enum SCHEME
