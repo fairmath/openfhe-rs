@@ -2,6 +2,11 @@
 
 #include "openfhe/pke/gen-cryptocontext.h"
 
+// This inclusion is required for SerializeCryptoContextToFile
+// and DeserializeCryptoContextFromFile functions for calling
+// specialized versions of the corresponding functions.
+#include "openfhe/pke/cryptocontext-ser.h"
+
 namespace openfhe
 {
 PublicKeyDCRTPoly::PublicKeyDCRTPoly()
