@@ -3,6 +3,7 @@
 #![allow(unused_imports)]
 
 use cxx::{CxxVector, SharedPtr, let_cxx_string};
+pub use cxx;
 
 #[cxx::bridge(namespace = "openfhe")]
 pub mod ffi
