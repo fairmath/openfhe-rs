@@ -32,7 +32,7 @@ sudo apt install build-essential libssl-dev cmake clang git
 
 ## Installation process
 
-1. Build and install OpenFHE library. Right now you need to use the Fair Math fork. It contains required features, which will be included in the next planned release (v1.1.5):
+1. Build and install OpenFHE library. Right now you need to use the Fair Math fork. It contains the required features, which will be included in the next planned release (v1.1.5):
 
    1. Clone the repository
 
@@ -53,6 +53,12 @@ sudo apt install build-essential libssl-dev cmake clang git
    make -C ${OPENFHE_BUILD:-build} -j$(nproc)
    make -C ${OPENFHE_BUILD:-build} install
    ```
+
+   4. Configure your dynamic linker
+
+   ```bash
+   sudo ldconfig
+   ```
 2. Make sure you have [rustc](https://www.rust-lang.org/tools/install) with `cargo` installed first.
 
 3. Clone the Fair Math [openfhe-rs](https://github.com/fairmath/openfhe-rs) repo to your local machine and build:
@@ -62,23 +68,17 @@ sudo apt install build-essential libssl-dev cmake clang git
    cd openfhe-rs
    ```
 
-   2. Configure your dynamic linker
-   ```bash
-   sudo ldconfig
-   ```
-
-   3. Build the library
+   2. Build the library
    ```bash
    cargo build
    ```
 
-   4. Run tests
+   3. Run tests
    ```bash
    cargo test -- --test-threads=1
    ```
 
-   5. Run the examples
-
+   4. Run the examples
    ```bash
    cargo run --example polynomial_evaluation
    ```
