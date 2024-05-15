@@ -1,5 +1,4 @@
-extern crate openfhe;
-use cxx::{CxxVector, SharedPtr};
+use openfhe::cxx::{CxxVector, SharedPtr};
 use openfhe::ffi as ffi;
 
 fn main()
