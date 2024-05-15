@@ -11,6 +11,7 @@ fn main()
         .flag_if_supported("-Wall")
         .flag_if_supported("-Werror")
         .flag_if_supported("-O3")
+        .flag_if_supported("-fopenmp") // [-Wunknown-pragmas]
         .flag_if_supported("-Wno-parentheses") // [-Wparentheses]
         .flag_if_supported("-Wno-unused-parameter") // [-Wunused-parameter]
         .flag_if_supported("-Wno-missing-field-initializers") // [-Wmissing-field-initializers]
