@@ -142,9 +142,7 @@ pub mod ffi
         type KeyPairDCRTPoly;
         type PrivateKeyImpl;
         type PublicKeyImpl;
-        type PlaintextImpl;
         type Plaintext;
-        type CiphertextImpl;
         type CiphertextDCRTPoly;
         type DecryptResult;
         type DCRTPolyParams;
@@ -460,7 +458,6 @@ pub mod ffi
     unsafe extern "C++"
     {
         fn GenEmptyPlainText() -> UniquePtr<Plaintext>;
-        fn GetPlainText(self: &Plaintext) -> SharedPtr<PlaintextImpl>;
         fn SetLength(self: &Plaintext, newSize: usize);
         fn GetString(self: &Plaintext) -> String;
         fn GetLogPrecision(self: &Plaintext) -> f64;
@@ -469,7 +466,6 @@ pub mod ffi
     // CiphertextDCRTPoly
     unsafe extern "C++"
     {
-        fn GetCipherText(self: &CiphertextDCRTPoly) -> SharedPtr<CiphertextImpl>;
         fn GenDefaultConstructedCiphertext() -> UniquePtr<CiphertextDCRTPoly>;
     }
 
@@ -508,35 +504,55 @@ pub mod ffi
         fn EvalMultKeysGen(self: &CryptoContextDCRTPoly, key: SharedPtr<PrivateKeyImpl>);
         fn EvalRotateKeyGen(self: &CryptoContextDCRTPoly, privateKey: SharedPtr<PrivateKeyImpl>,
                             indexList: &CxxVector<i32>, publicKey: SharedPtr<PublicKeyImpl>);
+        fn EvalCKKStoFHEWPrecompute(self: &CryptoContextDCRTPoly, scale: /* 1.0 */ f64);
         fn MakePackedPlaintext(self: &CryptoContextDCRTPoly, value: &CxxVector<i64>,
                                noiseScaleDeg: /* 1 */ usize, level: /* 0 */ u32)
                                -> UniquePtr<Plaintext>;
         fn Encrypt(self: &CryptoContextDCRTPoly, publicKey: SharedPtr<PublicKeyImpl>,
-                   plaintext: SharedPtr<PlaintextImpl>) -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalAdd(self: &CryptoContextDCRTPoly, ciphertext1: SharedPtr<CiphertextImpl>,
-                   ciphertext2: SharedPtr<CiphertextImpl>) -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalSub(self: &CryptoContextDCRTPoly, ciphertext1: SharedPtr<CiphertextImpl>,
-                   ciphertext2: SharedPtr<CiphertextImpl>) -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalMult(self: &CryptoContextDCRTPoly, ciphertext1: SharedPtr<CiphertextImpl>,
-                    ciphertext2: SharedPtr<CiphertextImpl>) -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalMultNoRelin(self: &CryptoContextDCRTPoly, ciphertext1: SharedPtr<CiphertextImpl>,
-                           ciphertext2: SharedPtr<CiphertextImpl>)
-                           -> UniquePtr<CiphertextDCRTPoly>;
+                   plaintext: &Plaintext) -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalAdd(self: &CryptoContextDCRTPoly, ciphertext1: &CiphertextDCRTPoly,
+                   ciphertext2: &CiphertextDCRTPoly) -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalSub(self: &CryptoContextDCRTPoly, ciphertext1: &CiphertextDCRTPoly,
+                   ciphertext2: &CiphertextDCRTPoly) -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalMult(self: &CryptoContextDCRTPoly, ciphertext1: &CiphertextDCRTPoly,
+                    ciphertext2: &CiphertextDCRTPoly) -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalMultNoRelin(self: &CryptoContextDCRTPoly, ciphertext1: &CiphertextDCRTPoly,
+                           ciphertext2: &CiphertextDCRTPoly) -> UniquePtr<CiphertextDCRTPoly>;
         fn EvalMultAndRelinearize(self: &CryptoContextDCRTPoly,
-                                  ciphertext1: SharedPtr<CiphertextImpl>,
-                                  ciphertext2: SharedPtr<CiphertextImpl>)
+                                  ciphertext1: &CiphertextDCRTPoly,
+                                  ciphertext2: &CiphertextDCRTPoly)
                                   -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalMultByConst(self: &CryptoContextDCRTPoly, ciphertext: SharedPtr<CiphertextImpl>,
+        fn EvalMultByConst(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
                            constant: f64) -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalRotate(self: &CryptoContextDCRTPoly, ciphertext: SharedPtr<CiphertextImpl>,
-                      index: i32) -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalChebyshevSeries(self: &CryptoContextDCRTPoly, ciphertext: SharedPtr<CiphertextImpl>,
+        fn EvalRotate(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly, index: i32)
+                      -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalChebyshevSeries(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
                                coefficients: &CxxVector<f64>, a: f64, b: f64)
                                -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalBootstrap(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
+                         numIterations: /* 1 */ u32, precision: /* 0 */ u32)
+                         -> UniquePtr<CiphertextDCRTPoly>;
+        fn Rescale(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly)
+                   -> UniquePtr<CiphertextDCRTPoly>;
+        fn ModReduce(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly)
+                     -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalSum(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly, batchSize: u32)
+                   -> UniquePtr<CiphertextDCRTPoly>;
+        fn IntMPBootAdjustScale(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly)
+                                -> UniquePtr<CiphertextDCRTPoly>;
+        fn IntMPBootRandomElementGen(self: &CryptoContextDCRTPoly, publicKey: &PublicKeyDCRTPoly)
+                                     -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalBootstrapSetup(self: &CryptoContextDCRTPoly,
+                              levelBudget: /* {5, 4} */ &CxxVector<u32>,
+                              dim1: /* {0, 0} */ &CxxVector<u32>, slots: /* 0 */ u32,
+                              correctionFactor: /* 0 */ u32, precompute: /* true */ bool);
+        fn EvalBootstrapKeyGen(self: &CryptoContextDCRTPoly, privateKey: SharedPtr<PrivateKeyImpl>,
+                               slots: u32);
         fn Decrypt(self: &CryptoContextDCRTPoly, privateKey: SharedPtr<PrivateKeyImpl>,
-                   ciphertext: SharedPtr<CiphertextImpl>, plaintext: Pin<&mut Plaintext>)
+                   ciphertext: &CiphertextDCRTPoly, plaintext: Pin<&mut Plaintext>)
                    -> UniquePtr<DecryptResult>;
         fn GetRingDimension(self: &CryptoContextDCRTPoly) -> u32;
+        fn GetCyclotomicOrder(self: &CryptoContextDCRTPoly) -> u32;
         fn MakeCKKSPackedPlaintext(self: &CryptoContextDCRTPoly, value: &CxxVector<f64>,
                                    scaleDeg: /* 1 */ usize, level: /* 0 */ u32,
                                    params: /* null() */ SharedPtr<DCRTPolyParams>,
@@ -546,7 +562,7 @@ pub mod ffi
                                                     scaleDeg: /* 1 */ usize, level: /* 0 */ u32,
                                                     params: /* null() */ SharedPtr<DCRTPolyParams>,
                                                     slots: /* 0 */ u32) -> UniquePtr<Plaintext>;
-        fn EvalPoly(self: &CryptoContextDCRTPoly, ciphertext: SharedPtr<CiphertextImpl>,
+        fn EvalPoly(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
                     coefficients: &CxxVector<f64>) -> UniquePtr<CiphertextDCRTPoly>;
     }
 
@@ -667,33 +683,33 @@ mod tests
         _vector_of_ints_3.pin_mut().push(12);
         let mut _plain_text_3 = _cc.MakePackedPlaintext(&_vector_of_ints_3, 1, 0);
 
-        let mut _cipher_text_1 = _cc.Encrypt(_key_pair.GetPublicKey(), _plain_text_1.GetPlainText());
-        let mut _cipher_text_2 = _cc.Encrypt(_key_pair.GetPublicKey(), _plain_text_2.GetPlainText());
-        let mut _cipher_text_3 = _cc.Encrypt(_key_pair.GetPublicKey(), _plain_text_3.GetPlainText());
+        let mut _cipher_text_1 = _cc.Encrypt(_key_pair.GetPublicKey(), &_plain_text_1);
+        let mut _cipher_text_2 = _cc.Encrypt(_key_pair.GetPublicKey(), &_plain_text_2);
+        let mut _cipher_text_3 = _cc.Encrypt(_key_pair.GetPublicKey(), &_plain_text_3);
 
-        let mut _cipher_text_add_1_2 = _cc.EvalAdd(_cipher_text_1.GetCipherText(), _cipher_text_2.GetCipherText());
-        let mut _cipher_text_add_result = _cc.EvalAdd(_cipher_text_add_1_2.GetCipherText(), _cipher_text_3.GetCipherText());
+        let mut _cipher_text_add_1_2 = _cc.EvalAdd(&_cipher_text_1, &_cipher_text_2);
+        let mut _cipher_text_add_result = _cc.EvalAdd(&_cipher_text_add_1_2, &_cipher_text_3);
 
-        let mut _cipher_text_mul_1_2 = _cc.EvalMult(_cipher_text_1.GetCipherText(), _cipher_text_2.GetCipherText());
-        let mut _cipher_text_mult_result = _cc.EvalMult(_cipher_text_mul_1_2.GetCipherText(), _cipher_text_3.GetCipherText());
+        let mut _cipher_text_mul_1_2 = _cc.EvalMult(&_cipher_text_1, &_cipher_text_2);
+        let mut _cipher_text_mult_result = _cc.EvalMult(&_cipher_text_mul_1_2, &_cipher_text_3);
 
-        let mut _cipher_text_rot_1 = _cc.EvalRotate(_cipher_text_1.GetCipherText(), 1);
-        let mut _cipher_text_rot_2 = _cc.EvalRotate(_cipher_text_1.GetCipherText(), 2);
-        let mut _cipher_text_rot_3 = _cc.EvalRotate(_cipher_text_1.GetCipherText(), -1);
-        let mut _cipher_text_rot_4 = _cc.EvalRotate(_cipher_text_1.GetCipherText(), -2);
+        let mut _cipher_text_rot_1 = _cc.EvalRotate(&_cipher_text_1, 1);
+        let mut _cipher_text_rot_2 = _cc.EvalRotate(&_cipher_text_1, 2);
+        let mut _cipher_text_rot_3 = _cc.EvalRotate(&_cipher_text_1, -1);
+        let mut _cipher_text_rot_4 = _cc.EvalRotate(&_cipher_text_1, -2);
 
         let mut _plain_text_add_result = ffi::GenEmptyPlainText();
-        _cc.Decrypt(_key_pair.GetPrivateKey(), _cipher_text_add_result.GetCipherText(), _plain_text_add_result.pin_mut());
+        _cc.Decrypt(_key_pair.GetPrivateKey(), &_cipher_text_add_result, _plain_text_add_result.pin_mut());
         let mut _plain_text_mult_result = ffi::GenEmptyPlainText();
-        _cc.Decrypt(_key_pair.GetPrivateKey(), _cipher_text_mult_result.GetCipherText(), _plain_text_mult_result.pin_mut());
+        _cc.Decrypt(_key_pair.GetPrivateKey(), &_cipher_text_mult_result, _plain_text_mult_result.pin_mut());
         let mut _plain_text_rot_1 = ffi::GenEmptyPlainText();
-        _cc.Decrypt(_key_pair.GetPrivateKey(), _cipher_text_rot_1.GetCipherText(), _plain_text_rot_1.pin_mut());
+        _cc.Decrypt(_key_pair.GetPrivateKey(), &_cipher_text_rot_1, _plain_text_rot_1.pin_mut());
         let mut _plain_text_rot_2 = ffi::GenEmptyPlainText();
-        _cc.Decrypt(_key_pair.GetPrivateKey(), _cipher_text_rot_2.GetCipherText(), _plain_text_rot_2.pin_mut());
+        _cc.Decrypt(_key_pair.GetPrivateKey(), &_cipher_text_rot_2, _plain_text_rot_2.pin_mut());
         let mut _plain_text_rot_3 = ffi::GenEmptyPlainText();
-        _cc.Decrypt(_key_pair.GetPrivateKey(), _cipher_text_rot_3.GetCipherText(), _plain_text_rot_3.pin_mut());
+        _cc.Decrypt(_key_pair.GetPrivateKey(), &_cipher_text_rot_3, _plain_text_rot_3.pin_mut());
         let mut _plain_text_rot_4 = ffi::GenEmptyPlainText();
-        _cc.Decrypt(_key_pair.GetPrivateKey(), _cipher_text_rot_4.GetCipherText(), _plain_text_rot_4.pin_mut());
+        _cc.Decrypt(_key_pair.GetPrivateKey(), &_cipher_text_rot_4, _plain_text_rot_4.pin_mut());
 
         _plain_text_rot_1.SetLength(_vector_of_ints_1.len());
         _plain_text_rot_2.SetLength(_vector_of_ints_1.len());
@@ -765,45 +781,45 @@ mod tests
         println!("Input x1: {}", _p_txt_1.GetString());
         println!("Input x2: {}", _p_txt_2.GetString());
 
-        let mut _c1 = _cc.Encrypt(_key_pair.GetPublicKey(), _p_txt_1.GetPlainText());
-        let mut _c2 = _cc.Encrypt(_key_pair.GetPublicKey(), _p_txt_2.GetPlainText());
+        let mut _c1 = _cc.Encrypt(_key_pair.GetPublicKey(), &_p_txt_1);
+        let mut _c2 = _cc.Encrypt(_key_pair.GetPublicKey(), &_p_txt_2);
 
-        let mut _c_add = _cc.EvalAdd(_c1.GetCipherText(), _c2.GetCipherText());
-        let mut _c_sub = _cc.EvalSub(_c1.GetCipherText(), _c2.GetCipherText());
-        let mut _c_scalar = _cc.EvalMultByConst(_c1.GetCipherText(), 4.0);
-        let mut _c_mul = _cc.EvalMult(_c1.GetCipherText(), _c2.GetCipherText());
-        let mut _c_rot_1 = _cc.EvalRotate(_c1.GetCipherText(), 1);
-        let mut _c_rot_2 = _cc.EvalRotate(_c1.GetCipherText(), -2);
+        let mut _c_add = _cc.EvalAdd(&_c1, &_c2);
+        let mut _c_sub = _cc.EvalSub(&_c1, &_c2);
+        let mut _c_scalar = _cc.EvalMultByConst(&_c1, 4.0);
+        let mut _c_mul = _cc.EvalMult(&_c1, &_c2);
+        let mut _c_rot_1 = _cc.EvalRotate(&_c1, 1);
+        let mut _c_rot_2 = _cc.EvalRotate(&_c1, -2);
 
         let mut _result = ffi::GenEmptyPlainText();
         println!("\nResults of homomorphic computations:");
 
-        _cc.Decrypt(_key_pair.GetPrivateKey(), _c1.GetCipherText(), _result.pin_mut());
+        _cc.Decrypt(_key_pair.GetPrivateKey(), &_c1, _result.pin_mut());
         _result.SetLength(_batch_size.try_into().unwrap());
         println!("x1 = {}Estimated precision in bits: {}", _result.GetString(), _result.GetLogPrecision());
 
-        _cc.Decrypt(_key_pair.GetPrivateKey(), _c_add.GetCipherText(), _result.pin_mut());
+        _cc.Decrypt(_key_pair.GetPrivateKey(), &_c_add, _result.pin_mut());
         _result.SetLength(_batch_size.try_into().unwrap());
         println!("x1 + x2 = {}Estimated precision in bits: {}",_result.GetString(), _result.GetLogPrecision());
 
-        _cc.Decrypt(_key_pair.GetPrivateKey(), _c_sub.GetCipherText(), _result.pin_mut());
+        _cc.Decrypt(_key_pair.GetPrivateKey(), &_c_sub, _result.pin_mut());
         _result.SetLength(_batch_size.try_into().unwrap());
         println!("x1 - x2 = {}", _result.GetString());
 
-        _cc.Decrypt(_key_pair.GetPrivateKey(), _c_scalar.GetCipherText(), _result.pin_mut());
+        _cc.Decrypt(_key_pair.GetPrivateKey(), &_c_scalar, _result.pin_mut());
         _result.SetLength(_batch_size.try_into().unwrap());
         println!("4 * x1 = {}", _result.GetString());
 
-        _cc.Decrypt(_key_pair.GetPrivateKey(), _c_mul.GetCipherText(), _result.pin_mut());
+        _cc.Decrypt(_key_pair.GetPrivateKey(), &_c_mul, _result.pin_mut());
         _result.SetLength(_batch_size.try_into().unwrap());
         println!("x1 * x2 = {}", _result.GetString());
 
-        _cc.Decrypt(_key_pair.GetPrivateKey(), _c_rot_1.GetCipherText(), _result.pin_mut());
+        _cc.Decrypt(_key_pair.GetPrivateKey(), &_c_rot_1, _result.pin_mut());
         _result.SetLength(_batch_size.try_into().unwrap());
         println!("\nIn rotations, very small outputs (~10^-10 here) correspond to 0's:");
         println!("x1 rotate by 1 = {}", _result.GetString());
 
-        _cc.Decrypt(_key_pair.GetPrivateKey(), _c_rot_2.GetCipherText(), _result.pin_mut());
+        _cc.Decrypt(_key_pair.GetPrivateKey(), &_c_rot_2, _result.pin_mut());
         _result.SetLength(_batch_size.try_into().unwrap());
         println!("x1 rotate by -2 = {}", _result.GetString());
     }
@@ -889,21 +905,21 @@ mod tests
         print!("Generating evaluation key for homomorphic multiplication...");
         _cc.EvalMultKeyGen(_key_pair.GetPrivateKey());
         println!("Completed.\n");
-        let mut _cipher_text_1 = _cc.Encrypt(_key_pair.GetPublicKey(), _plain_text_1.GetPlainText());
+        let mut _cipher_text_1 = _cc.Encrypt(_key_pair.GetPublicKey(), &_plain_text_1);
 
         let mut _start = Instant::now();
-        let mut _result = _cc.EvalPoly(_cipher_text_1.GetCipherText(), &_coefficients_1);
+        let mut _result = _cc.EvalPoly(&_cipher_text_1, &_coefficients_1);
         let _time_eval_poly_1 = _start.elapsed();
 
         _start = Instant::now();
-        let mut _result_2 = _cc.EvalPoly(_cipher_text_1.GetCipherText(), &_coefficients_2);
+        let mut _result_2 = _cc.EvalPoly(&_cipher_text_1, &_coefficients_2);
         let _time_eval_poly_2 = _start.elapsed();
 
         let mut _plain_text_dec = ffi::GenEmptyPlainText();
-        _cc.Decrypt(_key_pair.GetPrivateKey(), _result.GetCipherText(), _plain_text_dec.pin_mut());
+        _cc.Decrypt(_key_pair.GetPrivateKey(), &_result, _plain_text_dec.pin_mut());
         _plain_text_dec.SetLength(_encoded_length);
         let mut _plain_text_dec_2 = ffi::GenEmptyPlainText();
-        _cc.Decrypt(_key_pair.GetPrivateKey(), _result_2.GetCipherText(), _plain_text_dec_2.pin_mut());
+        _cc.Decrypt(_key_pair.GetPrivateKey(), &_result_2, _plain_text_dec_2.pin_mut());
         _plain_text_dec_2.SetLength(_encoded_length);
 
         println!("\n Original Plaintext #1:");

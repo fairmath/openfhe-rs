@@ -52,45 +52,45 @@ fn main()
     println!("Input x1: {}", _p_txt_1.GetString());
     println!("Input x2: {}", _p_txt_2.GetString());
 
-    let mut _c1 = _cc.Encrypt(_key_pair.GetPublicKey(), _p_txt_1.GetPlainText());
-    let mut _c2 = _cc.Encrypt(_key_pair.GetPublicKey(), _p_txt_2.GetPlainText());
+    let mut _c1 = _cc.Encrypt(_key_pair.GetPublicKey(), &_p_txt_1);
+    let mut _c2 = _cc.Encrypt(_key_pair.GetPublicKey(), &_p_txt_2);
 
-    let mut _c_add = _cc.EvalAdd(_c1.GetCipherText(), _c2.GetCipherText());
-    let mut _c_sub = _cc.EvalSub(_c1.GetCipherText(), _c2.GetCipherText());
-    let mut _c_scalar = _cc.EvalMultByConst(_c1.GetCipherText(), 4.0);
-    let mut _c_mul = _cc.EvalMult(_c1.GetCipherText(), _c2.GetCipherText());
-    let mut _c_rot_1 = _cc.EvalRotate(_c1.GetCipherText(), 1);
-    let mut _c_rot_2 = _cc.EvalRotate(_c1.GetCipherText(), -2);
+    let mut _c_add = _cc.EvalAdd(&_c1, &_c2);
+    let mut _c_sub = _cc.EvalSub(&_c1, &_c2);
+    let mut _c_scalar = _cc.EvalMultByConst(&_c1, 4.0);
+    let mut _c_mul = _cc.EvalMult(&_c1, &_c2);
+    let mut _c_rot_1 = _cc.EvalRotate(&_c1, 1);
+    let mut _c_rot_2 = _cc.EvalRotate(&_c1, -2);
 
     let mut _result = ffi::GenEmptyPlainText();
     println!("\nResults of homomorphic computations:");
 
-    _cc.Decrypt(_key_pair.GetPrivateKey(), _c1.GetCipherText(), _result.pin_mut());
+    _cc.Decrypt(_key_pair.GetPrivateKey(), &_c1, _result.pin_mut());
     _result.SetLength(_batch_size.try_into().unwrap());
     println!("x1 = {}Estimated precision in bits: {}", _result.GetString(), _result.GetLogPrecision());
 
-    _cc.Decrypt(_key_pair.GetPrivateKey(), _c_add.GetCipherText(), _result.pin_mut());
+    _cc.Decrypt(_key_pair.GetPrivateKey(), &_c_add, _result.pin_mut());
     _result.SetLength(_batch_size.try_into().unwrap());
     println!("x1 + x2 = {}Estimated precision in bits: {}",_result.GetString(), _result.GetLogPrecision());
 
-    _cc.Decrypt(_key_pair.GetPrivateKey(), _c_sub.GetCipherText(), _result.pin_mut());
+    _cc.Decrypt(_key_pair.GetPrivateKey(), &_c_sub, _result.pin_mut());
     _result.SetLength(_batch_size.try_into().unwrap());
     println!("x1 - x2 = {}", _result.GetString());
 
-    _cc.Decrypt(_key_pair.GetPrivateKey(), _c_scalar.GetCipherText(), _result.pin_mut());
+    _cc.Decrypt(_key_pair.GetPrivateKey(), &_c_scalar, _result.pin_mut());
     _result.SetLength(_batch_size.try_into().unwrap());
     println!("4 * x1 = {}", _result.GetString());
 
-    _cc.Decrypt(_key_pair.GetPrivateKey(), _c_mul.GetCipherText(), _result.pin_mut());
+    _cc.Decrypt(_key_pair.GetPrivateKey(), &_c_mul, _result.pin_mut());
     _result.SetLength(_batch_size.try_into().unwrap());
     println!("x1 * x2 = {}", _result.GetString());
 
-    _cc.Decrypt(_key_pair.GetPrivateKey(), _c_rot_1.GetCipherText(), _result.pin_mut());
+    _cc.Decrypt(_key_pair.GetPrivateKey(), &_c_rot_1, _result.pin_mut());
     _result.SetLength(_batch_size.try_into().unwrap());
     println!("\nIn rotations, very small outputs (~10^-10 here) correspond to 0's:");
     println!("x1 rotate by 1 = {}", _result.GetString());
 
-    _cc.Decrypt(_key_pair.GetPrivateKey(), _c_rot_2.GetCipherText(), _result.pin_mut());
+    _cc.Decrypt(_key_pair.GetPrivateKey(), &_c_rot_2, _result.pin_mut());
     _result.SetLength(_batch_size.try_into().unwrap());
     println!("x1 rotate by -2 = {}", _result.GetString());
 }

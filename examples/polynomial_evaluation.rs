@@ -81,21 +81,21 @@ fn main()
     print!("Generating evaluation key for homomorphic multiplication...");
     _cc.EvalMultKeyGen(_key_pair.GetPrivateKey());
     println!("Completed.\n");
-    let mut _cipher_text_1 = _cc.Encrypt(_key_pair.GetPublicKey(), _plain_text_1.GetPlainText());
+    let mut _cipher_text_1 = _cc.Encrypt(_key_pair.GetPublicKey(), &_plain_text_1);
 
     let mut _start = Instant::now();
-    let mut _result = _cc.EvalPoly(_cipher_text_1.GetCipherText(), &_coefficients_1);
+    let mut _result = _cc.EvalPoly(&_cipher_text_1, &_coefficients_1);
     let _time_eval_poly_1 = _start.elapsed();
 
     _start = Instant::now();
-    let mut _result_2 = _cc.EvalPoly(_cipher_text_1.GetCipherText(), &_coefficients_2);
+    let mut _result_2 = _cc.EvalPoly(&_cipher_text_1, &_coefficients_2);
     let _time_eval_poly_2 = _start.elapsed();
 
     let mut _plain_text_dec = ffi::GenEmptyPlainText();
-    _cc.Decrypt(_key_pair.GetPrivateKey(), _result.GetCipherText(), _plain_text_dec.pin_mut());
+    _cc.Decrypt(_key_pair.GetPrivateKey(), &_result, _plain_text_dec.pin_mut());
     _plain_text_dec.SetLength(_encoded_length);
     let mut _plain_text_dec_2 = ffi::GenEmptyPlainText();
-    _cc.Decrypt(_key_pair.GetPrivateKey(), _result_2.GetCipherText(), _plain_text_dec_2.pin_mut());
+    _cc.Decrypt(_key_pair.GetPrivateKey(), &_result_2, _plain_text_dec_2.pin_mut());
     _plain_text_dec_2.SetLength(_encoded_length);
 
     println!("\n Original Plaintext #1:");

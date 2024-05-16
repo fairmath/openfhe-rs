@@ -33,14 +33,21 @@ using COMPRESSION_LEVEL = lbcrypto::COMPRESSION_LEVEL;
 using PKESchemeFeature = lbcrypto::PKESchemeFeature;
 using PublicKeyImpl = lbcrypto::PublicKeyImpl<lbcrypto::DCRTPoly>;
 using PrivateKeyImpl = lbcrypto::PrivateKeyImpl<lbcrypto::DCRTPoly>;
-using PlaintextImpl = lbcrypto::PlaintextImpl;
-using CiphertextImpl = lbcrypto::CiphertextImpl<lbcrypto::DCRTPoly>;
 using DecryptResult = lbcrypto::DecryptResult;
 using DCRTPolyParams = lbcrypto::DCRTPoly::Params;
 using ::SerialMode;
 struct ComplexPair;
 using Complex = std::complex<double>;
 struct SharedComplex;
+
+// not used in the Rust side
+using PlaintextImpl = lbcrypto::PlaintextImpl;
+// not used in the Rust side
+using CiphertextImpl = lbcrypto::CiphertextImpl<lbcrypto::DCRTPoly>;
+// not used in the Rust side
+using CryptoContextImpl = lbcrypto::CryptoContextImpl<lbcrypto::DCRTPoly>;
+// not used in the Rust side
+using KeyPair = lbcrypto::KeyPair<lbcrypto::DCRTPoly>;
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -58,6 +65,8 @@ public:
     PublicKeyDCRTPoly(PublicKeyDCRTPoly&&) = delete;
     PublicKeyDCRTPoly& operator=(const PublicKeyDCRTPoly&) = delete;
     PublicKeyDCRTPoly& operator=(PublicKeyDCRTPoly&&) = delete;
+
+    [[nodiscard]] std::shared_ptr<PublicKeyImpl> GetInternal() const;
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -67,7 +76,7 @@ class KeyPairDCRTPoly final
     std::shared_ptr<PublicKeyImpl> m_publicKey;
     std::shared_ptr<PrivateKeyImpl> m_privateKey;
 public:
-    explicit KeyPairDCRTPoly(lbcrypto::KeyPair<lbcrypto::DCRTPoly> keyPair);
+    explicit KeyPairDCRTPoly(KeyPair keyPair);
     KeyPairDCRTPoly(const KeyPairDCRTPoly&) = delete;
     KeyPairDCRTPoly(KeyPairDCRTPoly&&) = delete;
     KeyPairDCRTPoly& operator=(const KeyPairDCRTPoly&) = delete;
@@ -91,7 +100,7 @@ public:
     Plaintext& operator=(Plaintext&&) = delete;
     Plaintext& operator=(std::shared_ptr<PlaintextImpl> plaintext);
 
-    [[nodiscard]] std::shared_ptr<PlaintextImpl> GetPlainText() const;
+    [[nodiscard]] std::shared_ptr<PlaintextImpl> GetInternal() const;
     void SetLength(const size_t newSize) const;
     [[nodiscard]] double GetLogPrecision() const;
     [[nodiscard]] rust::String GetString() const;
@@ -115,14 +124,14 @@ public:
     CiphertextDCRTPoly& operator=(const CiphertextDCRTPoly&) = delete;
     CiphertextDCRTPoly& operator=(CiphertextDCRTPoly&&) = delete;
 
-    [[nodiscard]] std::shared_ptr<CiphertextImpl> GetCipherText() const;
+    [[nodiscard]] std::shared_ptr<CiphertextImpl> GetInternal() const;
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
 class CryptoContextDCRTPoly final
 {
-    std::shared_ptr<lbcrypto::CryptoContextImpl<lbcrypto::DCRTPoly>> m_cryptoContextImplSharedPtr;
+    std::shared_ptr<CryptoContextImpl> m_cryptoContextImplSharedPtr;
 public:
     friend bool SerializeCryptoContextToFile(const std::string& ccLocation,
         const CryptoContextDCRTPoly& cryptoContext, const SerialMode serialMode);
@@ -151,37 +160,51 @@ public:
     void EvalRotateKeyGen(
         const std::shared_ptr<PrivateKeyImpl> privateKey, const std::vector<int32_t>& indexList,
         const std::shared_ptr<PublicKeyImpl> publicKey /* nullptr */) const;
+    void EvalCKKStoFHEWPrecompute(const double scale /* 1.0 */) const;
     [[nodiscard]] uint32_t GetRingDimension() const;
+    [[nodiscard]] uint32_t GetCyclotomicOrder() const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> Encrypt(
-        const std::shared_ptr<PublicKeyImpl> publicKey,
-        std::shared_ptr<lbcrypto::PlaintextImpl> plaintext) const;
+        const std::shared_ptr<PublicKeyImpl> publicKey, const Plaintext& plaintext) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalAdd(
-        std::shared_ptr<CiphertextImpl> ciphertext1,
-        std::shared_ptr<CiphertextImpl> ciphertext2) const;
+        const CiphertextDCRTPoly& ciphertext1, const CiphertextDCRTPoly& ciphertext2) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalSub(
-        std::shared_ptr<CiphertextImpl> ciphertext1,
-        std::shared_ptr<CiphertextImpl> ciphertext2) const;
+        const CiphertextDCRTPoly& ciphertext1, const CiphertextDCRTPoly& ciphertext2) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalMult(
-        std::shared_ptr<CiphertextImpl> ciphertext1,
-        std::shared_ptr<CiphertextImpl> ciphertext2) const;
+        const CiphertextDCRTPoly& ciphertext1, const CiphertextDCRTPoly& ciphertext2) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalMultNoRelin(
-        std::shared_ptr<CiphertextImpl> ciphertext1,
-        std::shared_ptr<CiphertextImpl> ciphertext2) const;
+        const CiphertextDCRTPoly& ciphertext1, const CiphertextDCRTPoly& ciphertext2) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalMultAndRelinearize(
-        std::shared_ptr<CiphertextImpl> ciphertext1,
-        std::shared_ptr<CiphertextImpl> ciphertext2) const;
+        const CiphertextDCRTPoly& ciphertext1, const CiphertextDCRTPoly& ciphertext2) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalMultByConst(
-        std::shared_ptr<CiphertextImpl> ciphertext, const double constant) const;
+        const CiphertextDCRTPoly& ciphertext, const double constant) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalRotate(
-        std::shared_ptr<CiphertextImpl> ciphertext, const int32_t index) const;
+        const CiphertextDCRTPoly& ciphertext, const int32_t index) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalPoly(
-        std::shared_ptr<CiphertextImpl> ciphertext, const std::vector<double>& coefficients) const;
+        const CiphertextDCRTPoly& ciphertext, const std::vector<double>& coefficients) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalChebyshevSeries(
-        std::shared_ptr<CiphertextImpl> ciphertext, const std::vector<double>& coefficients,
+   	    const CiphertextDCRTPoly& ciphertext, const std::vector<double>& coefficients,
         const double a, const double b) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalBootstrap(
+        const CiphertextDCRTPoly& ciphertext, const uint32_t numIterations /* 1 */,
+        const uint32_t precision /* 0 */) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> Rescale(
+   	    const CiphertextDCRTPoly& ciphertext) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> ModReduce(
+        const CiphertextDCRTPoly& ciphertext) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalSum(const CiphertextDCRTPoly& ciphertext,
+        const uint32_t batchSize) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> IntMPBootAdjustScale(
+   	    const CiphertextDCRTPoly& ciphertext) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> IntMPBootRandomElementGen(
+        const PublicKeyDCRTPoly& publicKey) const;
+    void EvalBootstrapSetup(const std::vector<uint32_t>& levelBudget /* {5, 4} */,
+        const std::vector<uint32_t>& dim1 /* {0, 0} */, const uint32_t slots /* 0 */,
+        const uint32_t correctionFactor /* 0 */, const bool precompute /* true */) const;
+    void EvalBootstrapKeyGen(const std::shared_ptr<PrivateKeyImpl> privateKey,
+        const uint32_t slots) const;
     [[nodiscard]] std::unique_ptr<DecryptResult> Decrypt(
-        const std::shared_ptr<PrivateKeyImpl> privateKey,
-        std::shared_ptr<CiphertextImpl> ciphertext, Plaintext& plaintext) const;
+        const std::shared_ptr<PrivateKeyImpl> privateKey, const CiphertextDCRTPoly& ciphertext,
+        Plaintext& plaintext) const;
     [[nodiscard]] std::unique_ptr<Plaintext> MakePackedPlaintext(
         const std::vector<int64_t>& value, const size_t noiseScaleDeg /* 1 */,
         const uint32_t level /* 0 */) const;
@@ -194,6 +217,8 @@ public:
         const uint32_t level /* 0 */, const std::shared_ptr<DCRTPolyParams> params /* nullptr */,
         const uint32_t slots /* 0 */) const;
 };
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
 [[nodiscard]] std::unique_ptr<std::vector<SharedComplex>> GenVectorOfComplex(
     const std::vector<ComplexPair>& vals);
@@ -219,6 +244,8 @@ public:
     const ParamsCKKSRNS& params);
 [[nodiscard]] std::unique_ptr<PublicKeyDCRTPoly> GenDefaultConstructedPublicKey();
 [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> GenDefaultConstructedCiphertext();
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
 
 bool SerializeCryptoContextToFile(const std::string& ccLocation,
     const CryptoContextDCRTPoly& cryptoContext, const SerialMode serialMode);

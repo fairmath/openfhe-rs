@@ -12,6 +12,10 @@ namespace openfhe
 PublicKeyDCRTPoly::PublicKeyDCRTPoly()
     : m_publicKey(std::make_shared<PublicKeyImpl>())
 { }
+std::shared_ptr<PublicKeyImpl> PublicKeyDCRTPoly::GetInternal() const
+{
+    return m_publicKey;
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -38,7 +42,7 @@ Plaintext& Plaintext::operator=(std::shared_ptr<PlaintextImpl> plaintext)
     m_plaintext = plaintext;
     return *this;
 }
-std::shared_ptr<PlaintextImpl> Plaintext::GetPlainText() const
+std::shared_ptr<PlaintextImpl> Plaintext::GetInternal() const
 {
     return m_plaintext;
 }
@@ -65,7 +69,7 @@ CiphertextDCRTPoly::CiphertextDCRTPoly()
 CiphertextDCRTPoly::CiphertextDCRTPoly(std::shared_ptr<CiphertextImpl> ciphertext)
     : m_ciphertext(ciphertext)
 { }
-std::shared_ptr<CiphertextImpl> CiphertextDCRTPoly::GetCipherText() const
+std::shared_ptr<CiphertextImpl> CiphertextDCRTPoly::GetInternal() const
 {
     return m_ciphertext;
 }
@@ -116,6 +120,10 @@ void CryptoContextDCRTPoly::EvalRotateKeyGen(
 {
     m_cryptoContextImplSharedPtr->EvalRotateKeyGen(privateKey, indexList, publicKey);
 }
+void CryptoContextDCRTPoly::EvalCKKStoFHEWPrecompute(const double scale) const
+{
+    m_cryptoContextImplSharedPtr->EvalCKKStoFHEWPrecompute(scale);
+}
 std::unique_ptr<Plaintext> CryptoContextDCRTPoly::MakePackedPlaintext(
     const std::vector<int64_t>& value, const size_t noiseScaleDeg,
     const uint32_t level) const
@@ -125,73 +133,127 @@ std::unique_ptr<Plaintext> CryptoContextDCRTPoly::MakePackedPlaintext(
 }
 std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::Encrypt(
     const std::shared_ptr<lbcrypto::PublicKeyImpl<lbcrypto::DCRTPoly>> publicKey,
-    std::shared_ptr<PlaintextImpl> plaintext) const
+    const Plaintext& plaintext) const
 {
     return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->Encrypt(
-        publicKey, plaintext));
+        publicKey, plaintext.GetInternal()));
 }
 std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalAdd(
-    std::shared_ptr<CiphertextImpl> ciphertext1, std::shared_ptr<CiphertextImpl> ciphertext2) const
+    const CiphertextDCRTPoly& ciphertext1, const CiphertextDCRTPoly& ciphertext2) const
 {
     return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalAdd(
-        ciphertext1, ciphertext2));
+        ciphertext1.GetInternal(), ciphertext2.GetInternal()));
 }
 std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalSub(
-    std::shared_ptr<CiphertextImpl> ciphertext1, std::shared_ptr<CiphertextImpl> ciphertext2) const
+    const CiphertextDCRTPoly& ciphertext1, const CiphertextDCRTPoly& ciphertext2) const
 {
     return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalSub(
-        ciphertext1, ciphertext2));
+        ciphertext1.GetInternal(), ciphertext2.GetInternal()));
 }
 std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalMult(
-    std::shared_ptr<CiphertextImpl> ciphertext1, std::shared_ptr<CiphertextImpl> ciphertext2) const
+    const CiphertextDCRTPoly& ciphertext1, const CiphertextDCRTPoly& ciphertext2) const
 {
     return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalMult(
-        ciphertext1, ciphertext2));
+        ciphertext1.GetInternal(), ciphertext2.GetInternal()));
 }
 std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalMultNoRelin(
-    std::shared_ptr<CiphertextImpl> ciphertext1, std::shared_ptr<CiphertextImpl> ciphertext2) const
+    const CiphertextDCRTPoly& ciphertext1, const CiphertextDCRTPoly& ciphertext2) const
 {
     return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalMultNoRelin(
-        ciphertext1, ciphertext2));
+        ciphertext1.GetInternal(), ciphertext2.GetInternal()));
 }
 std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalMultAndRelinearize(
-    std::shared_ptr<CiphertextImpl> ciphertext1, std::shared_ptr<CiphertextImpl> ciphertext2) const
+    const CiphertextDCRTPoly& ciphertext1, const CiphertextDCRTPoly& ciphertext2) const
 {
     return std::make_unique<CiphertextDCRTPoly>(
-        m_cryptoContextImplSharedPtr->EvalMultAndRelinearize(ciphertext1, ciphertext2));
+        m_cryptoContextImplSharedPtr->EvalMultAndRelinearize(ciphertext1.GetInternal(),
+        ciphertext2.GetInternal()));
 }
 std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalMultByConst(
-    std::shared_ptr<CiphertextImpl> ciphertext, const double constant) const
+    const CiphertextDCRTPoly& ciphertext, const double constant) const
 {
     return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalMult(
-        ciphertext, constant));
+        ciphertext.GetInternal(), constant));
 }
 std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalRotate(
-    std::shared_ptr<CiphertextImpl> ciphertext, const int32_t index) const
+    const CiphertextDCRTPoly& ciphertext, const int32_t index) const
 {
     return std::make_unique<CiphertextDCRTPoly>(
-        m_cryptoContextImplSharedPtr->EvalRotate(ciphertext, index));
+        m_cryptoContextImplSharedPtr->EvalRotate(ciphertext.GetInternal(), index));
 }
 std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalChebyshevSeries(
-    std::shared_ptr<CiphertextImpl> ciphertext, const std::vector<double>& coefficients,
+    const CiphertextDCRTPoly& ciphertext, const std::vector<double>& coefficients,
     const double a, const double b) const
 {
     return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalChebyshevSeries(
-        ciphertext, coefficients, a, b));
+        ciphertext.GetInternal(), coefficients, a, b));
+}
+std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalBootstrap(
+    const CiphertextDCRTPoly& ciphertext, const uint32_t numIterations,
+    const uint32_t precision) const
+{
+    return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalBootstrap(
+        ciphertext.GetInternal(), numIterations, precision));
+}
+std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::Rescale(
+    const CiphertextDCRTPoly& ciphertext) const
+{
+    return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->Rescale(
+        ciphertext.GetInternal()));
+}
+std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::ModReduce(
+    const CiphertextDCRTPoly& ciphertext) const
+{
+    return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->ModReduce(
+        ciphertext.GetInternal()));
+}
+std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalSum(
+    const CiphertextDCRTPoly& ciphertext, const uint32_t batchSize) const
+{
+    return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalSum(
+        ciphertext.GetInternal(), batchSize));
+}
+std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::IntMPBootAdjustScale(
+    const CiphertextDCRTPoly& ciphertext) const
+{
+    return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->IntMPBootAdjustScale(
+        ciphertext.GetInternal()));
+}
+std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::IntMPBootRandomElementGen(
+    const PublicKeyDCRTPoly& publicKey) const
+{
+    return std::make_unique<CiphertextDCRTPoly>(
+        m_cryptoContextImplSharedPtr->IntMPBootRandomElementGen(publicKey.GetInternal()));
+}
+void CryptoContextDCRTPoly::EvalBootstrapSetup(
+    const std::vector<uint32_t>& levelBudget, const std::vector<uint32_t>& dim1,
+    const uint32_t slots, const uint32_t correctionFactor, const bool precompute) const
+{
+    m_cryptoContextImplSharedPtr->EvalBootstrapSetup(levelBudget, dim1, slots, correctionFactor,
+        precompute);
+}
+void CryptoContextDCRTPoly::EvalBootstrapKeyGen(const std::shared_ptr<PrivateKeyImpl> privateKey,
+    const uint32_t slots) const
+{
+    m_cryptoContextImplSharedPtr->EvalBootstrapKeyGen(privateKey, slots);
 }
 std::unique_ptr<DecryptResult> CryptoContextDCRTPoly::Decrypt(
     const std::shared_ptr<PrivateKeyImpl> privateKey,
-    std::shared_ptr<CiphertextImpl> ciphertext, Plaintext& plaintext) const
+    const CiphertextDCRTPoly& ciphertext, Plaintext& plaintext) const
 {
     std::shared_ptr<PlaintextImpl> res;
     std::unique_ptr<DecryptResult> result = std::make_unique<DecryptResult>(
-        m_cryptoContextImplSharedPtr->Decrypt(privateKey, ciphertext, &res));
+        m_cryptoContextImplSharedPtr->Decrypt(privateKey, ciphertext.GetInternal(), &res));
     plaintext = res;
     return result;
 }
 uint32_t CryptoContextDCRTPoly::GetRingDimension() const
 {
     return m_cryptoContextImplSharedPtr->GetRingDimension();
+}
+uint32_t CryptoContextDCRTPoly::GetCyclotomicOrder() const
+{
+    return m_cryptoContextImplSharedPtr->GetCyclotomicOrder();
 }
 std::unique_ptr<Plaintext> CryptoContextDCRTPoly::MakeCKKSPackedPlaintext(
     const std::vector<double>& value, const size_t scaleDeg, const uint32_t level,
@@ -201,10 +263,10 @@ std::unique_ptr<Plaintext> CryptoContextDCRTPoly::MakeCKKSPackedPlaintext(
         value, scaleDeg, level, params, slots));
 }
 std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalPoly(
-    std::shared_ptr<CiphertextImpl> ciphertext, const std::vector<double>& coefficients) const
+    const CiphertextDCRTPoly& ciphertext, const std::vector<double>& coefficients) const
 {
     return std::make_unique<CiphertextDCRTPoly>(
-        m_cryptoContextImplSharedPtr->EvalPoly(ciphertext, coefficients));
+        m_cryptoContextImplSharedPtr->EvalPoly(ciphertext.GetInternal(), coefficients));
 }
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -282,6 +344,9 @@ std::unique_ptr<CiphertextDCRTPoly> GenDefaultConstructedCiphertext()
 {
     return std::make_unique<CiphertextDCRTPoly>();
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////
+
 bool SerializeCryptoContextToFile(const std::string& ccLocation,
     const CryptoContextDCRTPoly& cryptoContext, const SerialMode serialMode)
 {
@@ -323,13 +388,13 @@ bool SerializeEvalMultKeyToFile(const std::string& multKeyLocation,
     {
         if (serialMode == SerialMode::BINARY)
         {
-            return lbcrypto::CryptoContextImpl<lbcrypto::DCRTPoly>::SerializeEvalMultKey(
-                *ofs, lbcrypto::SerType::BINARY, cryptoContext.m_cryptoContextImplSharedPtr);
+            return CryptoContextImpl::SerializeEvalMultKey(*ofs,
+                lbcrypto::SerType::BINARY, cryptoContext.m_cryptoContextImplSharedPtr);
         }
         if (serialMode == SerialMode::JSON)
         {
-            return lbcrypto::CryptoContextImpl<lbcrypto::DCRTPoly>::SerializeEvalMultKey(
-                *ofs, lbcrypto::SerType::JSON, cryptoContext.m_cryptoContextImplSharedPtr);
+            return CryptoContextImpl::SerializeEvalMultKey(*ofs,
+                lbcrypto::SerType::JSON, cryptoContext.m_cryptoContextImplSharedPtr);
         }
     }
     return false;
@@ -345,13 +410,11 @@ bool SerializeEvalMultKeyByIdToFile(const std::string& multKeyLocation,
     {
         if (serialMode == SerialMode::BINARY)
         {
-            return lbcrypto::CryptoContextImpl<lbcrypto::DCRTPoly>::SerializeEvalMultKey(
-                *ofs, lbcrypto::SerType::BINARY, id);
+            return CryptoContextImpl::SerializeEvalMultKey(*ofs, lbcrypto::SerType::BINARY, id);
         }
         if (serialMode == SerialMode::JSON)
         {
-            return lbcrypto::CryptoContextImpl<lbcrypto::DCRTPoly>::SerializeEvalMultKey(
-                *ofs, lbcrypto::SerType::JSON, id);
+            return CryptoContextImpl::SerializeEvalMultKey(*ofs, lbcrypto::SerType::JSON, id);
         }
     }
     return false;
@@ -367,13 +430,11 @@ bool DeserializeEvalMultKeyFromFile(const std::string& multKeyLocation,
     {
         if (serialMode == SerialMode::BINARY)
         {
-            return lbcrypto::CryptoContextImpl<lbcrypto::DCRTPoly>::DeserializeEvalMultKey(
-                *ifs, lbcrypto::SerType::BINARY);
+            return CryptoContextImpl::DeserializeEvalMultKey(*ifs, lbcrypto::SerType::BINARY);
         }
         if (serialMode == SerialMode::JSON)
         {
-            return lbcrypto::CryptoContextImpl<lbcrypto::DCRTPoly>::DeserializeEvalMultKey(
-                *ifs, lbcrypto::SerType::JSON);
+            return CryptoContextImpl::DeserializeEvalMultKey(*ifs, lbcrypto::SerType::JSON);
         }
     }
     return false;
@@ -389,13 +450,13 @@ bool SerializeEvalSumKeyToFile(const std::string& sumKeyLocation,
     {
         if (serialMode == SerialMode::BINARY)
         {
-            return lbcrypto::CryptoContextImpl<lbcrypto::DCRTPoly>::SerializeEvalAutomorphismKey(
-                *ofs, lbcrypto::SerType::BINARY, cryptoContext.m_cryptoContextImplSharedPtr);
+            return CryptoContextImpl::SerializeEvalAutomorphismKey(*ofs, lbcrypto::SerType::BINARY,
+                cryptoContext.m_cryptoContextImplSharedPtr);
         }
         if (serialMode == SerialMode::JSON)
         {
-            return lbcrypto::CryptoContextImpl<lbcrypto::DCRTPoly>::SerializeEvalAutomorphismKey(
-                *ofs, lbcrypto::SerType::JSON, cryptoContext.m_cryptoContextImplSharedPtr);
+            return CryptoContextImpl::SerializeEvalAutomorphismKey(*ofs, lbcrypto::SerType::JSON,
+                cryptoContext.m_cryptoContextImplSharedPtr);
         }
     }
     return false;
@@ -411,13 +472,11 @@ bool SerializeEvalSumKeyByIdToFile(const std::string& sumKeyLocation,
     {
         if (serialMode == SerialMode::BINARY)
         {
-            return lbcrypto::CryptoContextImpl<lbcrypto::DCRTPoly>::SerializeEvalSumKey(
-                *ofs, lbcrypto::SerType::BINARY, id);
+            return CryptoContextImpl::SerializeEvalSumKey(*ofs, lbcrypto::SerType::BINARY, id);
         }
         if (serialMode == SerialMode::JSON)
         {
-            return lbcrypto::CryptoContextImpl<lbcrypto::DCRTPoly>::SerializeEvalSumKey(
-                *ofs, lbcrypto::SerType::JSON, id);
+            return CryptoContextImpl::SerializeEvalSumKey(*ofs, lbcrypto::SerType::JSON, id);
         }
     }
     return false;
@@ -432,13 +491,13 @@ bool DeserializeEvalSumKeyFromFile(const std::string& sumKeyLocation, const Seri
     {
         if (serialMode == SerialMode::BINARY)
         {
-            return lbcrypto::CryptoContextImpl<lbcrypto::DCRTPoly>::DeserializeEvalAutomorphismKey(
-                *ifs, lbcrypto::SerType::BINARY);
+            return CryptoContextImpl::DeserializeEvalAutomorphismKey(*ifs,
+                lbcrypto::SerType::BINARY);
         }
         if (serialMode == SerialMode::JSON)
         {
-            return lbcrypto::CryptoContextImpl<lbcrypto::DCRTPoly>::DeserializeEvalAutomorphismKey(
-                *ifs, lbcrypto::SerType::JSON);
+            return CryptoContextImpl::DeserializeEvalAutomorphismKey(*ifs,
+                lbcrypto::SerType::JSON);
         }
     }
     return false;
@@ -454,13 +513,13 @@ bool SerializeEvalAutomorphismKeyToFile(const std::string& automorphismKeyLocati
     {
         if (serialMode == SerialMode::BINARY)
         {
-            return lbcrypto::CryptoContextImpl<lbcrypto::DCRTPoly>::SerializeEvalAutomorphismKey(
-                *ofs, lbcrypto::SerType::BINARY, cryptoContext.m_cryptoContextImplSharedPtr);
+            return CryptoContextImpl::SerializeEvalAutomorphismKey(*ofs, lbcrypto::SerType::BINARY,
+                cryptoContext.m_cryptoContextImplSharedPtr);
         }
         if (serialMode == SerialMode::JSON)
         {
-            return lbcrypto::CryptoContextImpl<lbcrypto::DCRTPoly>::SerializeEvalAutomorphismKey(
-                *ofs, lbcrypto::SerType::JSON, cryptoContext.m_cryptoContextImplSharedPtr);
+            return CryptoContextImpl::SerializeEvalAutomorphismKey(*ofs, lbcrypto::SerType::JSON,
+                cryptoContext.m_cryptoContextImplSharedPtr);
         }
     }
     return false;
@@ -476,13 +535,13 @@ bool SerializeEvalAutomorphismKeyByIdToFile(const std::string& automorphismKeyLo
     {
         if (serialMode == SerialMode::BINARY)
         {
-            return lbcrypto::CryptoContextImpl<lbcrypto::DCRTPoly>::SerializeEvalAutomorphismKey(
-                *ofs, lbcrypto::SerType::BINARY, id);
+            return CryptoContextImpl::SerializeEvalAutomorphismKey(*ofs, lbcrypto::SerType::BINARY,
+                id);
         }
         if (serialMode == SerialMode::JSON)
         {
-            return lbcrypto::CryptoContextImpl<lbcrypto::DCRTPoly>::SerializeEvalAutomorphismKey(
-                *ofs, lbcrypto::SerType::JSON, id);
+            return CryptoContextImpl::SerializeEvalAutomorphismKey(*ofs, lbcrypto::SerType::JSON,
+                id);
         }
     }
     return false;
@@ -498,13 +557,13 @@ bool DeserializeEvalAutomorphismKeyFromFile(const std::string& automorphismKeyLo
     {
         if (serialMode == SerialMode::BINARY)
         {
-            return lbcrypto::CryptoContextImpl<lbcrypto::DCRTPoly>::DeserializeEvalAutomorphismKey(
-                *ifs, lbcrypto::SerType::BINARY);
+            return CryptoContextImpl::DeserializeEvalAutomorphismKey(*ifs,
+                lbcrypto::SerType::BINARY);
         }
         if (serialMode == SerialMode::JSON)
         {
-            return lbcrypto::CryptoContextImpl<lbcrypto::DCRTPoly>::DeserializeEvalAutomorphismKey(
-                *ifs, lbcrypto::SerType::JSON);
+            return CryptoContextImpl::DeserializeEvalAutomorphismKey(*ifs,
+                lbcrypto::SerType::JSON);
         }
     }
     return false;
