@@ -1,9 +1,11 @@
-# Polycircuit
+---
+description: Cryptography library in Rust with the widest range of FHE algorithms
+---
 
-[Polycircuit ](https://github.com/fairmath/polycircuit)is an application-layer FHE components library built through competitions from the [FHERMA](overview/fherma.md) community. Once the winner of a challenge is determined, their submitted solution is added to the repository via a PR.
+# OpenFHE-rs
 
-The components within the repository are designed with a consistent interface, making them easily integrable into FHE-enabled applications. However, this interface is subject to change as we consistently strive to better accommodate developers' needs. We're actively refining the interface, working in partnership with other projects to de-facto develop an optimal application layer interface standard.
+OpenFHE-rs is a joint project by Fair Math and OpenFHE. It brings exciting new opportunities for the Web3 community by adding Rust support for the OpenFHE library. OpenFHE is known for its wide range of Fully Homomorphic Encryption (FHE) schemes, all implemented in C++, and now we're bringing these capabilities to Rust developers.
 
-If you're working on a toolchain for FHE development or are interested in contributing to this initiative, [we'd love to hear from you](https://discord.com/invite/NfhXwyr9M5). Collaboration is at the heart of what we do, and we're always looking for new partners to join us in advancing the field of FHE development.
+By offering a Rust wrapper for OpenFHE, we make it easier to use advanced FHE schemes in Rust projects. Whether you're building secure data processing apps or privacy-focused protocols, OpenFHE-rs helps you do so with the power of OpenFHE's algorithms.
 
-Check out the [FHERMA platform](https://fherma.io) for innovative FHE solutions and challenges.
+OpenFHE-rs is the most comprehensive FHE Rust library in terms of components, which also makes OpenFHE the library that supports the largest number of languages: Python, C++, and Rust.
