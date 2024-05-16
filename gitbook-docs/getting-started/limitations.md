@@ -4,7 +4,7 @@ description: Our toolchain is not perfect (yet)
 
 # Limitations
 
-The backbone of our ecosystem is the [OpenFHE-rs](../overview/openfhe-rs.md) crate for FHE-enabled apps development. We are developing it in collaboration with the [OpenFHE](https://www.openfhe.org/) research team, which allows us to concentrate on developing web3-related dev-tools and perform advanced protocol research.
+The backbone of our ecosystem is the [OpenFHE-rs](../) crate for FHE-enabled apps development. We are developing it in collaboration with the [OpenFHE](https://www.openfhe.org/) research team, which allows us to concentrate on developing web3-related dev-tools and perform advanced protocol research.
 
 In other words, we develop the crate as a Rust binding to the core [C++ OpenFHE library](https://github.com/openfheorg/openfhe-development/). This gives us the ability to reuse vast results of the OpenFHE team and give the Rust community access to the most advanced existing cryptography library.
 

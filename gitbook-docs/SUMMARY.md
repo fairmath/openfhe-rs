@@ -2,9 +2,9 @@
 
 ## Overview
 
-* [Polycircuit](README.md)
-* [OpenFHE-rs](overview/openfhe-rs.md)
+* [OpenFHE-rs](README.md)
 * [FHERMA competition platform](overview/fherma.md)
+* [Polycircuit](<README (1).md>)
 
 ## Getting started
 
