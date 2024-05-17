@@ -10,6 +10,11 @@ In other words, we develop the crate as a Rust binding to the core [C++ OpenFHE 
 
 At the same time, we do have some limitations in the interfaces, as we seek to avoid any extra memory consumption and computational overheads. FHE algorithms often operate with huge data containers and its crucial not to copy them unless absolutely necessary.
 
-### Vector data methods
-
-We use [CXX crate](https://cxx.rs/) for our Rust binding to reduce the amount of abstraction levels. Because of that, instead of the usual [std::vec](https://doc.rust-lang.org/std/vec/), we use [cxx::vector](https://cxx.rs/binding/cxxvector.html). The main difference lies in the initialization method. You need to init the vector element by element, otherwise it will be stored in memory twice.
+At the moment, only a certain set of OpenFHE functionality has been implemented.
+We use [CXX crate](https://cxx.rs/) for our Rust binding to reduce the amount of abstraction levels.
+OpenFHE types represented as opaque types on the Rust side using [cxx::UniquePtr](https://docs.rs/cxx/latest/cxx/struct.UniquePtr.html) from the CXX crate.
+Instead of the usual [std::vec](https://doc.rust-lang.org/std/vec/), we use [cxx::vector](https://docs.rs/cxx/latest/cxx/struct.CxxVector.html).
+The main difference lies in the initialization method: you need to init the vector element by element, otherwise it will be stored in memory twice.
+Currently only supported CxxVector of the primitive and "SharedComplex" (alterantive to std::complex<double> in C++) types.
+Since Rust does not support default parameters and function overloading, default parameters are mentioned in comments after the
+corresponding parameter name and overloaded library functions are represented by slightly different names.
