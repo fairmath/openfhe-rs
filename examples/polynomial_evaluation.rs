@@ -16,13 +16,12 @@ fn main()
     _cc.Enable(ffi::PKESchemeFeature::LEVELEDSHE);
     _cc.Enable(ffi::PKESchemeFeature::ADVANCEDSHE);
 
-    let mut _vals = CxxVector::<ffi::ComplexPair>::new();
-    _vals.pin_mut().push(ffi::ComplexPair{re: 0.5, im: 0.0});
-    _vals.pin_mut().push(ffi::ComplexPair{re: 0.7, im: 0.0});
-    _vals.pin_mut().push(ffi::ComplexPair{re: 0.9, im: 0.0});
-    _vals.pin_mut().push(ffi::ComplexPair{re: 0.95, im: 0.0});
-    _vals.pin_mut().push(ffi::ComplexPair{re: 0.93, im: 0.0});
-    let _input = ffi::GenVectorOfComplex(&_vals);
+    let mut _input = CxxVector::<ffi::ComplexPair>::new();
+    _input.pin_mut().push(ffi::ComplexPair{re: 0.5, im: 0.0});
+    _input.pin_mut().push(ffi::ComplexPair{re: 0.7, im: 0.0});
+    _input.pin_mut().push(ffi::ComplexPair{re: 0.9, im: 0.0});
+    _input.pin_mut().push(ffi::ComplexPair{re: 0.95, im: 0.0});
+    _input.pin_mut().push(ffi::ComplexPair{re: 0.93, im: 0.0});
     let _encoded_length = _input.len();
 
     let mut _coefficients_1 = CxxVector::<f64>::new();

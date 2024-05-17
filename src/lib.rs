@@ -148,7 +148,6 @@ pub mod ffi
         type DCRTPolyParams;
         type SerialMode;
         type PublicKeyDCRTPoly;
-        type Complex;
     }
 
     // Params
@@ -461,6 +460,7 @@ pub mod ffi
         fn SetLength(self: &Plaintext, newSize: usize);
         fn GetString(self: &Plaintext) -> String;
         fn GetLogPrecision(self: &Plaintext) -> f64;
+        fn GetCopyOfCKKSPackedValue(self: &Plaintext) -> UniquePtr<CxxVector<ComplexPair>>;
     }
 
     // CiphertextDCRTPoly
@@ -474,17 +474,6 @@ pub mod ffi
     {
         re: f64,
         im: f64,
-    }
-    // SharedComplex
-    struct SharedComplex
-    {
-        ptr: SharedPtr<Complex>,
-    }
-    // Vector of SharedComplex
-    unsafe extern "C++"
-    {
-        fn GenVectorOfComplex(vals: &CxxVector<ComplexPair>)
-                              -> UniquePtr<CxxVector<SharedComplex>>;
     }
 
     // CryptoContextDCRTPoly
@@ -529,6 +518,9 @@ pub mod ffi
         fn EvalChebyshevSeries(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
                                coefficients: &CxxVector<f64>, a: f64, b: f64)
                                -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalChebyshevFunction(self: &CryptoContextDCRTPoly, func: fn(f64, ret: &mut f64),
+                                 ciphertext: &CiphertextDCRTPoly, a: f64, b: f64, degree: u32)
+                                 -> UniquePtr<CiphertextDCRTPoly>;
         fn EvalBootstrap(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
                          numIterations: /* 1 */ u32, precision: /* 0 */ u32)
                          -> UniquePtr<CiphertextDCRTPoly>;
@@ -540,6 +532,8 @@ pub mod ffi
                    -> UniquePtr<CiphertextDCRTPoly>;
         fn IntMPBootAdjustScale(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly)
                                 -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalLogistic(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly, a: f64,
+                        b: f64, degree: u32) -> UniquePtr<CiphertextDCRTPoly>;
         fn IntMPBootRandomElementGen(self: &CryptoContextDCRTPoly, publicKey: &PublicKeyDCRTPoly)
                                      -> UniquePtr<CiphertextDCRTPoly>;
         fn EvalBootstrapSetup(self: &CryptoContextDCRTPoly,
@@ -558,7 +552,7 @@ pub mod ffi
                                    params: /* null() */ SharedPtr<DCRTPolyParams>,
                                    slots: /* 0 */ u32) -> UniquePtr<Plaintext>;
         fn MakeCKKSPackedPlaintextByVectorOfComplex(self: &CryptoContextDCRTPoly,
-                                                    value: &CxxVector<SharedComplex>,
+                                                    value: &CxxVector<ComplexPair>,
                                                     scaleDeg: /* 1 */ usize, level: /* 0 */ u32,
                                                     params: /* null() */ SharedPtr<DCRTPolyParams>,
                                                     slots: /* 0 */ u32) -> UniquePtr<Plaintext>;
@@ -840,13 +834,12 @@ mod tests
         _cc.Enable(ffi::PKESchemeFeature::LEVELEDSHE);
         _cc.Enable(ffi::PKESchemeFeature::ADVANCEDSHE);
 
-        let mut _vals = CxxVector::<ffi::ComplexPair>::new();
-        _vals.pin_mut().push(ffi::ComplexPair{re: 0.5, im: 0.0});
-        _vals.pin_mut().push(ffi::ComplexPair{re: 0.7, im: 0.0});
-        _vals.pin_mut().push(ffi::ComplexPair{re: 0.9, im: 0.0});
-        _vals.pin_mut().push(ffi::ComplexPair{re: 0.95, im: 0.0});
-        _vals.pin_mut().push(ffi::ComplexPair{re: 0.93, im: 0.0});
-        let _input = ffi::GenVectorOfComplex(&_vals);
+        let mut _input = CxxVector::<ffi::ComplexPair>::new();
+        _input.pin_mut().push(ffi::ComplexPair{re: 0.5, im: 0.0});
+        _input.pin_mut().push(ffi::ComplexPair{re: 0.7, im: 0.0});
+        _input.pin_mut().push(ffi::ComplexPair{re: 0.9, im: 0.0});
+        _input.pin_mut().push(ffi::ComplexPair{re: 0.95, im: 0.0});
+        _input.pin_mut().push(ffi::ComplexPair{re: 0.93, im: 0.0});
         let _encoded_length = _input.len();
 
         let mut _coefficients_1 = CxxVector::<f64>::new();

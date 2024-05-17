@@ -60,6 +60,17 @@ rust::String Plaintext::GetString() const
     stream << *m_plaintext;
     return rust::String(stream.str());
 }
+std::unique_ptr<std::vector<ComplexPair>> Plaintext::GetCopyOfCKKSPackedValue() const
+{
+    const std::vector<std::complex<double>>& v = m_plaintext->GetCKKSPackedValue();
+    std::vector<ComplexPair> result;
+    result.reserve(v.size());
+    for (const std::complex<double>& elem : v)
+    {
+        result.push_back(ComplexPair{elem.real(), elem.imag()});
+    }
+    return std::make_unique<std::vector<ComplexPair>>(std::move(result));
+}
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -86,14 +97,14 @@ CryptoContextDCRTPoly::CryptoContextDCRTPoly(const ParamsCKKSRNS& params)
     : m_cryptoContextImplSharedPtr(lbcrypto::GenCryptoContext(params))
 { }
 std::unique_ptr<Plaintext> CryptoContextDCRTPoly::MakeCKKSPackedPlaintextByVectorOfComplex(
-    const std::vector<SharedComplex>& value, const size_t scaleDeg, const uint32_t level,
+    const std::vector<ComplexPair>& value, const size_t scaleDeg, const uint32_t level,
     const std::shared_ptr<DCRTPolyParams> params, const uint32_t slots) const
 {
-    std::vector<Complex> v;
+    std::vector<std::complex<double>> v;
     v.reserve(value.size());
-    for (const SharedComplex& elem : value)
+    for (const ComplexPair& elem : value)
     {
-        v.push_back(std::move(*elem.ptr));
+        v.emplace_back(elem.re, elem.im);
     }
     return std::make_unique<Plaintext>(m_cryptoContextImplSharedPtr->MakeCKKSPackedPlaintext(
         v, scaleDeg, level, params, slots));
@@ -188,6 +199,14 @@ std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalChebyshevSeries(
     return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalChebyshevSeries(
         ciphertext.GetInternal(), coefficients, a, b));
 }
+std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalChebyshevFunction(
+    rust::Fn<void(const double x, double& ret)> func, const CiphertextDCRTPoly& ciphertext,
+    const double a, const double b, const uint32_t degree) const
+{
+    return std::make_unique<CiphertextDCRTPoly>(
+        m_cryptoContextImplSharedPtr->EvalChebyshevFunction([&](const double x){
+        double result; func(x, result); return result; }, ciphertext.GetInternal(), a, b, degree));
+}
 std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalBootstrap(
     const CiphertextDCRTPoly& ciphertext, const uint32_t numIterations,
     const uint32_t precision) const
@@ -218,6 +237,13 @@ std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::IntMPBootAdjustScale(
 {
     return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->IntMPBootAdjustScale(
         ciphertext.GetInternal()));
+}
+std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalLogistic(
+    const CiphertextDCRTPoly& ciphertext, const double a, const double b,
+    const uint32_t degree) const
+{
+    return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalLogistic(
+        ciphertext.GetInternal(), a, b, degree));
 }
 std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::IntMPBootRandomElementGen(
     const PublicKeyDCRTPoly& publicKey) const
@@ -271,19 +297,6 @@ std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalPoly(
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-std::unique_ptr<std::vector<SharedComplex>> GenVectorOfComplex(
-    const std::vector<ComplexPair>& vals)
-{
-    std::vector<SharedComplex> result;
-    result.reserve(vals.size());
-    for (const ComplexPair& p : vals)
-    {
-        SharedComplex temp;
-        temp.ptr = std::make_shared<Complex>(p.re, p.im);
-        result.emplace_back(std::move(temp));
-    }
-    return std::make_unique<std::vector<SharedComplex>>(std::move(result));
-}
 std::unique_ptr<Params> GetParamsByScheme(const SCHEME scheme)
 {
     return std::make_unique<Params>(scheme);

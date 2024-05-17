@@ -37,8 +37,6 @@ using DecryptResult = lbcrypto::DecryptResult;
 using DCRTPolyParams = lbcrypto::DCRTPoly::Params;
 using ::SerialMode;
 struct ComplexPair;
-using Complex = std::complex<double>;
-struct SharedComplex;
 
 // not used in the Rust side
 using PlaintextImpl = lbcrypto::PlaintextImpl;
@@ -104,6 +102,7 @@ public:
     void SetLength(const size_t newSize) const;
     [[nodiscard]] double GetLogPrecision() const;
     [[nodiscard]] rust::String GetString() const;
+    [[nodiscard]] std::unique_ptr<std::vector<ComplexPair>> GetCopyOfCKKSPackedValue() const;
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
@@ -184,6 +183,9 @@ public:
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalChebyshevSeries(
    	    const CiphertextDCRTPoly& ciphertext, const std::vector<double>& coefficients,
         const double a, const double b) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalChebyshevFunction(
+        rust::Fn<void(const double x, double& ret)> func, const CiphertextDCRTPoly& ciphertext,
+        const double a, const double b, const uint32_t degree) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalBootstrap(
         const CiphertextDCRTPoly& ciphertext, const uint32_t numIterations /* 1 */,
         const uint32_t precision /* 0 */) const;
@@ -195,6 +197,9 @@ public:
         const uint32_t batchSize) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> IntMPBootAdjustScale(
    	    const CiphertextDCRTPoly& ciphertext) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalLogistic(
+        const CiphertextDCRTPoly& ciphertext, const double a, const double b,
+        const uint32_t degree) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> IntMPBootRandomElementGen(
         const PublicKeyDCRTPoly& publicKey) const;
     void EvalBootstrapSetup(const std::vector<uint32_t>& levelBudget /* {5, 4} */,
@@ -213,15 +218,13 @@ public:
         const uint32_t level /* 0 */, const std::shared_ptr<DCRTPolyParams> params /* nullptr */,
         const uint32_t slots /* 0 */) const;
     [[nodiscard]] std::unique_ptr<Plaintext> MakeCKKSPackedPlaintextByVectorOfComplex(
-        const std::vector<SharedComplex>& value, const size_t scaleDeg /* 1 */,
+        const std::vector<ComplexPair>& value, const size_t scaleDeg /* 1 */,
         const uint32_t level /* 0 */, const std::shared_ptr<DCRTPolyParams> params /* nullptr */,
         const uint32_t slots /* 0 */) const;
 };
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-[[nodiscard]] std::unique_ptr<std::vector<SharedComplex>> GenVectorOfComplex(
-    const std::vector<ComplexPair>& vals);
 [[nodiscard]] std::unique_ptr<Params> GetParamsByScheme(const SCHEME scheme);
 [[nodiscard]] std::unique_ptr<Params> GetParamsByVectorOfString(
     const std::vector<std::string>& vals);
