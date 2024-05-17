@@ -18,3 +18,4 @@ The main difference lies in the initialization method: you need to init the vect
 Currently only supported CxxVector of the primitive and "SharedComplex" (alterantive to std::complex<double> in C++) types.
 Since Rust does not support default parameters and function overloading, default parameters are mentioned in comments after the
 corresponding parameter name and overloaded library functions are represented by slightly different names.
+Calling member functions on generated empty types (those generated with GenEmptyPlainText() and GenEmptyCryptoContext()) results in undefined behavior.
