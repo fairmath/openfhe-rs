@@ -2,16 +2,14 @@
 
 ## Overview
 
+* [FHERMA](overview/fherma.md)
+* [POLYCIRCUIT](overview/polycircuit.md)
 * [OpenFHE-rs](overview/openfhe-rs.md)
-* [FHERMA competition platform](overview/fherma.md)
-* [Polycircuit](overview/polycircuit.md)
 
-## Getting started
-
+## OpenFHE-rs
 * [Limitations](getting-started/limitations.md)
-* [Toolchain Architecture](getting-started/toolchain-architecture.md)
+* [Toolchain](getting-started/toolchain-architecture.md)
 * [Base types and algorithms](getting-started/base-types-and-algorithms.md)
 
 ## FHE-(E)VM
-
 * [Collaborative FHE-(E)VM](fhe-e-vm/collaborative-fhe-e-vm.md)

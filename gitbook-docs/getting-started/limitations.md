@@ -1,14 +1,11 @@
 ---
-description: Our toolchain is not perfect (yet)
+description:
 ---
 
+
+
 # Limitations
-
-The backbone of our ecosystem is the [OpenFHE-rs](../) crate for FHE-enabled apps development. We are developing it in collaboration with the [OpenFHE](https://www.openfhe.org/) research team, which allows us to concentrate on developing web3-related dev-tools and perform advanced protocol research.
-
-In other words, we develop the crate as a Rust binding to the core [C++ OpenFHE library](https://github.com/openfheorg/openfhe-development/). This gives us the ability to reuse vast results of the OpenFHE team and give the Rust community access to the most advanced existing cryptography library.
-
-At the same time, we do have some limitations in the interfaces, as we seek to avoid any extra memory consumption and computational overheads. FHE algorithms often operate with huge data containers and its crucial not to copy them unless absolutely necessary.
+The library is WIP and may contain some unpulished interfaces. If you struggle with anything or have suggestions, feel free to ping us on our Discord server or open a new issue in the [Github repository](https://github.com/fairmath/openfhe-rs/tree/master). 
 
 At the moment, only a certain set of OpenFHE functionality has been implemented.
 We use [CXX crate](https://cxx.rs/) for our Rust binding to reduce the amount of abstraction levels.
