@@ -152,8 +152,19 @@ public:
     CryptoContextDCRTPoly& operator=(const CryptoContextDCRTPoly&) = delete;
     CryptoContextDCRTPoly& operator=(CryptoContextDCRTPoly&&) = delete;
 
+    void SetSchemeId(const SCHEME schemeTag) const;
+    [[nodiscard]] SCHEME GetSchemeId() const;
+    [[nodiscard]] size_t GetKeyGenLevel() const;
+    void SetKeyGenLevel(const size_t level) const;
+    void SetSwkFC(const CiphertextDCRTPoly& FHEWtoCKKSswk) const;
+    void EvalCompareSwitchPrecompute(const uint32_t pLWE /* 0 */, const double scaleSign /* 1.0 */,
+        const bool unit /* false */) const;
+    [[nodiscard]] uint32_t FindAutomorphismIndex(const uint32_t idx) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> GetSwkFC() const;
     void Enable(const PKESchemeFeature feature) const;
+    void EnableByMask(const uint32_t featureMask) const;
     [[nodiscard]] std::unique_ptr<KeyPairDCRTPoly> KeyGen() const;
+    [[nodiscard]] std::unique_ptr<KeyPairDCRTPoly> SparseKeyGen() const;
     void EvalMultKeyGen(const std::shared_ptr<PrivateKeyImpl> key) const;
     void EvalMultKeysGen(const std::shared_ptr<PrivateKeyImpl> key) const;
     void EvalRotateKeyGen(
@@ -162,6 +173,10 @@ public:
     void EvalCKKStoFHEWPrecompute(const double scale /* 1.0 */) const;
     [[nodiscard]] uint32_t GetRingDimension() const;
     [[nodiscard]] uint32_t GetCyclotomicOrder() const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalSin(const CiphertextDCRTPoly& ciphertext,
+        const double a, const double b, const uint32_t degree) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalCos(const CiphertextDCRTPoly& ciphertext,
+        const double a, const double b, const uint32_t degree) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> Encrypt(
         const std::shared_ptr<PublicKeyImpl> publicKey, const Plaintext& plaintext) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalAdd(
@@ -180,8 +195,18 @@ public:
         const CiphertextDCRTPoly& ciphertext, const int32_t index) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalPoly(
         const CiphertextDCRTPoly& ciphertext, const std::vector<double>& coefficients) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalNegate(
+        const CiphertextDCRTPoly& ciphertext) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalSquare(
+        const CiphertextDCRTPoly& ciphertext) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalAtIndex(
+        const CiphertextDCRTPoly& ciphertext, const uint32_t index) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> ComposedEvalMult(
+        const CiphertextDCRTPoly& ciphertext1, const CiphertextDCRTPoly& ciphertext2) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> Relinearize(
+        const CiphertextDCRTPoly& ciphertext) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalChebyshevSeries(
-   	    const CiphertextDCRTPoly& ciphertext, const std::vector<double>& coefficients,
+        const CiphertextDCRTPoly& ciphertext, const std::vector<double>& coefficients,
         const double a, const double b) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalChebyshevFunction(
         rust::Fn<void(const double x, double& ret)> func, const CiphertextDCRTPoly& ciphertext,
@@ -190,13 +215,26 @@ public:
         const CiphertextDCRTPoly& ciphertext, const uint32_t numIterations /* 1 */,
         const uint32_t precision /* 0 */) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> Rescale(
-   	    const CiphertextDCRTPoly& ciphertext) const;
+        const CiphertextDCRTPoly& ciphertext) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> ModReduce(
         const CiphertextDCRTPoly& ciphertext) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalSum(const CiphertextDCRTPoly& ciphertext,
         const uint32_t batchSize) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalPolyLinear(
+        const CiphertextDCRTPoly& ciphertext, const std::vector<double>& coefficients) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalPolyPS(
+        const CiphertextDCRTPoly& ciphertext, const std::vector<double>& coefficients) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalChebyshevSeriesLinear(
+        const CiphertextDCRTPoly& ciphertext, const std::vector<double>& coefficients,
+        const double a, const double b) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalChebyshevSeriesPS(
+        const CiphertextDCRTPoly& ciphertext, const std::vector<double>& coefficients,
+        const double a, const double b) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalDivide(
+        const CiphertextDCRTPoly& ciphertext, const double a, const double b,
+        const uint32_t degree) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> IntMPBootAdjustScale(
-   	    const CiphertextDCRTPoly& ciphertext) const;
+        const CiphertextDCRTPoly& ciphertext) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalLogistic(
         const CiphertextDCRTPoly& ciphertext, const double a, const double b,
         const uint32_t degree) const;

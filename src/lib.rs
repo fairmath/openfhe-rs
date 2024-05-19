@@ -558,6 +558,43 @@ pub mod ffi
                                                     slots: /* 0 */ u32) -> UniquePtr<Plaintext>;
         fn EvalPoly(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
                     coefficients: &CxxVector<f64>) -> UniquePtr<CiphertextDCRTPoly>;
+        fn SetSchemeId(self: &CryptoContextDCRTPoly, schemeTag: SCHEME);
+        fn GetSchemeId(self: &CryptoContextDCRTPoly) -> SCHEME;
+        fn GetKeyGenLevel(self: &CryptoContextDCRTPoly) -> usize;
+        fn SetKeyGenLevel(self: &CryptoContextDCRTPoly, level: usize);
+        fn SetSwkFC(self: &CryptoContextDCRTPoly, FHEWtoCKKSswk: &CiphertextDCRTPoly);
+        fn EvalCompareSwitchPrecompute(self: &CryptoContextDCRTPoly, pLWE: u32, scaleSign: f64,
+                                       unit: bool);
+        fn FindAutomorphismIndex(self: &CryptoContextDCRTPoly, idx: u32) -> u32;
+        fn GetSwkFC(self: &CryptoContextDCRTPoly) -> UniquePtr<CiphertextDCRTPoly>;
+        fn EnableByMask(self: &CryptoContextDCRTPoly, featureMask: u32);
+        fn SparseKeyGen(self: &CryptoContextDCRTPoly) -> UniquePtr<KeyPairDCRTPoly>;
+        fn EvalPolyLinear(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
+                          coefficients: &CxxVector<f64>)-> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalPolyPS(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
+                      coefficients: &CxxVector<f64>) -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalChebyshevSeriesLinear(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
+                                     coefficients: &CxxVector<f64>, a: f64, b: f64)
+                                     -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalChebyshevSeriesPS(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
+                                 coefficients: &CxxVector<f64>, a: f64, b: f64)
+                                 -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalDivide(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly, a: f64,
+                      b: f64, degree: u32) -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalSin(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly, a: f64, b: f64,
+                   degree: u32) -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalCos(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly, a: f64, b: f64,
+                   degree: u32) -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalNegate(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly)
+                      -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalSquare(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly)
+                      -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalAtIndex(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly, index: u32)
+                       -> UniquePtr<CiphertextDCRTPoly>;
+        fn ComposedEvalMult(self: &CryptoContextDCRTPoly, ciphertext1: &CiphertextDCRTPoly,
+                            ciphertext2: &CiphertextDCRTPoly) -> UniquePtr<CiphertextDCRTPoly>;
+        fn Relinearize(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly)
+                       -> UniquePtr<CiphertextDCRTPoly>;
     }
 
     // Serialize / Deserialize
