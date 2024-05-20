@@ -177,24 +177,42 @@ public:
         const double a, const double b, const uint32_t degree) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalCos(const CiphertextDCRTPoly& ciphertext,
         const double a, const double b, const uint32_t degree) const;
-    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> Encrypt(
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EncryptByPublicKey(
         const std::shared_ptr<PublicKeyImpl> publicKey, const Plaintext& plaintext) const;
-    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalAdd(
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EncryptByPrivateKey(
+        const std::shared_ptr<PrivateKeyImpl> privateKey, const Plaintext& plaintext) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalAddByCiphertexts(
         const CiphertextDCRTPoly& ciphertext1, const CiphertextDCRTPoly& ciphertext2) const;
-    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalSub(
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalAddByPlaintext(
+        const CiphertextDCRTPoly& ciphertext, const Plaintext& plaintext) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalAddByConst(
+        const CiphertextDCRTPoly& ciphertext, const double constant) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalSubByCiphertexts(
         const CiphertextDCRTPoly& ciphertext1, const CiphertextDCRTPoly& ciphertext2) const;
-    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalMult(
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalSubByPlaintext(
+        const CiphertextDCRTPoly& ciphertext, const Plaintext& plaintext) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalSubByConst(
+        const CiphertextDCRTPoly& ciphertext, const double constant) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalMultByCiphertexts(
         const CiphertextDCRTPoly& ciphertext1, const CiphertextDCRTPoly& ciphertext2) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalMultByPlaintext(
+        const CiphertextDCRTPoly& ciphertext, const Plaintext& plaintext) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalMultByConst(
+        const CiphertextDCRTPoly& ciphertext, const double constant) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalMultNoRelin(
         const CiphertextDCRTPoly& ciphertext1, const CiphertextDCRTPoly& ciphertext2) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalMultAndRelinearize(
         const CiphertextDCRTPoly& ciphertext1, const CiphertextDCRTPoly& ciphertext2) const;
-    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalMultByConst(
-        const CiphertextDCRTPoly& ciphertext, const double constant) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalRotate(
         const CiphertextDCRTPoly& ciphertext, const int32_t index) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalPoly(
         const CiphertextDCRTPoly& ciphertext, const std::vector<double>& coefficients) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> KeySwitchDown(
+        const CiphertextDCRTPoly& ciphertext) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> KeySwitchExt(
+        const CiphertextDCRTPoly& ciphertext, const bool addFirst) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> Compress(
+        const CiphertextDCRTPoly& ciphertext, const uint32_t towersLeft /* 1 */) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalNegate(
         const CiphertextDCRTPoly& ciphertext) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalSquare(
@@ -240,15 +258,25 @@ public:
         const uint32_t degree) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> IntMPBootRandomElementGen(
         const PublicKeyDCRTPoly& publicKey) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalCompareSchemeSwitching(
+        const CiphertextDCRTPoly& ciphertext1, const CiphertextDCRTPoly& ciphertext2,
+        const uint32_t numCtxts /* 0 */, const uint32_t numSlots /* 0 */,
+        const uint32_t pLWE /* 0 */, const double scaleSign /* 1.0 */,
+        const bool unit /* false */) const;
     void EvalBootstrapSetup(const std::vector<uint32_t>& levelBudget /* {5, 4} */,
         const std::vector<uint32_t>& dim1 /* {0, 0} */, const uint32_t slots /* 0 */,
         const uint32_t correctionFactor /* 0 */, const bool precompute /* true */) const;
     void EvalBootstrapKeyGen(const std::shared_ptr<PrivateKeyImpl> privateKey,
         const uint32_t slots) const;
+    void EvalBootstrapPrecompute(const uint32_t slots /* 0 */) const;
     [[nodiscard]] std::unique_ptr<DecryptResult> Decrypt(
         const std::shared_ptr<PrivateKeyImpl> privateKey, const CiphertextDCRTPoly& ciphertext,
         Plaintext& plaintext) const;
     [[nodiscard]] std::unique_ptr<Plaintext> MakePackedPlaintext(
+        const std::vector<int64_t>& value, const size_t noiseScaleDeg /* 1 */,
+        const uint32_t level /* 0 */) const;
+    [[nodiscard]] std::unique_ptr<Plaintext> MakeStringPlaintext(const std::string& s) const;
+    [[nodiscard]] std::unique_ptr<Plaintext> MakeCoefPackedPlaintext(
         const std::vector<int64_t>& value, const size_t noiseScaleDeg /* 1 */,
         const uint32_t level /* 0 */) const;
     [[nodiscard]] std::unique_ptr<Plaintext> MakeCKKSPackedPlaintext(
@@ -259,7 +287,25 @@ public:
         const std::vector<ComplexPair>& value, const size_t scaleDeg /* 1 */,
         const uint32_t level /* 0 */, const std::shared_ptr<DCRTPolyParams> params /* nullptr */,
         const uint32_t slots /* 0 */) const;
+    [[nodiscard]] std::unique_ptr<std::vector<uint32_t>> FindAutomorphismIndices(
+        const std::vector<uint32_t>& idxList) const;
+    [[nodiscard]] std::shared_ptr<CryptoContextImpl> GetInternal() const;
 };
+// cxx currently does not support static class methods
+void ClearEvalMultKeys();
+void ClearEvalMultKeysById(const std::string& id);
+void ClearEvalMultKeysByCryptoContext(const CryptoContextDCRTPoly& cryptoContext);
+void ClearEvalSumKeys();
+void ClearEvalSumKeysById(const std::string& id);
+void ClearEvalSumKeysByCryptoContext(const CryptoContextDCRTPoly& cryptoContext);
+void ClearEvalAutomorphismKeys();
+void ClearEvalAutomorphismKeysById(const std::string& id);
+void ClearEvalAutomorphismKeysByCryptoContext(const CryptoContextDCRTPoly& cryptoContext);
+[[nodiscard]] std::unique_ptr<std::vector<uint32_t>> GetExistingEvalAutomorphismKeyIndices(
+    const std::string& keyTag);
+[[nodiscard]] std::unique_ptr<std::vector<uint32_t>> GetUniqueValues(
+    const std::vector<uint32_t>& oldValues,
+    const std::vector<uint32_t>& newValues);
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 

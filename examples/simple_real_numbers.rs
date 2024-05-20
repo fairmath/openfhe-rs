@@ -52,13 +52,13 @@ fn main()
     println!("Input x1: {}", _p_txt_1.GetString());
     println!("Input x2: {}", _p_txt_2.GetString());
 
-    let mut _c1 = _cc.Encrypt(_key_pair.GetPublicKey(), &_p_txt_1);
-    let mut _c2 = _cc.Encrypt(_key_pair.GetPublicKey(), &_p_txt_2);
+    let mut _c1 = _cc.EncryptByPublicKey(_key_pair.GetPublicKey(), &_p_txt_1);
+    let mut _c2 = _cc.EncryptByPublicKey(_key_pair.GetPublicKey(), &_p_txt_2);
 
-    let mut _c_add = _cc.EvalAdd(&_c1, &_c2);
-    let mut _c_sub = _cc.EvalSub(&_c1, &_c2);
+    let mut _c_add = _cc.EvalAddByCiphertexts(&_c1, &_c2);
+    let mut _c_sub = _cc.EvalSubByCiphertexts(&_c1, &_c2);
     let mut _c_scalar = _cc.EvalMultByConst(&_c1, 4.0);
-    let mut _c_mul = _cc.EvalMult(&_c1, &_c2);
+    let mut _c_mul = _cc.EvalMultByCiphertexts(&_c1, &_c2);
     let mut _c_rot_1 = _cc.EvalRotate(&_c1, 1);
     let mut _c_rot_2 = _cc.EvalRotate(&_c1, -2);
 

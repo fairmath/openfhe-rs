@@ -80,7 +80,7 @@ fn main()
     print!("Generating evaluation key for homomorphic multiplication...");
     _cc.EvalMultKeyGen(_key_pair.GetPrivateKey());
     println!("Completed.\n");
-    let mut _cipher_text_1 = _cc.Encrypt(_key_pair.GetPublicKey(), &_plain_text_1);
+    let mut _cipher_text_1 = _cc.EncryptByPublicKey(_key_pair.GetPublicKey(), &_plain_text_1);
 
     let mut _start = Instant::now();
     let mut _result = _cc.EvalPoly(&_cipher_text_1, &_coefficients_1);

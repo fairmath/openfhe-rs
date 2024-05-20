@@ -497,22 +497,33 @@ pub mod ffi
         fn MakePackedPlaintext(self: &CryptoContextDCRTPoly, value: &CxxVector<i64>,
                                noiseScaleDeg: /* 1 */ usize, level: /* 0 */ u32)
                                -> UniquePtr<Plaintext>;
-        fn Encrypt(self: &CryptoContextDCRTPoly, publicKey: SharedPtr<PublicKeyImpl>,
-                   plaintext: &Plaintext) -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalAdd(self: &CryptoContextDCRTPoly, ciphertext1: &CiphertextDCRTPoly,
-                   ciphertext2: &CiphertextDCRTPoly) -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalSub(self: &CryptoContextDCRTPoly, ciphertext1: &CiphertextDCRTPoly,
-                   ciphertext2: &CiphertextDCRTPoly) -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalMult(self: &CryptoContextDCRTPoly, ciphertext1: &CiphertextDCRTPoly,
-                    ciphertext2: &CiphertextDCRTPoly) -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalMultNoRelin(self: &CryptoContextDCRTPoly, ciphertext1: &CiphertextDCRTPoly,
-                           ciphertext2: &CiphertextDCRTPoly) -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalMultAndRelinearize(self: &CryptoContextDCRTPoly,
-                                  ciphertext1: &CiphertextDCRTPoly,
-                                  ciphertext2: &CiphertextDCRTPoly)
-                                  -> UniquePtr<CiphertextDCRTPoly>;
+        fn EncryptByPublicKey(self: &CryptoContextDCRTPoly, publicKey: SharedPtr<PublicKeyImpl>,
+                              plaintext: &Plaintext) -> UniquePtr<CiphertextDCRTPoly>;
+        fn EncryptByPrivateKey(self: &CryptoContextDCRTPoly, privateKey: SharedPtr<PrivateKeyImpl>,
+                               plaintext: &Plaintext) -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalAddByCiphertexts(self: &CryptoContextDCRTPoly, ciphertext1: &CiphertextDCRTPoly,
+                                ciphertext2: &CiphertextDCRTPoly) -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalAddByPlaintext(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
+                              plaintext: &Plaintext) -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalAddByConst(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
+                          constant: f64) -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalSubByCiphertexts(self: &CryptoContextDCRTPoly, ciphertext1: &CiphertextDCRTPoly,
+                                ciphertext2: &CiphertextDCRTPoly) -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalSubByPlaintext(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
+                              plaintext: &Plaintext) -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalSubByConst(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
+                          constant: f64) -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalMultByCiphertexts(self: &CryptoContextDCRTPoly, ciphertext1: &CiphertextDCRTPoly,
+                                 ciphertext2: &CiphertextDCRTPoly) -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalMultByPlaintext(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
+                               plaintext: &Plaintext) -> UniquePtr<CiphertextDCRTPoly>;
         fn EvalMultByConst(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
                            constant: f64) -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalMultNoRelin(self: &CryptoContextDCRTPoly, ciphertext1: &CiphertextDCRTPoly,
+                           ciphertext2: &CiphertextDCRTPoly) -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalMultAndRelinearize(self: &CryptoContextDCRTPoly, ciphertext1: &CiphertextDCRTPoly,
+                                  ciphertext2: &CiphertextDCRTPoly)
+                                  -> UniquePtr<CiphertextDCRTPoly>;
         fn EvalRotate(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly, index: i32)
                       -> UniquePtr<CiphertextDCRTPoly>;
         fn EvalChebyshevSeries(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
@@ -547,6 +558,10 @@ pub mod ffi
                    -> UniquePtr<DecryptResult>;
         fn GetRingDimension(self: &CryptoContextDCRTPoly) -> u32;
         fn GetCyclotomicOrder(self: &CryptoContextDCRTPoly) -> u32;
+        fn MakeStringPlaintext(self: &CryptoContextDCRTPoly, s: &CxxString) -> UniquePtr<Plaintext>;
+        fn MakeCoefPackedPlaintext(self: &CryptoContextDCRTPoly, value: &CxxVector<i64>,
+                                   noiseScaleDeg: /* 1 */ usize, level: /* 0 */ u32)
+                                   -> UniquePtr<Plaintext>;
         fn MakeCKKSPackedPlaintext(self: &CryptoContextDCRTPoly, value: &CxxVector<f64>,
                                    scaleDeg: /* 1 */ usize, level: /* 0 */ u32,
                                    params: /* null() */ SharedPtr<DCRTPolyParams>,
@@ -595,6 +610,35 @@ pub mod ffi
                             ciphertext2: &CiphertextDCRTPoly) -> UniquePtr<CiphertextDCRTPoly>;
         fn Relinearize(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly)
                        -> UniquePtr<CiphertextDCRTPoly>;
+        fn KeySwitchDown(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly)
+                         -> UniquePtr<CiphertextDCRTPoly>;
+        fn KeySwitchExt(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
+                        addFirst: bool) -> UniquePtr<CiphertextDCRTPoly>;
+        fn Compress(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
+                    towersLeft: /* 1 */ u32) -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalCompareSchemeSwitching(self: &CryptoContextDCRTPoly,
+                                      ciphertext1: &CiphertextDCRTPoly,
+                                      ciphertext2: &CiphertextDCRTPoly, numCtxts: /* 0 */ u32,
+                                      numSlots: /* 0 */ u32, pLWE: /* 0 */ u32,
+                                      scaleSign: /* 1.0 */ f64, unit: /* false */ bool)
+                                      -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalBootstrapPrecompute(self: &CryptoContextDCRTPoly, slots: /* 0 */ u32);
+        fn FindAutomorphismIndices(self: &CryptoContextDCRTPoly, idxList: &CxxVector<u32>)
+                                   -> UniquePtr<CxxVector<u32>>;
+
+        // cxx currently does not support static class methods
+        fn ClearEvalMultKeys();
+        fn ClearEvalMultKeysById(id: &CxxString);
+        fn ClearEvalMultKeysByCryptoContext(cryptoContext: &CryptoContextDCRTPoly);
+        fn ClearEvalSumKeys();
+        fn ClearEvalSumKeysById(id: &CxxString);
+        fn ClearEvalSumKeysByCryptoContext(cryptoContext: &CryptoContextDCRTPoly);
+        fn ClearEvalAutomorphismKeys();
+        fn ClearEvalAutomorphismKeysById(id: &CxxString);
+        fn ClearEvalAutomorphismKeysByCryptoContext(cryptoContext: &CryptoContextDCRTPoly);
+        fn GetExistingEvalAutomorphismKeyIndices(keyTag: &CxxString) -> UniquePtr<CxxVector<u32>>;
+        fn GetUniqueValues(oldValues: &CxxVector<u32>, newValues: &CxxVector<u32>)
+                           -> UniquePtr<CxxVector<u32>>;
     }
 
     // Serialize / Deserialize
@@ -714,15 +758,15 @@ mod tests
         _vector_of_ints_3.pin_mut().push(12);
         let mut _plain_text_3 = _cc.MakePackedPlaintext(&_vector_of_ints_3, 1, 0);
 
-        let mut _cipher_text_1 = _cc.Encrypt(_key_pair.GetPublicKey(), &_plain_text_1);
-        let mut _cipher_text_2 = _cc.Encrypt(_key_pair.GetPublicKey(), &_plain_text_2);
-        let mut _cipher_text_3 = _cc.Encrypt(_key_pair.GetPublicKey(), &_plain_text_3);
+        let mut _cipher_text_1 = _cc.EncryptByPublicKey(_key_pair.GetPublicKey(), &_plain_text_1);
+        let mut _cipher_text_2 = _cc.EncryptByPublicKey(_key_pair.GetPublicKey(), &_plain_text_2);
+        let mut _cipher_text_3 = _cc.EncryptByPublicKey(_key_pair.GetPublicKey(), &_plain_text_3);
 
-        let mut _cipher_text_add_1_2 = _cc.EvalAdd(&_cipher_text_1, &_cipher_text_2);
-        let mut _cipher_text_add_result = _cc.EvalAdd(&_cipher_text_add_1_2, &_cipher_text_3);
+        let mut _cipher_text_add_1_2 = _cc.EvalAddByCiphertexts(&_cipher_text_1, &_cipher_text_2);
+        let mut _cipher_text_add_result = _cc.EvalAddByCiphertexts(&_cipher_text_add_1_2, &_cipher_text_3);
 
-        let mut _cipher_text_mul_1_2 = _cc.EvalMult(&_cipher_text_1, &_cipher_text_2);
-        let mut _cipher_text_mult_result = _cc.EvalMult(&_cipher_text_mul_1_2, &_cipher_text_3);
+        let mut _cipher_text_mul_1_2 = _cc.EvalMultByCiphertexts(&_cipher_text_1, &_cipher_text_2);
+        let mut _cipher_text_mult_result = _cc.EvalMultByCiphertexts(&_cipher_text_mul_1_2, &_cipher_text_3);
 
         let mut _cipher_text_rot_1 = _cc.EvalRotate(&_cipher_text_1, 1);
         let mut _cipher_text_rot_2 = _cc.EvalRotate(&_cipher_text_1, 2);
@@ -812,13 +856,13 @@ mod tests
         println!("Input x1: {}", _p_txt_1.GetString());
         println!("Input x2: {}", _p_txt_2.GetString());
 
-        let mut _c1 = _cc.Encrypt(_key_pair.GetPublicKey(), &_p_txt_1);
-        let mut _c2 = _cc.Encrypt(_key_pair.GetPublicKey(), &_p_txt_2);
+        let mut _c1 = _cc.EncryptByPublicKey(_key_pair.GetPublicKey(), &_p_txt_1);
+        let mut _c2 = _cc.EncryptByPublicKey(_key_pair.GetPublicKey(), &_p_txt_2);
 
-        let mut _c_add = _cc.EvalAdd(&_c1, &_c2);
-        let mut _c_sub = _cc.EvalSub(&_c1, &_c2);
+        let mut _c_add = _cc.EvalAddByCiphertexts(&_c1, &_c2);
+        let mut _c_sub = _cc.EvalSubByCiphertexts(&_c1, &_c2);
         let mut _c_scalar = _cc.EvalMultByConst(&_c1, 4.0);
-        let mut _c_mul = _cc.EvalMult(&_c1, &_c2);
+        let mut _c_mul = _cc.EvalMultByCiphertexts(&_c1, &_c2);
         let mut _c_rot_1 = _cc.EvalRotate(&_c1, 1);
         let mut _c_rot_2 = _cc.EvalRotate(&_c1, -2);
 
@@ -935,7 +979,7 @@ mod tests
         print!("Generating evaluation key for homomorphic multiplication...");
         _cc.EvalMultKeyGen(_key_pair.GetPrivateKey());
         println!("Completed.\n");
-        let mut _cipher_text_1 = _cc.Encrypt(_key_pair.GetPublicKey(), &_plain_text_1);
+        let mut _cipher_text_1 = _cc.EncryptByPublicKey(_key_pair.GetPublicKey(), &_plain_text_1);
 
         let mut _start = Instant::now();
         let mut _result = _cc.EvalPoly(&_cipher_text_1, &_coefficients_1);
