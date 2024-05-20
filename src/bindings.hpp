@@ -304,8 +304,7 @@ void ClearEvalAutomorphismKeysByCryptoContext(const CryptoContextDCRTPoly& crypt
 [[nodiscard]] std::unique_ptr<std::vector<uint32_t>> GetExistingEvalAutomorphismKeyIndices(
     const std::string& keyTag);
 [[nodiscard]] std::unique_ptr<std::vector<uint32_t>> GetUniqueValues(
-    const std::vector<uint32_t>& oldValues,
-    const std::vector<uint32_t>& newValues);
+    const std::vector<uint32_t>& oldValues, const std::vector<uint32_t>& newValues);
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////
 
