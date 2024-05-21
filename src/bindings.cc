@@ -492,6 +492,20 @@ std::unique_ptr<std::vector<uint32_t>> CryptoContextDCRTPoly::FindAutomorphismIn
     return std::make_unique<std::vector<uint32_t>>(
         m_cryptoContextImplSharedPtr->FindAutomorphismIndices(idxList));
 }
+std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalInnerProductByCiphertexts(
+    const CiphertextDCRTPoly& ciphertext1, const CiphertextDCRTPoly& ciphertext2,
+    const uint32_t batchSize) const
+{
+    return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalInnerProduct(
+        ciphertext1.GetInternal(), ciphertext2.GetInternal(), batchSize));
+}
+std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalInnerProductByPlaintext(
+    const CiphertextDCRTPoly& ciphertext, const Plaintext& plaintext,
+    const uint32_t batchSize) const
+{
+    return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalInnerProduct(
+        ciphertext.GetInternal(), plaintext.GetInternal(), batchSize));
+}
 std::shared_ptr<CryptoContextImpl> CryptoContextDCRTPoly::GetInternal() const
 {
     return m_cryptoContextImplSharedPtr;

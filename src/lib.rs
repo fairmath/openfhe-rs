@@ -625,6 +625,13 @@ pub mod ffi
         fn EvalBootstrapPrecompute(self: &CryptoContextDCRTPoly, slots: /* 0 */ u32);
         fn FindAutomorphismIndices(self: &CryptoContextDCRTPoly, idxList: &CxxVector<u32>)
                                    -> UniquePtr<CxxVector<u32>>;
+        fn EvalInnerProductByCiphertexts(self: &CryptoContextDCRTPoly,
+                                         ciphertext1: &CiphertextDCRTPoly,
+                                         ciphertext2: &CiphertextDCRTPoly, batchSize: u32)
+                                         -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalInnerProductByPlaintext(self: &CryptoContextDCRTPoly,
+                                       ciphertext: &CiphertextDCRTPoly, plaintext: &Plaintext,
+                                       batchSize: u32) -> UniquePtr<CiphertextDCRTPoly>;
 
         // cxx currently does not support static class methods
         fn ClearEvalMultKeys();

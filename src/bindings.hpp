@@ -289,6 +289,12 @@ public:
         const uint32_t slots /* 0 */) const;
     [[nodiscard]] std::unique_ptr<std::vector<uint32_t>> FindAutomorphismIndices(
         const std::vector<uint32_t>& idxList) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalInnerProductByCiphertexts(
+        const CiphertextDCRTPoly& ciphertext1, const CiphertextDCRTPoly& ciphertext2,
+        const uint32_t batchSize) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalInnerProductByPlaintext(
+        const CiphertextDCRTPoly& ciphertext, const Plaintext& plaintext,
+        const uint32_t batchSize) const;
     [[nodiscard]] std::shared_ptr<CryptoContextImpl> GetInternal() const;
 };
 // cxx currently does not support static class methods
