@@ -1,7 +1,13 @@
 fn main()
 {
     cxx_build::bridge("src/lib.rs")
-        .file("src/bindings.cc")
+        .file("src/Ciphertext.cc")
+        .file("src/CryptoContext.cc")
+        .file("src/KeyPair.cc")
+        .file("src/Params.cc")
+        .file("src/Plaintext.cc")
+        .file("src/PublicKey.cc")
+        .file("src/SerialDeserial.cc")
         .include("/usr/local/include/openfhe")
         .include("/usr/local/include/openfhe/third-party/include")
         .include("/usr/local/include/openfhe/core")
@@ -19,8 +25,20 @@ fn main()
         .compile("openfhe");
 
     println!("cargo::rerun-if-changed=src/lib.rs");
-    println!("cargo::rerun-if-changed=src/bindings.hpp");
-    println!("cargo::rerun-if-changed=src/bindings.cc");
+    println!("cargo::rerun-if-changed=src/Ciphertext.h");
+    println!("cargo::rerun-if-changed=src/Ciphertext.cc");
+    println!("cargo::rerun-if-changed=src/CryptoContext.h");
+    println!("cargo::rerun-if-changed=src/CryptoContext.cc");
+    println!("cargo::rerun-if-changed=src/KeyPair.h");
+    println!("cargo::rerun-if-changed=src/KeyPair.cc");
+    println!("cargo::rerun-if-changed=src/Params.h");
+    println!("cargo::rerun-if-changed=src/Params.cc");
+    println!("cargo::rerun-if-changed=src/Plaintext.h");
+    println!("cargo::rerun-if-changed=src/Plaintext.cc");
+    println!("cargo::rerun-if-changed=src/PublicKey.h");
+    println!("cargo::rerun-if-changed=src/PublicKey.cc");
+    println!("cargo::rerun-if-changed=src/SerialDeserial.h");
+    println!("cargo::rerun-if-changed=src/SerialDeserial.cc");
 
     // linking openFHE
     println!("cargo::rustc-link-arg=-L/usr/local/lib");

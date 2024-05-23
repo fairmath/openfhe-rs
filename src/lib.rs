@@ -16,6 +16,7 @@ pub mod ffi
         BFVRNS_SCHEME,
         BGVRNS_SCHEME,
     }
+
     #[repr(i32)]
     enum SecretKeyDist
     {
@@ -23,6 +24,7 @@ pub mod ffi
         UNIFORM_TERNARY = 1,
         SPARSE_TERNARY  = 2,
     }
+
     #[repr(i32)]
     enum ProxyReEncryptionMode
     {
@@ -32,6 +34,7 @@ pub mod ffi
         NOISE_FLOODING_HRA,
         DIVIDE_AND_ROUND_HRA,
     }
+
     #[repr(i32)]
     enum MultipartyMode
     {
@@ -39,18 +42,21 @@ pub mod ffi
         FIXED_NOISE_MULTIPARTY,
         NOISE_FLOODING_MULTIPARTY,
     }
+
     #[repr(i32)]
     enum ExecutionMode
     {
         EXEC_EVALUATION = 0,
         EXEC_NOISE_ESTIMATION,
     }
+
     #[repr(i32)]
     enum DecryptionNoiseMode
     {
         FIXED_NOISE_DECRYPT = 0,
         NOISE_FLOODING_DECRYPT,
     }
+
     #[repr(i32)]    
     enum KeySwitchTechnique
     {
@@ -58,6 +64,7 @@ pub mod ffi
         BV,
         HYBRID,
     }
+
     #[repr(i32)]
     enum ScalingTechnique
     {
@@ -68,6 +75,7 @@ pub mod ffi
         NORESCALE,
         INVALID_RS_TECHNIQUE,
     }
+
     #[repr(i32)]
     enum SecurityLevel
     {
@@ -79,12 +87,14 @@ pub mod ffi
         HEStd_256_quantum,
         HEStd_NotSet,
     }
+
     #[repr(i32)]
     enum EncryptionTechnique
     {
         STANDARD = 0,
         EXTENDED,
     }
+
     #[repr(i32)]
     enum MultiplicationTechnique
     {
@@ -93,12 +103,14 @@ pub mod ffi
         HPSPOVERQ,
         HPSPOVERQLEVELED,
     }
+
     #[repr(i32)]
     enum COMPRESSION_LEVEL
     {
         COMPACT = 2,
         SLACK   = 3,
     }
+
     #[repr(i32)]
     enum PKESchemeFeature
     {
@@ -111,6 +123,7 @@ pub mod ffi
         FHE          = 0x40,
         SCHEMESWITCH = 0x80,
     }
+
     #[repr(i32)]
     enum SerialMode
     {
@@ -118,36 +131,50 @@ pub mod ffi
         JSON = 1,
     }
 
+    struct ComplexPair
+    {
+        re: f64,
+        im: f64,
+    }
+
     unsafe extern "C++"
     {
-        include!("openfhe/src/bindings.hpp");
-        type SCHEME;
-        type Params;
-        type SecretKeyDist;
-        type ProxyReEncryptionMode;
-        type MultipartyMode;
-        type ExecutionMode;
-        type DecryptionNoiseMode;
-        type KeySwitchTechnique;
-        type ScalingTechnique;
-        type SecurityLevel;
-        type EncryptionTechnique;
-        type MultiplicationTechnique;
+        include!("openfhe/src/Ciphertext.h");
+        include!("openfhe/src/CryptoContext.h");
+        include!("openfhe/src/KeyPair.h");
+        include!("openfhe/src/Params.h");
+        include!("openfhe/src/Plaintext.h");
+        include!("openfhe/src/PublicKey.h");
+        include!("openfhe/src/SerialDeserial.h");
+
         type COMPRESSION_LEVEL;
+        type DecryptionNoiseMode;
+        type EncryptionTechnique;
+        type ExecutionMode;
+        type KeySwitchTechnique;
+        type MultipartyMode;
+        type MultiplicationTechnique;
+        type PKESchemeFeature;
+        type ProxyReEncryptionMode;
+        type ScalingTechnique;
+        type SCHEME;
+        type SecretKeyDist;
+        type SecurityLevel;
+        type SerialMode;
+
+        type CiphertextDCRTPoly;
+        type CryptoContextDCRTPoly;
+        type DCRTPolyParams;
+        type DecryptResult;
+        type KeyPairDCRTPoly;
+        type Params;
         type ParamsBFVRNS;
         type ParamsBGVRNS;
         type ParamsCKKSRNS;
-        type CryptoContextDCRTPoly;
-        type PKESchemeFeature;
-        type KeyPairDCRTPoly;
-        type PrivateKeyImpl;
-        type PublicKeyImpl;
         type Plaintext;
-        type CiphertextDCRTPoly;
-        type DecryptResult;
-        type DCRTPolyParams;
-        type SerialMode;
+        type PrivateKeyImpl;
         type PublicKeyDCRTPoly;
+        type PublicKeyImpl;
     }
 
     // Params
@@ -467,13 +494,6 @@ pub mod ffi
     unsafe extern "C++"
     {
         fn GenDefaultConstructedCiphertext() -> UniquePtr<CiphertextDCRTPoly>;
-    }
-
-    // ComplexPair
-    struct ComplexPair
-    {
-        re: f64,
-        im: f64,
     }
 
     // CryptoContextDCRTPoly
