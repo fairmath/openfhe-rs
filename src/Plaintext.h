@@ -48,11 +48,13 @@ public:
     void SetNoiseScaleDeg(const size_t nsd) const;
     void SetScalingFactor(const double sf) const;
     void SetSlots(const uint32_t s) const;
+    void SetStringValue(const std::string& value) const;
 
     [[nodiscard]] std::unique_ptr<std::vector<ComplexPair>> GetCopyOfCKKSPackedValue() const;
-    [[nodiscard]] std::unique_ptr<std::vector<int64_t>> GetCopyOfPackedValue() const;
-    [[nodiscard]] std::unique_ptr<std::vector<double>> GetCopyOfRealPackedValue() const;
-    [[nodiscard]] std::unique_ptr<std::vector<int64_t>> GetCopyOfCoefPackedValue() const;
+    [[nodiscard]] const std::vector<int64_t>& GetPackedValue() const;
+    [[nodiscard]] std::unique_ptr<std::vector<double>> GetRealPackedValue() const;
+    [[nodiscard]] const std::vector<int64_t>& GetCoefPackedValue() const;
+    [[nodiscard]] const std::string& GetStringValue() const;
 };
 [[nodiscard]] std::unique_ptr<Plaintext> GenEmptyPlainText();
 

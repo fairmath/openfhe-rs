@@ -105,6 +105,10 @@ void Plaintext::SetSlots(const uint32_t s) const
 {
     m_plaintext->SetSlots(s);
 }
+void Plaintext::SetStringValue(const std::string& value) const
+{
+    m_plaintext->SetStringValue(value);
+}
 std::unique_ptr<std::vector<ComplexPair>> Plaintext::GetCopyOfCKKSPackedValue() const
 {
     const std::vector<std::complex<double>>& v = m_plaintext->GetCKKSPackedValue();
@@ -116,17 +120,21 @@ std::unique_ptr<std::vector<ComplexPair>> Plaintext::GetCopyOfCKKSPackedValue() 
     }
     return std::make_unique<std::vector<ComplexPair>>(std::move(result));
 }
-std::unique_ptr<std::vector<int64_t>> Plaintext::GetCopyOfPackedValue() const
+const std::vector<int64_t>& Plaintext::GetPackedValue() const
 {
-    return std::make_unique<std::vector<int64_t>>(m_plaintext->GetPackedValue());
+    return m_plaintext->GetPackedValue();
 }
-std::unique_ptr<std::vector<double>> Plaintext::GetCopyOfRealPackedValue() const
+std::unique_ptr<std::vector<double>>Plaintext::GetRealPackedValue() const
 {
-    return std::make_unique<std::vector<double>>(m_plaintext->GetRealPackedValue());
+    return std::make_unique<std::vector<double>>(std::move(m_plaintext->GetRealPackedValue()));
 }
-std::unique_ptr<std::vector<int64_t>> Plaintext::GetCopyOfCoefPackedValue() const
+const std::vector<int64_t>& Plaintext::GetCoefPackedValue() const
 {
-    return std::make_unique<std::vector<int64_t>>(m_plaintext->GetCoefPackedValue());
+    return m_plaintext->GetCoefPackedValue();
+}
+const std::string& Plaintext::GetStringValue() const
+{
+    return m_plaintext->GetStringValue();
 }
 std::unique_ptr<Plaintext> GenEmptyPlainText()
 {

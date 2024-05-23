@@ -513,9 +513,11 @@ pub mod ffi
         fn SetNoiseScaleDeg(self: &Plaintext, nsd: usize);
         fn SetScalingFactor(self: &Plaintext, sf: f64);
         fn SetSlots(self: &Plaintext, s: u32);
-        fn GetCopyOfPackedValue(self: &Plaintext) -> UniquePtr<CxxVector<i64>>;
-        fn GetCopyOfRealPackedValue(self: &Plaintext) -> UniquePtr<CxxVector<f64>>;
-        fn GetCopyOfCoefPackedValue(self: &Plaintext) -> UniquePtr<CxxVector<i64>>;
+        fn SetStringValue(self: &Plaintext, value: &CxxString);
+        fn GetPackedValue(self: &Plaintext) -> &CxxVector<i64>;
+        fn GetRealPackedValue(self: &Plaintext) -> UniquePtr<CxxVector<f64>>;
+        fn GetCoefPackedValue(self: &Plaintext) -> &CxxVector<i64>;
+        fn GetStringValue(self: &Plaintext) -> &CxxString;
         fn GetCopyOfCKKSPackedValue(self: &Plaintext) -> UniquePtr<CxxVector<ComplexPair>>;
     }
 
