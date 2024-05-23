@@ -131,6 +131,13 @@ pub mod ffi
         JSON = 1,
     }
 
+    #[repr(i32)]
+    enum Format
+    {
+        EVALUATION = 0,
+        COEFFICIENT = 1
+    }
+
     struct ComplexPair
     {
         re: f64,
@@ -161,6 +168,7 @@ pub mod ffi
         type SecretKeyDist;
         type SecurityLevel;
         type SerialMode;
+        type Format;
 
         type CiphertextDCRTPoly;
         type CryptoContextDCRTPoly;
@@ -487,6 +495,27 @@ pub mod ffi
         fn SetLength(self: &Plaintext, newSize: usize);
         fn GetString(self: &Plaintext) -> String;
         fn GetLogPrecision(self: &Plaintext) -> f64;
+        fn SetLevel(self: &Plaintext, l: usize);
+        fn IsEncoded(self: &Plaintext) -> bool;
+        fn HighBound(self: &Plaintext) -> i64;
+        fn LowBound(self: &Plaintext) -> i64;
+        fn GetLength(self: &Plaintext) -> usize;
+        fn GetLevel(self: &Plaintext) -> usize;
+        fn GetLogError(self: &Plaintext) -> f64;
+        fn GetNoiseScaleDeg(self: &Plaintext) -> usize;
+        fn GetScalingFactor(self: &Plaintext) -> f64;
+        fn GetSchemeID(self: &Plaintext) -> SCHEME;
+        fn GetSlots(self: &Plaintext) -> u32;
+        fn Encode(self: &Plaintext) -> bool;
+        fn Decode(self: &Plaintext) -> bool;
+        fn SetFormat(self: &Plaintext, fmt: Format);
+        fn SetIntVectorValue(self: &Plaintext, val: &CxxVector<i64>);
+        fn SetNoiseScaleDeg(self: &Plaintext, nsd: usize);
+        fn SetScalingFactor(self: &Plaintext, sf: f64);
+        fn SetSlots(self: &Plaintext, s: u32);
+        fn GetCopyOfPackedValue(self: &Plaintext) -> UniquePtr<CxxVector<i64>>;
+        fn GetCopyOfRealPackedValue(self: &Plaintext) -> UniquePtr<CxxVector<f64>>;
+        fn GetCopyOfCoefPackedValue(self: &Plaintext) -> UniquePtr<CxxVector<i64>>;
         fn GetCopyOfCKKSPackedValue(self: &Plaintext) -> UniquePtr<CxxVector<ComplexPair>>;
     }
 

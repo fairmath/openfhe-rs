@@ -23,6 +23,22 @@ void Plaintext::SetLength(const size_t newSize) const
 {
     m_plaintext->SetLength(newSize);
 }
+void Plaintext::SetLevel(const size_t l) const
+{
+    m_plaintext->SetLevel(l);
+}
+bool Plaintext::IsEncoded() const
+{
+    return m_plaintext->IsEncoded();
+}
+int64_t Plaintext::HighBound() const
+{
+    return m_plaintext->HighBound();
+}
+int64_t Plaintext::LowBound() const
+{
+    return m_plaintext->LowBound();
+}
 double Plaintext::GetLogPrecision() const
 {
     return m_plaintext->GetLogPrecision();
@@ -32,6 +48,62 @@ rust::String Plaintext::GetString() const
     std::stringstream stream;
     stream << *m_plaintext;
     return rust::String(stream.str());
+}
+size_t Plaintext::GetLength() const
+{
+    return m_plaintext->GetLength();
+}
+size_t Plaintext::GetLevel() const
+{
+    return m_plaintext->GetLevel();
+}
+double Plaintext::GetLogError() const
+{
+    return m_plaintext->GetLogError();
+}
+size_t Plaintext::GetNoiseScaleDeg() const
+{
+    return m_plaintext->GetNoiseScaleDeg();
+}
+double Plaintext::GetScalingFactor() const
+{
+    return m_plaintext->GetScalingFactor();
+}
+SCHEME Plaintext::GetSchemeID() const
+{
+    return m_plaintext->GetSchemeID();
+}
+uint32_t Plaintext::GetSlots() const
+{
+    return m_plaintext->GetSlots();
+}
+bool Plaintext::Encode() const
+{
+    return m_plaintext->Encode();
+}
+bool Plaintext::Decode() const
+{
+    return m_plaintext->Decode();
+}
+void Plaintext::SetFormat(const Format fmt) const
+{
+    m_plaintext->SetFormat(fmt);
+}
+void Plaintext::SetIntVectorValue(const std::vector<int64_t>& val) const
+{
+    m_plaintext->SetIntVectorValue(val);
+}
+void Plaintext::SetNoiseScaleDeg(const size_t nsd) const
+{
+    m_plaintext->SetNoiseScaleDeg(nsd);
+}
+void Plaintext::SetScalingFactor(const double sf) const
+{
+    m_plaintext->SetScalingFactor(sf);
+}
+void Plaintext::SetSlots(const uint32_t s) const
+{
+    m_plaintext->SetSlots(s);
 }
 std::unique_ptr<std::vector<ComplexPair>> Plaintext::GetCopyOfCKKSPackedValue() const
 {
@@ -43,6 +115,18 @@ std::unique_ptr<std::vector<ComplexPair>> Plaintext::GetCopyOfCKKSPackedValue() 
         result.push_back(ComplexPair{elem.real(), elem.imag()});
     }
     return std::make_unique<std::vector<ComplexPair>>(std::move(result));
+}
+std::unique_ptr<std::vector<int64_t>> Plaintext::GetCopyOfPackedValue() const
+{
+    return std::make_unique<std::vector<int64_t>>(m_plaintext->GetPackedValue());
+}
+std::unique_ptr<std::vector<double>> Plaintext::GetCopyOfRealPackedValue() const
+{
+    return std::make_unique<std::vector<double>>(m_plaintext->GetRealPackedValue());
+}
+std::unique_ptr<std::vector<int64_t>> Plaintext::GetCopyOfCoefPackedValue() const
+{
+    return std::make_unique<std::vector<int64_t>>(m_plaintext->GetCoefPackedValue());
 }
 std::unique_ptr<Plaintext> GenEmptyPlainText()
 {
