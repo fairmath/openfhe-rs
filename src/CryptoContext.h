@@ -191,14 +191,19 @@ public:
         const CiphertextDCRTPoly& ciphertext, const uint32_t towersLeft /* 1 */) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalNegate(
         const CiphertextDCRTPoly& ciphertext) const;
+    void EvalNegateInPlace(const CiphertextDCRTPoly& ciphertext) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalSquare(
         const CiphertextDCRTPoly& ciphertext) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalSquareMutable(
+        const CiphertextDCRTPoly& ciphertext) const;
+    void EvalSquareInPlace(const CiphertextDCRTPoly& ciphertext) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalAtIndex(
         const CiphertextDCRTPoly& ciphertext, const uint32_t index) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> ComposedEvalMult(
         const CiphertextDCRTPoly& ciphertext1, const CiphertextDCRTPoly& ciphertext2) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> Relinearize(
         const CiphertextDCRTPoly& ciphertext) const;
+    void RelinearizeInPlace(const CiphertextDCRTPoly& ciphertext) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalChebyshevSeries(
         const CiphertextDCRTPoly& ciphertext, const std::vector<double>& coefficients,
         const double a, const double b) const;
@@ -210,8 +215,10 @@ public:
         const uint32_t precision /* 0 */) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> Rescale(
         const CiphertextDCRTPoly& ciphertext) const;
+    void RescaleInPlace(const CiphertextDCRTPoly& ciphertext) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> ModReduce(
         const CiphertextDCRTPoly& ciphertext) const;
+    void ModReduceInPlace(const CiphertextDCRTPoly& ciphertext) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalSum(const CiphertextDCRTPoly& ciphertext,
         const uint32_t batchSize) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalPolyLinear(

@@ -679,8 +679,10 @@ pub mod ffi
                          -> UniquePtr<CiphertextDCRTPoly>;
         fn Rescale(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly)
                    -> UniquePtr<CiphertextDCRTPoly>;
+        fn RescaleInPlace(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly);
         fn ModReduce(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly)
                      -> UniquePtr<CiphertextDCRTPoly>;
+        fn ModReduceInPlace(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly);
         fn EvalSum(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly, batchSize: u32)
                    -> UniquePtr<CiphertextDCRTPoly>;
         fn IntMPBootAdjustScale(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly)
@@ -751,14 +753,19 @@ pub mod ffi
                    degree: u32) -> UniquePtr<CiphertextDCRTPoly>;
         fn EvalNegate(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly)
                       -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalNegateInPlace(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly);
         fn EvalSquare(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly)
                       -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalSquareMutable(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly)
+                             -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalSquareInPlace(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly);
         fn EvalAtIndex(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly, index: u32)
                        -> UniquePtr<CiphertextDCRTPoly>;
         fn ComposedEvalMult(self: &CryptoContextDCRTPoly, ciphertext1: &CiphertextDCRTPoly,
                             ciphertext2: &CiphertextDCRTPoly) -> UniquePtr<CiphertextDCRTPoly>;
         fn Relinearize(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly)
                        -> UniquePtr<CiphertextDCRTPoly>;
+        fn RelinearizeInPlace(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly);
         fn KeySwitchDown(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly)
                          -> UniquePtr<CiphertextDCRTPoly>;
         fn KeySwitchExt(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
