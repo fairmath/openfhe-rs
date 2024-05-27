@@ -96,9 +96,8 @@ void CryptoContextDCRTPoly::EvalMultKeysGen(const std::shared_ptr<PrivateKeyImpl
 {
     m_cryptoContextImplSharedPtr->EvalMultKeysGen(key);
 }
-void CryptoContextDCRTPoly::EvalRotateKeyGen(
-    const std::shared_ptr<PrivateKeyImpl> privateKey, const std::vector<int32_t>& indexList,
-    const std::shared_ptr<PublicKeyImpl> publicKey) const
+void CryptoContextDCRTPoly::EvalRotateKeyGen(const std::shared_ptr<PrivateKeyImpl> privateKey,
+    const std::vector<int32_t>& indexList, const std::shared_ptr<PublicKeyImpl> publicKey) const
 {
     m_cryptoContextImplSharedPtr->EvalRotateKeyGen(privateKey, indexList, publicKey);
 }
@@ -118,8 +117,7 @@ std::unique_ptr<Plaintext> CryptoContextDCRTPoly::MakeStringPlaintext(const std:
     return std::make_unique<Plaintext>(m_cryptoContextImplSharedPtr->MakeStringPlaintext(s));
 }
 std::unique_ptr<Plaintext> CryptoContextDCRTPoly::MakeCoefPackedPlaintext(
-    const std::vector<int64_t>& value, const size_t noiseScaleDeg,
-    const uint32_t level) const
+    const std::vector<int64_t>& value, const size_t noiseScaleDeg, const uint32_t level) const
 {
     return std::make_unique<Plaintext>(m_cryptoContextImplSharedPtr->MakeCoefPackedPlaintext(value,
         noiseScaleDeg, level));
@@ -166,6 +164,36 @@ std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalAddByCiphertextAn
     return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalAdd(
         ciphertext.GetInternal(), constant));
 }
+void CryptoContextDCRTPoly::EvalAddInPlaceByCiphertexts(const CiphertextDCRTPoly& ciphertext1,
+    const CiphertextDCRTPoly& ciphertext2) const
+{
+    std::shared_ptr<CiphertextImpl> c1 = ciphertext1.GetInternal();
+    m_cryptoContextImplSharedPtr->EvalAddInPlace(c1, ciphertext2.GetInternal());
+}
+void CryptoContextDCRTPoly::EvalAddInPlaceByCiphertextAndPlaintext(
+    const CiphertextDCRTPoly& ciphertext, const Plaintext& plaintext) const
+{
+    std::shared_ptr<CiphertextImpl> c = ciphertext.GetInternal();
+    m_cryptoContextImplSharedPtr->EvalAddInPlace(c, plaintext.GetInternal());
+}
+void CryptoContextDCRTPoly::EvalAddInPlaceByPlaintextAndCiphertext(const Plaintext& plaintext,
+    const CiphertextDCRTPoly& ciphertext) const
+{
+    std::shared_ptr<CiphertextImpl> c = ciphertext.GetInternal();
+    m_cryptoContextImplSharedPtr->EvalAddInPlace(plaintext.GetInternal(), c);
+}
+void CryptoContextDCRTPoly::EvalAddInPlaceByCiphertextAndConst(
+    const CiphertextDCRTPoly& ciphertext, const double constant) const
+{
+    std::shared_ptr<CiphertextImpl> c = ciphertext.GetInternal();
+    m_cryptoContextImplSharedPtr->EvalAddInPlace(c, constant);
+}
+void CryptoContextDCRTPoly::EvalAddInPlaceByConstAndCiphertext(const double constant,
+    const CiphertextDCRTPoly& ciphertext) const
+{
+    std::shared_ptr<CiphertextImpl> c = ciphertext.GetInternal();
+    m_cryptoContextImplSharedPtr->EvalAddInPlace(constant, c);
+}
 std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalSubByCiphertexts(
     const CiphertextDCRTPoly& ciphertext1, const CiphertextDCRTPoly& ciphertext2) const
 {
@@ -196,6 +224,24 @@ std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalSubByCiphertextAn
     return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalSub(
         ciphertext.GetInternal(), constant));
 }
+void CryptoContextDCRTPoly::EvalSubInPlaceByCiphertexts(const CiphertextDCRTPoly& ciphertext1,
+    const CiphertextDCRTPoly& ciphertext2) const
+{
+    std::shared_ptr<CiphertextImpl> c1 = ciphertext1.GetInternal();
+    m_cryptoContextImplSharedPtr->EvalSubInPlace(c1, ciphertext2.GetInternal());
+}
+void CryptoContextDCRTPoly::EvalSubInPlaceByCiphertextAndConst(
+    const CiphertextDCRTPoly& ciphertext, const double constant) const
+{
+    std::shared_ptr<CiphertextImpl> c = ciphertext.GetInternal();
+    m_cryptoContextImplSharedPtr->EvalSubInPlace(c, constant);
+}
+void CryptoContextDCRTPoly::EvalSubInPlaceByConstAndCiphertext(const double constant,
+    const CiphertextDCRTPoly& ciphertext) const
+{
+    std::shared_ptr<CiphertextImpl> c = ciphertext.GetInternal();
+    m_cryptoContextImplSharedPtr->EvalSubInPlace(constant, c);
+}
 std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalMultByCiphertexts(
     const CiphertextDCRTPoly& ciphertext1, const CiphertextDCRTPoly& ciphertext2) const
 {
@@ -225,6 +271,18 @@ std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalMultByCiphertextA
 {
     return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalMult(
         ciphertext.GetInternal(), constant));
+}
+void CryptoContextDCRTPoly::EvalMultInPlaceByCiphertextAndConst(
+    const CiphertextDCRTPoly& ciphertext, const double constant) const
+{
+    std::shared_ptr<CiphertextImpl> c = ciphertext.GetInternal();
+    m_cryptoContextImplSharedPtr->EvalMultInPlace(c, constant);
+}
+void CryptoContextDCRTPoly::EvalMultInPlaceByConstAndCiphertext(const double constant,
+    const CiphertextDCRTPoly& ciphertext) const
+{
+    std::shared_ptr<CiphertextImpl> c = ciphertext.GetInternal();
+    m_cryptoContextImplSharedPtr->EvalMultInPlace(constant, c);
 }
 std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalMultNoRelin(
     const CiphertextDCRTPoly& ciphertext1, const CiphertextDCRTPoly& ciphertext2) const
