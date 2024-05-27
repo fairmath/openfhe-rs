@@ -111,6 +111,12 @@ public:
         const double constant, const CiphertextDCRTPoly& ciphertext) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalAddByCiphertextAndConst(
         const CiphertextDCRTPoly& ciphertext, const double constant) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalAddMutableByCiphertexts(
+        const CiphertextDCRTPoly& ciphertext1, const CiphertextDCRTPoly& ciphertext2) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalAddMutableByCiphertextAndPlaintext(
+        const CiphertextDCRTPoly& ciphertext, const Plaintext& plaintext) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalAddMutableByPlaintextAndCiphertext(
+        const Plaintext& plaintext, const CiphertextDCRTPoly& ciphertext) const;
     void EvalAddInPlaceByCiphertexts(const CiphertextDCRTPoly& ciphertext1,
         const CiphertextDCRTPoly& ciphertext2) const;
     void EvalAddInPlaceByCiphertextAndPlaintext(const CiphertextDCRTPoly& ciphertext,
@@ -121,6 +127,8 @@ public:
         const double constant) const;
     void EvalAddInPlaceByConstAndCiphertext(const double constant,
         const CiphertextDCRTPoly& ciphertext) const;
+    void EvalAddMutableInPlace(const CiphertextDCRTPoly& ciphertext1,
+        const CiphertextDCRTPoly& ciphertext2) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalSubByCiphertexts(
         const CiphertextDCRTPoly& ciphertext1, const CiphertextDCRTPoly& ciphertext2) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalSubByCiphertextAndPlaintext(
@@ -131,12 +139,20 @@ public:
         const double constant, const CiphertextDCRTPoly& ciphertext) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalSubByCiphertextAndConst(
         const CiphertextDCRTPoly& ciphertext, const double constant) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalSubMutableByCiphertexts(
+        const CiphertextDCRTPoly& ciphertext1, const CiphertextDCRTPoly& ciphertext2) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalSubMutableByCiphertextAndPlaintext(
+        const CiphertextDCRTPoly& ciphertext, const Plaintext& plaintext) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalSubMutableByPlaintextAndCiphertext(
+        const Plaintext& plaintext, const CiphertextDCRTPoly& ciphertext) const;
     void EvalSubInPlaceByCiphertexts(const CiphertextDCRTPoly& ciphertext1,
         const CiphertextDCRTPoly& ciphertext2) const;
     void EvalSubInPlaceByCiphertextAndConst(const CiphertextDCRTPoly& ciphertext,
         const double constant) const;
     void EvalSubInPlaceByConstAndCiphertext(const double constant,
         const CiphertextDCRTPoly& ciphertext) const;
+    void EvalSubMutableInPlace(const CiphertextDCRTPoly& ciphertext1,
+        const CiphertextDCRTPoly& ciphertext2) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalMultByCiphertexts(
         const CiphertextDCRTPoly& ciphertext1, const CiphertextDCRTPoly& ciphertext2) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalMultByCiphertextAndPlaintext(
@@ -147,10 +163,18 @@ public:
         const double constant, const CiphertextDCRTPoly& ciphertext) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalMultByCiphertextAndConst(
         const CiphertextDCRTPoly& ciphertext, const double constant) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalMultMutableByCiphertexts(
+        const CiphertextDCRTPoly& ciphertext1, const CiphertextDCRTPoly& ciphertext2) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalMultMutableByCiphertextAndPlaintext(
+        const CiphertextDCRTPoly& ciphertext, const Plaintext& plaintext) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalMultMutableByPlaintextAndCiphertext(
+        const Plaintext& plaintext, const CiphertextDCRTPoly& ciphertext) const;
     void EvalMultInPlaceByCiphertextAndConst(const CiphertextDCRTPoly& ciphertext,
         const double constant) const;
     void EvalMultInPlaceByConstAndCiphertext(const double constant,
         const CiphertextDCRTPoly& ciphertext) const;
+    void EvalMultMutableInPlace(const CiphertextDCRTPoly& ciphertext1,
+        const CiphertextDCRTPoly& ciphertext2) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalMultNoRelin(
         const CiphertextDCRTPoly& ciphertext1, const CiphertextDCRTPoly& ciphertext2) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalMultAndRelinearize(

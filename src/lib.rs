@@ -566,6 +566,18 @@ pub mod ffi
         fn EvalAddByCiphertextAndConst(self: &CryptoContextDCRTPoly,
                                        ciphertext: &CiphertextDCRTPoly, constant: f64)
                                        -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalAddMutableByCiphertexts(self: &CryptoContextDCRTPoly,
+                                       ciphertext1: &CiphertextDCRTPoly,
+                                       ciphertext2: &CiphertextDCRTPoly)
+                                       -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalAddMutableByCiphertextAndPlaintext(self: &CryptoContextDCRTPoly,
+                                                  ciphertext: &CiphertextDCRTPoly,
+                                                  plaintext: &Plaintext)
+                                                  -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalAddMutableByPlaintextAndCiphertext(self: &CryptoContextDCRTPoly,
+                                                  plaintext: &Plaintext,
+                                                  ciphertext: &CiphertextDCRTPoly)
+                                                  -> UniquePtr<CiphertextDCRTPoly>;
         fn EvalAddInPlaceByCiphertexts(self: &CryptoContextDCRTPoly,
                                        ciphertext1: &CiphertextDCRTPoly,
                                        ciphertext2: &CiphertextDCRTPoly);
@@ -579,6 +591,8 @@ pub mod ffi
                                               ciphertext: &CiphertextDCRTPoly, constant: f64);
         fn EvalAddInPlaceByConstAndCiphertext(self: &CryptoContextDCRTPoly, constant: f64,
                                               ciphertext: &CiphertextDCRTPoly);
+        fn EvalAddMutableInPlace(self: &CryptoContextDCRTPoly, ciphertext1: &CiphertextDCRTPoly,
+                                 ciphertext2: &CiphertextDCRTPoly);
         fn EvalSubByCiphertexts(self: &CryptoContextDCRTPoly, ciphertext1: &CiphertextDCRTPoly,
                                 ciphertext2: &CiphertextDCRTPoly) -> UniquePtr<CiphertextDCRTPoly>;
         fn EvalSubByCiphertextAndPlaintext(self: &CryptoContextDCRTPoly,
@@ -593,6 +607,18 @@ pub mod ffi
         fn EvalSubByCiphertextAndConst(self: &CryptoContextDCRTPoly,
                                        ciphertext: &CiphertextDCRTPoly, constant: f64)
                                        -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalSubMutableByCiphertexts(self: &CryptoContextDCRTPoly,
+                                       ciphertext1: &CiphertextDCRTPoly,
+                                       ciphertext2: &CiphertextDCRTPoly)
+                                       -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalSubMutableByCiphertextAndPlaintext(self: &CryptoContextDCRTPoly,
+                                                  ciphertext: &CiphertextDCRTPoly,
+                                                  plaintext: &Plaintext)
+                                                  -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalSubMutableByPlaintextAndCiphertext(self: &CryptoContextDCRTPoly,
+                                                  plaintext: &Plaintext,
+                                                  ciphertext: &CiphertextDCRTPoly)
+                                                  -> UniquePtr<CiphertextDCRTPoly>;
         fn EvalSubInPlaceByCiphertexts(self: &CryptoContextDCRTPoly,
                                        ciphertext1: &CiphertextDCRTPoly,
                                        ciphertext2: &CiphertextDCRTPoly);
@@ -600,6 +626,8 @@ pub mod ffi
                                               ciphertext: &CiphertextDCRTPoly, constant: f64);
         fn EvalSubInPlaceByConstAndCiphertext(self: &CryptoContextDCRTPoly, constant: f64,
                                               ciphertext: &CiphertextDCRTPoly);
+        fn EvalSubMutableInPlace(self: &CryptoContextDCRTPoly, ciphertext1: &CiphertextDCRTPoly,
+                                 ciphertext2: &CiphertextDCRTPoly);
         fn EvalMultByCiphertexts(self: &CryptoContextDCRTPoly, ciphertext1: &CiphertextDCRTPoly,
                                  ciphertext2: &CiphertextDCRTPoly)
                                  -> UniquePtr<CiphertextDCRTPoly>;
@@ -615,10 +643,24 @@ pub mod ffi
         fn EvalMultByCiphertextAndConst(self: &CryptoContextDCRTPoly,
                                         ciphertext: &CiphertextDCRTPoly, constant: f64)
                                         -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalMultMutableByCiphertexts(self: &CryptoContextDCRTPoly,
+                                       ciphertext1: &CiphertextDCRTPoly,
+                                       ciphertext2: &CiphertextDCRTPoly)
+                                       -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalMultMutableByCiphertextAndPlaintext(self: &CryptoContextDCRTPoly,
+                                                  ciphertext: &CiphertextDCRTPoly,
+                                                  plaintext: &Plaintext)
+                                                  -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalMultMutableByPlaintextAndCiphertext(self: &CryptoContextDCRTPoly,
+                                                  plaintext: &Plaintext,
+                                                  ciphertext: &CiphertextDCRTPoly)
+                                                  -> UniquePtr<CiphertextDCRTPoly>;
         fn EvalMultInPlaceByCiphertextAndConst(self: &CryptoContextDCRTPoly,
                                                ciphertext: &CiphertextDCRTPoly, constant: f64);
         fn EvalMultInPlaceByConstAndCiphertext(self: &CryptoContextDCRTPoly, constant: f64,
                                                ciphertext: &CiphertextDCRTPoly);
+        fn EvalMultMutableInPlace(self: &CryptoContextDCRTPoly, ciphertext1: &CiphertextDCRTPoly,
+                                 ciphertext2: &CiphertextDCRTPoly);
         fn EvalMultNoRelin(self: &CryptoContextDCRTPoly, ciphertext1: &CiphertextDCRTPoly,
                            ciphertext2: &CiphertextDCRTPoly) -> UniquePtr<CiphertextDCRTPoly>;
         fn EvalMultAndRelinearize(self: &CryptoContextDCRTPoly, ciphertext1: &CiphertextDCRTPoly,
