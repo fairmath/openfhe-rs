@@ -103,21 +103,33 @@ public:
         const std::shared_ptr<PrivateKeyImpl> privateKey, const Plaintext& plaintext) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalAddByCiphertexts(
         const CiphertextDCRTPoly& ciphertext1, const CiphertextDCRTPoly& ciphertext2) const;
-    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalAddByPlaintext(
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalAddByCiphertextAndPlaintext(
         const CiphertextDCRTPoly& ciphertext, const Plaintext& plaintext) const;
-    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalAddByConst(
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalAddByPlaintextAndCiphertext(
+        const Plaintext& plaintext, const CiphertextDCRTPoly& ciphertext) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalAddByConstAndCiphertext(
+        const double constant, const CiphertextDCRTPoly& ciphertext) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalAddByCiphertextAndConst(
         const CiphertextDCRTPoly& ciphertext, const double constant) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalSubByCiphertexts(
         const CiphertextDCRTPoly& ciphertext1, const CiphertextDCRTPoly& ciphertext2) const;
-    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalSubByPlaintext(
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalSubByCiphertextAndPlaintext(
         const CiphertextDCRTPoly& ciphertext, const Plaintext& plaintext) const;
-    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalSubByConst(
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalSubByPlaintextAndCiphertext(
+        const Plaintext& plaintext, const CiphertextDCRTPoly& ciphertext) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalSubByConstAndCiphertext(
+        const double constant, const CiphertextDCRTPoly& ciphertext) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalSubByCiphertextAndConst(
         const CiphertextDCRTPoly& ciphertext, const double constant) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalMultByCiphertexts(
         const CiphertextDCRTPoly& ciphertext1, const CiphertextDCRTPoly& ciphertext2) const;
-    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalMultByPlaintext(
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalMultByCiphertextAndPlaintext(
         const CiphertextDCRTPoly& ciphertext, const Plaintext& plaintext) const;
-    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalMultByConst(
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalMultByPlaintextAndCiphertext(
+        const Plaintext& plaintext, const CiphertextDCRTPoly& ciphertext) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalMultByConstAndCiphertext(
+        const double constant, const CiphertextDCRTPoly& ciphertext) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalMultByCiphertextAndConst(
         const CiphertextDCRTPoly& ciphertext, const double constant) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalMultNoRelin(
         const CiphertextDCRTPoly& ciphertext1, const CiphertextDCRTPoly& ciphertext2) const;
@@ -189,8 +201,11 @@ public:
     void EvalBootstrapKeyGen(const std::shared_ptr<PrivateKeyImpl> privateKey,
         const uint32_t slots) const;
     void EvalBootstrapPrecompute(const uint32_t slots /* 0 */) const;
-    [[nodiscard]] std::unique_ptr<DecryptResult> Decrypt(
+    [[nodiscard]] std::unique_ptr<DecryptResult> DecryptByPrivateKeyAndCiphertext(
         const std::shared_ptr<PrivateKeyImpl> privateKey, const CiphertextDCRTPoly& ciphertext,
+        Plaintext& plaintext) const;
+    [[nodiscard]] std::unique_ptr<DecryptResult> DecryptByCiphertextAndPrivateKey(
+        const CiphertextDCRTPoly& ciphertext, const std::shared_ptr<PrivateKeyImpl> privateKey,
         Plaintext& plaintext) const;
     [[nodiscard]] std::unique_ptr<Plaintext> MakePackedPlaintext(
         const std::vector<int64_t>& value, const size_t noiseScaleDeg /* 1 */,

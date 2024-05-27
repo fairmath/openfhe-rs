@@ -10,7 +10,7 @@ fn main()
     _cc_params_ckksrns.pin_mut().SetMultiplicativeDepth(6);
     _cc_params_ckksrns.pin_mut().SetScalingModSize(50);
 
-    let mut _cc = ffi::GenCryptoContextByParamsCKKSRNS(&_cc_params_ckksrns);
+    let _cc = ffi::GenCryptoContextByParamsCKKSRNS(&_cc_params_ckksrns);
     _cc.Enable(ffi::PKESchemeFeature::PKE);
     _cc.Enable(ffi::PKESchemeFeature::KEYSWITCH);
     _cc.Enable(ffi::PKESchemeFeature::LEVELEDSHE);
@@ -75,26 +75,26 @@ fn main()
     _coefficients_2.pin_mut().push(-0.4);
     _coefficients_2.pin_mut().push(-0.5);
 
-    let mut _plain_text_1 = _cc.MakeCKKSPackedPlaintextByVectorOfComplex(&_input, 1, 0, SharedPtr::<ffi::DCRTPolyParams>::null(), 0);
-    let mut _key_pair = _cc.KeyGen();
+    let _plain_text_1 = _cc.MakeCKKSPackedPlaintextByVectorOfComplex(&_input, 1, 0, SharedPtr::<ffi::DCRTPolyParams>::null(), 0);
+    let _key_pair = _cc.KeyGen();
     print!("Generating evaluation key for homomorphic multiplication...");
     _cc.EvalMultKeyGen(_key_pair.GetPrivateKey());
     println!("Completed.\n");
     let mut _cipher_text_1 = _cc.EncryptByPublicKey(_key_pair.GetPublicKey(), &_plain_text_1);
 
     let mut _start = Instant::now();
-    let mut _result = _cc.EvalPoly(&_cipher_text_1, &_coefficients_1);
+    let _result = _cc.EvalPoly(&_cipher_text_1, &_coefficients_1);
     let _time_eval_poly_1 = _start.elapsed();
 
     _start = Instant::now();
-    let mut _result_2 = _cc.EvalPoly(&_cipher_text_1, &_coefficients_2);
+    let _result_2 = _cc.EvalPoly(&_cipher_text_1, &_coefficients_2);
     let _time_eval_poly_2 = _start.elapsed();
 
     let mut _plain_text_dec = ffi::GenEmptyPlainText();
-    _cc.Decrypt(_key_pair.GetPrivateKey(), &_result, _plain_text_dec.pin_mut());
+    _cc.DecryptByPrivateKeyAndCiphertext(_key_pair.GetPrivateKey(), &_result, _plain_text_dec.pin_mut());
     _plain_text_dec.SetLength(_encoded_length);
     let mut _plain_text_dec_2 = ffi::GenEmptyPlainText();
-    _cc.Decrypt(_key_pair.GetPrivateKey(), &_result_2, _plain_text_dec_2.pin_mut());
+    _cc.DecryptByPrivateKeyAndCiphertext(_key_pair.GetPrivateKey(), &_result_2, _plain_text_dec_2.pin_mut());
     _plain_text_dec_2.SetLength(_encoded_length);
 
     println!("\n Original Plaintext #1:");

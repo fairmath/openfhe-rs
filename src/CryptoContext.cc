@@ -142,13 +142,25 @@ std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalAddByCiphertexts(
     return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalAdd(
         ciphertext1.GetInternal(), ciphertext2.GetInternal()));
 }
-std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalAddByPlaintext(
+std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalAddByCiphertextAndPlaintext(
     const CiphertextDCRTPoly& ciphertext, const Plaintext& plaintext) const
 {
     return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalAdd(
         ciphertext.GetInternal(), plaintext.GetInternal()));
 }
-std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalAddByConst(
+std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalAddByPlaintextAndCiphertext(
+    const Plaintext& plaintext, const CiphertextDCRTPoly& ciphertext) const
+{
+    return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalAdd(
+        plaintext.GetInternal(), ciphertext.GetInternal()));
+}
+std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalAddByConstAndCiphertext(
+    const double constant, const CiphertextDCRTPoly& ciphertext) const
+{
+    return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalAdd(
+        constant, ciphertext.GetInternal()));
+}
+std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalAddByCiphertextAndConst(
     const CiphertextDCRTPoly& ciphertext, const double constant) const
 {
     return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalAdd(
@@ -160,13 +172,25 @@ std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalSubByCiphertexts(
     return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalSub(
         ciphertext1.GetInternal(), ciphertext2.GetInternal()));
 }
-std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalSubByPlaintext(
+std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalSubByCiphertextAndPlaintext(
     const CiphertextDCRTPoly& ciphertext, const Plaintext& plaintext) const
 {
     return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalSub(
         ciphertext.GetInternal(), plaintext.GetInternal()));
 }
-std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalSubByConst(
+std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalSubByPlaintextAndCiphertext(
+    const Plaintext& plaintext, const CiphertextDCRTPoly& ciphertext) const
+{
+    return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalSub(
+        plaintext.GetInternal(), ciphertext.GetInternal()));
+}
+std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalSubByConstAndCiphertext(
+    const double constant, const CiphertextDCRTPoly& ciphertext) const
+{
+    return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalSub(
+        constant, ciphertext.GetInternal()));
+}
+std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalSubByCiphertextAndConst(
     const CiphertextDCRTPoly& ciphertext, const double constant) const
 {
     return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalSub(
@@ -178,13 +202,25 @@ std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalMultByCiphertexts
     return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalMult(
         ciphertext1.GetInternal(), ciphertext2.GetInternal()));
 }
-std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalMultByPlaintext(
+std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalMultByCiphertextAndPlaintext(
     const CiphertextDCRTPoly& ciphertext, const Plaintext& plaintext) const
 {
     return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalMult(
         ciphertext.GetInternal(), plaintext.GetInternal()));
 }
-std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalMultByConst(
+std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalMultByPlaintextAndCiphertext(
+    const Plaintext& plaintext, const CiphertextDCRTPoly& ciphertext) const
+{
+    return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalMult(
+        plaintext.GetInternal(), ciphertext.GetInternal()));
+}
+std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalMultByConstAndCiphertext(
+    const double constant, const CiphertextDCRTPoly& ciphertext) const
+{
+    return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalMult(
+        constant, ciphertext.GetInternal()));
+}
+std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalMultByCiphertextAndConst(
     const CiphertextDCRTPoly& ciphertext, const double constant) const
 {
     return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalMult(
@@ -322,13 +358,23 @@ void CryptoContextDCRTPoly::EvalBootstrapPrecompute(const uint32_t slots) const
 {
     m_cryptoContextImplSharedPtr->EvalBootstrapPrecompute(slots);
 }
-std::unique_ptr<DecryptResult> CryptoContextDCRTPoly::Decrypt(
-    const std::shared_ptr<PrivateKeyImpl> privateKey,
-    const CiphertextDCRTPoly& ciphertext, Plaintext& plaintext) const
+std::unique_ptr<DecryptResult> CryptoContextDCRTPoly::DecryptByPrivateKeyAndCiphertext(
+    const std::shared_ptr<PrivateKeyImpl> privateKey, const CiphertextDCRTPoly& ciphertext,
+    Plaintext& plaintext) const
 {
     std::shared_ptr<PlaintextImpl> res;
     std::unique_ptr<DecryptResult> result = std::make_unique<DecryptResult>(
     m_cryptoContextImplSharedPtr->Decrypt(privateKey, ciphertext.GetInternal(), &res));
+    plaintext = res;
+    return result;
+}
+std::unique_ptr<DecryptResult> CryptoContextDCRTPoly::DecryptByCiphertextAndPrivateKey(
+    const CiphertextDCRTPoly& ciphertext, const std::shared_ptr<PrivateKeyImpl> privateKey,
+    Plaintext& plaintext) const
+{
+    std::shared_ptr<PlaintextImpl> res;
+    std::unique_ptr<DecryptResult> result = std::make_unique<DecryptResult>(
+    m_cryptoContextImplSharedPtr->Decrypt(ciphertext.GetInternal(), privateKey, &res));
     plaintext = res;
     return result;
 }
