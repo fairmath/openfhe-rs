@@ -12,6 +12,7 @@
 #include "Plaintext.h"
 #include "PublicKey.h"
 #include "EvalKey.h"
+#include "LWEPrivateKey.h"
 
 namespace openfhe
 {
@@ -728,29 +729,48 @@ std::unique_ptr<EvalKeyDCRTPoly> CryptoContextDCRTPoly::MultiKeySwitchGen(
 }
 std::unique_ptr<EvalKeyDCRTPoly> CryptoContextDCRTPoly::MultiAddEvalKeys(
     const EvalKeyDCRTPoly& evalKey1, const EvalKeyDCRTPoly& evalKey2,
-    const std::string& keyId /* "" */) const
+    const std::string& keyId) const
 {
     return std::make_unique<EvalKeyDCRTPoly>(m_cryptoContextImplSharedPtr->MultiAddEvalKeys(
         evalKey1.GetInternal(), evalKey2.GetInternal(), keyId));
 }
 std::unique_ptr<EvalKeyDCRTPoly> CryptoContextDCRTPoly::MultiMultEvalKey(
     const std::shared_ptr<PrivateKeyImpl> privateKey, const EvalKeyDCRTPoly& evalKey,
-    const std::string& keyId /* "" */) const
+    const std::string& keyId) const
 {
     return std::make_unique<EvalKeyDCRTPoly>(m_cryptoContextImplSharedPtr->MultiMultEvalKey(
         privateKey, evalKey.GetInternal(), keyId));
 }
 std::unique_ptr<EvalKeyDCRTPoly> CryptoContextDCRTPoly::MultiAddEvalMultKeys(
     const EvalKeyDCRTPoly& evalKey1, const EvalKeyDCRTPoly& evalKey2,
-    const std::string& keyId /* "" */) const
+    const std::string& keyId) const
 {
     return std::make_unique<EvalKeyDCRTPoly>(m_cryptoContextImplSharedPtr->MultiAddEvalMultKeys(
         evalKey1.GetInternal(), evalKey2.GetInternal(), keyId));
 }
 void CryptoContextDCRTPoly::EvalSumKeyGen(const std::shared_ptr<PrivateKeyImpl> privateKey,
-    const std::shared_ptr<PublicKeyImpl> publicKey /* nullptr */) const
+    const std::shared_ptr<PublicKeyImpl> publicKey) const
 {
     m_cryptoContextImplSharedPtr->EvalSumKeyGen(privateKey, publicKey);
+}
+void CryptoContextDCRTPoly::EvalCKKStoFHEWKeyGen(const KeyPairDCRTPoly& keyPair,
+    const LWEPrivateKey& lwesk) const
+{
+    m_cryptoContextImplSharedPtr->EvalCKKStoFHEWKeyGen({keyPair.GetPublicKey(),
+        keyPair.GetPrivateKey()}, lwesk.GetInternal());
+}
+void CryptoContextDCRTPoly::EvalFHEWtoCKKSKeyGen(const KeyPairDCRTPoly& keyPair,
+    const LWEPrivateKey& lwesk, const uint32_t numSlots, const uint32_t numCtxts,
+    const uint32_t dim1, const uint32_t L) const
+{
+    m_cryptoContextImplSharedPtr->EvalFHEWtoCKKSKeyGen({keyPair.GetPublicKey(),
+        keyPair.GetPrivateKey()}, lwesk.GetInternal(), numSlots, numCtxts, dim1, L);
+}
+void CryptoContextDCRTPoly::EvalSchemeSwitchingKeyGen(const KeyPairDCRTPoly& keyPair,
+    const LWEPrivateKey& lwesk) const
+{
+    m_cryptoContextImplSharedPtr->EvalSchemeSwitchingKeyGen({keyPair.GetPublicKey(),
+        keyPair.GetPrivateKey()}, lwesk.GetInternal());
 }
 std::shared_ptr<CryptoContextImpl> CryptoContextDCRTPoly::GetInternal() const
 {
@@ -803,10 +823,9 @@ std::unique_ptr<std::vector<uint32_t>> GetExistingEvalAutomorphismKeyIndices(
 std::unique_ptr<std::vector<uint32_t>> GetUniqueValues(const std::vector<uint32_t>& oldValues,
     const std::vector<uint32_t>& newValues)
 {
-    return std::make_unique<std::vector<uint32_t>>(
-        CryptoContextImpl::GetUniqueValues(oldValues, newValues));
+    return std::make_unique<std::vector<uint32_t>>(CryptoContextImpl::GetUniqueValues(oldValues,
+        newValues));
 }
-
 std::unique_ptr<CryptoContextDCRTPoly> GenEmptyCryptoContext()
 {
     return std::make_unique<CryptoContextDCRTPoly>();

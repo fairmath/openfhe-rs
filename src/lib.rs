@@ -154,6 +154,7 @@ pub mod ffi
         include!("openfhe/src/PublicKey.h");
         include!("openfhe/src/SerialDeserial.h");
         include!("openfhe/src/EvalKey.h");
+        include!("openfhe/src/LWEPrivateKey.h");
 
         type COMPRESSION_LEVEL;
         type DecryptionNoiseMode;
@@ -185,6 +186,7 @@ pub mod ffi
         type PublicKeyDCRTPoly;
         type PublicKeyImpl;
         type EvalKeyDCRTPoly;
+        type LWEPrivateKey;
     }
 
     // Params

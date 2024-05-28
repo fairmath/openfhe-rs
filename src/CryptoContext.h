@@ -34,6 +34,7 @@ class PublicKeyDCRTPoly;
 class Plaintext;
 class CiphertextDCRTPoly;
 class EvalKeyDCRTPoly;
+class LWEPrivateKey;
 
 using SCHEME = lbcrypto::SCHEME;
 using PKESchemeFeature = lbcrypto::PKESchemeFeature;
@@ -320,6 +321,13 @@ public:
         const std::string& keyId /* "" */) const;
     void EvalSumKeyGen(const std::shared_ptr<PrivateKeyImpl> privateKey,
         const std::shared_ptr<PublicKeyImpl> publicKey /* nullptr */) const;
+    void EvalCKKStoFHEWKeyGen(const KeyPairDCRTPoly& keyPair, const LWEPrivateKey& lwesk) const;
+    void EvalFHEWtoCKKSKeyGen(const KeyPairDCRTPoly& keyPair, const LWEPrivateKey& lwesk,
+        const uint32_t numSlots /* 0 */, const uint32_t numCtxts /* 0 */,
+        const uint32_t dim1 /* 0 */, const uint32_t L /* 0 */) const;
+    void EvalSchemeSwitchingKeyGen(const KeyPairDCRTPoly& keyPair,
+        const LWEPrivateKey& lwesk) const;
+
     [[nodiscard]] std::shared_ptr<CryptoContextImpl> GetInternal() const;
 };
 // cxx currently does not support static class methods

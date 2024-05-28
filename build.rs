@@ -9,6 +9,7 @@ fn main()
         .file("src/PublicKey.cc")
         .file("src/SerialDeserial.cc")
         .file("src/EvalKey.cc")
+        .file("src/LWEPrivateKey.cc")
         .include("/usr/local/include/openfhe")
         .include("/usr/local/include/openfhe/third-party/include")
         .include("/usr/local/include/openfhe/core")
@@ -42,6 +43,8 @@ fn main()
     println!("cargo::rerun-if-changed=src/SerialDeserial.cc");
     println!("cargo::rerun-if-changed=src/EvalKey.h");
     println!("cargo::rerun-if-changed=src/EvalKey.cc");
+    println!("cargo::rerun-if-changed=src/LWEPrivateKey.h");
+    println!("cargo::rerun-if-changed=src/LWEPrivateKey.cc");
 
     // linking openFHE
     println!("cargo::rustc-link-arg=-L/usr/local/lib");
