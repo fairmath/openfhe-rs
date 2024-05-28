@@ -116,6 +116,11 @@ void CryptoContextDCRTPoly::EvalRotateKeyGen(const std::shared_ptr<PrivateKeyImp
 {
     m_cryptoContextImplSharedPtr->EvalRotateKeyGen(privateKey, indexList, publicKey);
 }
+void CryptoContextDCRTPoly::EvalAtIndexKeyGen(const std::shared_ptr<PrivateKeyImpl> privateKey,
+    const std::vector<int32_t>& indexList, const std::shared_ptr<PublicKeyImpl> publicKey) const
+{
+    m_cryptoContextImplSharedPtr->EvalAtIndexKeyGen(privateKey, indexList, publicKey);
+}
 void CryptoContextDCRTPoly::EvalCKKStoFHEWPrecompute(const double scale) const
 {
     m_cryptoContextImplSharedPtr->EvalCKKStoFHEWPrecompute(scale);

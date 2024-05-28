@@ -95,8 +95,11 @@ public:
     [[nodiscard]] std::unique_ptr<KeyPairDCRTPoly> SparseKeyGen() const;
     void EvalMultKeyGen(const std::shared_ptr<PrivateKeyImpl> key) const;
     void EvalMultKeysGen(const std::shared_ptr<PrivateKeyImpl> key) const;
-    void EvalRotateKeyGen(
-        const std::shared_ptr<PrivateKeyImpl> privateKey, const std::vector<int32_t>& indexList,
+    void EvalRotateKeyGen(const std::shared_ptr<PrivateKeyImpl> privateKey,
+        const std::vector<int32_t>& indexList,
+        const std::shared_ptr<PublicKeyImpl> publicKey /* nullptr */) const;
+    void EvalAtIndexKeyGen(const std::shared_ptr<PrivateKeyImpl> privateKey,
+        const std::vector<int32_t>& indexList,
         const std::shared_ptr<PublicKeyImpl> publicKey /* nullptr */) const;
     void EvalCKKStoFHEWPrecompute(const double scale /* 1.0 */) const;
     [[nodiscard]] uint32_t GetRingDimension() const;

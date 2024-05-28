@@ -548,12 +548,16 @@ pub mod ffi
                             makeSparse: /* false */ bool, fresh: /* false */ bool)
                             -> UniquePtr<KeyPairDCRTPoly>;
         fn MultiAddPubKeys(self: &CryptoContextDCRTPoly, publicKey1: &PublicKeyDCRTPoly,
-                           publicKey2: &PublicKeyDCRTPoly, keyId: &CxxString /* "" */)
+                           publicKey2: &PublicKeyDCRTPoly, keyId: /* "" */ &CxxString)
                            -> UniquePtr<PublicKeyDCRTPoly>;
         fn EvalMultKeyGen(self: &CryptoContextDCRTPoly, key: SharedPtr<PrivateKeyImpl>);
         fn EvalMultKeysGen(self: &CryptoContextDCRTPoly, key: SharedPtr<PrivateKeyImpl>);
         fn EvalRotateKeyGen(self: &CryptoContextDCRTPoly, privateKey: SharedPtr<PrivateKeyImpl>,
-                            indexList: &CxxVector<i32>, publicKey: SharedPtr<PublicKeyImpl>);
+                            indexList: &CxxVector<i32>,
+                            publicKey: /* null() */ SharedPtr<PublicKeyImpl>);
+        fn EvalAtIndexKeyGen(self: &CryptoContextDCRTPoly, privateKey: SharedPtr<PrivateKeyImpl>,
+                             indexList: &CxxVector<i32>,
+                             publicKey: /* null() */ SharedPtr<PublicKeyImpl>);
         fn EvalCKKStoFHEWPrecompute(self: &CryptoContextDCRTPoly, scale: /* 1.0 */ f64);
         fn MakePackedPlaintext(self: &CryptoContextDCRTPoly, value: &CxxVector<i64>,
                                noiseScaleDeg: /* 1 */ usize, level: /* 0 */ u32)
@@ -823,7 +827,7 @@ pub mod ffi
                             evalKey2: &EvalKeyDCRTPoly, keyId: /* "" */ &CxxString)
                             -> UniquePtr<EvalKeyDCRTPoly>;
         fn MultiMultEvalKey(self: &CryptoContextDCRTPoly, privateKey: SharedPtr<PrivateKeyImpl>,
-                            evalKey: &EvalKeyDCRTPoly, keyId: &CxxString /* "" */)
+                            evalKey: &EvalKeyDCRTPoly, keyId: /* "" */ &CxxString)
                             -> UniquePtr<EvalKeyDCRTPoly>;
         fn MultiAddEvalMultKeys(self: &CryptoContextDCRTPoly, evalKey1: &EvalKeyDCRTPoly,
                                 evalKey2: &EvalKeyDCRTPoly, keyId: /* "" */ &CxxString)
