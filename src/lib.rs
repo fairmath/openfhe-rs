@@ -719,7 +719,8 @@ pub mod ffi
                                             -> UniquePtr<DecryptResult>;
         fn GetRingDimension(self: &CryptoContextDCRTPoly) -> u32;
         fn GetCyclotomicOrder(self: &CryptoContextDCRTPoly) -> u32;
-        fn MakeStringPlaintext(self: &CryptoContextDCRTPoly, s: &CxxString) -> UniquePtr<Plaintext>;
+        fn MakeStringPlaintext(self: &CryptoContextDCRTPoly, s: &CxxString)
+                               -> UniquePtr<Plaintext>;
         fn MakeCoefPackedPlaintext(self: &CryptoContextDCRTPoly, value: &CxxVector<i64>,
                                    noiseScaleDeg: /* 1 */ usize, level: /* 0 */ u32)
                                    -> UniquePtr<Plaintext>;
@@ -814,7 +815,8 @@ pub mod ffi
                         newPrivateKey: SharedPtr<PrivateKeyImpl>) -> UniquePtr<EvalKeyDCRTPoly>;
         fn ReKeyGen(self: &CryptoContextDCRTPoly, oldPrivateKey: SharedPtr<PrivateKeyImpl>,
                     newPublicKey: SharedPtr<PublicKeyImpl>) -> UniquePtr<EvalKeyDCRTPoly>;
-        fn MultiKeySwitchGen(self: &CryptoContextDCRTPoly, originalPrivateKey: SharedPtr<PrivateKeyImpl>,
+        fn MultiKeySwitchGen(self: &CryptoContextDCRTPoly,
+                             originalPrivateKey: SharedPtr<PrivateKeyImpl>,
                              newPrivateKey: SharedPtr<PrivateKeyImpl>, evalKey: &EvalKeyDCRTPoly)
                              -> UniquePtr<EvalKeyDCRTPoly>;
         fn MultiAddEvalKeys(self: &CryptoContextDCRTPoly, evalKey1: &EvalKeyDCRTPoly,
@@ -828,6 +830,14 @@ pub mod ffi
                                 -> UniquePtr<EvalKeyDCRTPoly>;
         fn EvalSumKeyGen(self: &CryptoContextDCRTPoly, privateKey: SharedPtr<PrivateKeyImpl>,
                          publicKey: /* null() */ SharedPtr<PublicKeyImpl>);
+
+        fn EvalCKKStoFHEWKeyGen(self: &CryptoContextDCRTPoly, keyPair: &KeyPairDCRTPoly,
+                                lwesk: &LWEPrivateKey);
+        fn EvalFHEWtoCKKSKeyGen(self: &CryptoContextDCRTPoly, keyPair: &KeyPairDCRTPoly,
+                                lwesk: &LWEPrivateKey, numSlots: /* 0 */ u32,
+                                numCtxts: /* 0 */ u32, dim1: /* 0 */ u32, L: /* 0 */ u32);
+        fn EvalSchemeSwitchingKeyGen(self: &CryptoContextDCRTPoly, keyPair: &KeyPairDCRTPoly,
+                                     lwesk: &LWEPrivateKey);
 
         // cxx currently does not support static class methods
         fn ClearEvalMultKeys();
