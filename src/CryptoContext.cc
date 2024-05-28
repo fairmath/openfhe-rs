@@ -11,6 +11,7 @@
 #include "KeyPair.h"
 #include "Plaintext.h"
 #include "PublicKey.h"
+#include "EvalKey.h"
 
 namespace openfhe
 {
@@ -670,6 +671,86 @@ std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalInnerProductByPla
 {
     return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalInnerProduct(
         ciphertext.GetInternal(), plaintext.GetInternal(), batchSize));
+}
+std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::KeySwitch(
+    const CiphertextDCRTPoly& ciphertext, const EvalKeyDCRTPoly& evalKey) const
+{
+    return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->KeySwitch(
+        ciphertext.GetInternal(), evalKey.GetInternal()));
+}
+void CryptoContextDCRTPoly::KeySwitchInPlace(const CiphertextDCRTPoly& ciphertext,
+    const EvalKeyDCRTPoly& evalKey) const
+{
+    std::shared_ptr<CiphertextImpl> c = ciphertext.GetInternal();
+    m_cryptoContextImplSharedPtr->KeySwitchInPlace(c, evalKey.GetInternal());
+}
+std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::LevelReduce(
+    const CiphertextDCRTPoly& ciphertext, const EvalKeyDCRTPoly& evalKey,
+    const size_t levels) const
+{
+    return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->LevelReduce(
+        ciphertext.GetInternal(), evalKey.GetInternal(), levels));
+}
+void CryptoContextDCRTPoly::LevelReduceInPlace(const CiphertextDCRTPoly& ciphertext,
+    const EvalKeyDCRTPoly& evalKey, const size_t levels) const
+{
+    std::shared_ptr<CiphertextImpl> c = ciphertext.GetInternal();
+    m_cryptoContextImplSharedPtr->LevelReduceInPlace(c, evalKey.GetInternal(), levels);
+}
+std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::ReEncrypt(
+    const CiphertextDCRTPoly& ciphertext, const EvalKeyDCRTPoly& evalKey,
+    const std::shared_ptr<PublicKeyImpl> publicKey) const
+{
+    return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->ReEncrypt(
+        ciphertext.GetInternal(), evalKey.GetInternal(), publicKey));
+}
+
+std::unique_ptr<EvalKeyDCRTPoly> CryptoContextDCRTPoly::KeySwitchGen(
+    const std::shared_ptr<PrivateKeyImpl> oldPrivateKey,
+    const std::shared_ptr<PrivateKeyImpl> newPrivateKey) const
+{
+    return std::make_unique<EvalKeyDCRTPoly>(m_cryptoContextImplSharedPtr->KeySwitchGen(
+        oldPrivateKey, newPrivateKey));
+}
+std::unique_ptr<EvalKeyDCRTPoly> CryptoContextDCRTPoly::ReKeyGen(
+    const std::shared_ptr<PrivateKeyImpl> oldPrivateKey,
+    const std::shared_ptr<PublicKeyImpl> newPublicKey) const
+{
+    return std::make_unique<EvalKeyDCRTPoly>(m_cryptoContextImplSharedPtr->ReKeyGen(
+        oldPrivateKey, newPublicKey));
+}
+std::unique_ptr<EvalKeyDCRTPoly> CryptoContextDCRTPoly::MultiKeySwitchGen(
+    const std::shared_ptr<PrivateKeyImpl> originalPrivateKey,
+    const std::shared_ptr<PrivateKeyImpl> newPrivateKey, const EvalKeyDCRTPoly& evalKey) const
+{
+    return std::make_unique<EvalKeyDCRTPoly>(m_cryptoContextImplSharedPtr->MultiKeySwitchGen(
+        originalPrivateKey, newPrivateKey, evalKey.GetInternal()));
+}
+std::unique_ptr<EvalKeyDCRTPoly> CryptoContextDCRTPoly::MultiAddEvalKeys(
+    const EvalKeyDCRTPoly& evalKey1, const EvalKeyDCRTPoly& evalKey2,
+    const std::string& keyId /* "" */) const
+{
+    return std::make_unique<EvalKeyDCRTPoly>(m_cryptoContextImplSharedPtr->MultiAddEvalKeys(
+        evalKey1.GetInternal(), evalKey2.GetInternal(), keyId));
+}
+std::unique_ptr<EvalKeyDCRTPoly> CryptoContextDCRTPoly::MultiMultEvalKey(
+    const std::shared_ptr<PrivateKeyImpl> privateKey, const EvalKeyDCRTPoly& evalKey,
+    const std::string& keyId /* "" */) const
+{
+    return std::make_unique<EvalKeyDCRTPoly>(m_cryptoContextImplSharedPtr->MultiMultEvalKey(
+        privateKey, evalKey.GetInternal(), keyId));
+}
+std::unique_ptr<EvalKeyDCRTPoly> CryptoContextDCRTPoly::MultiAddEvalMultKeys(
+    const EvalKeyDCRTPoly& evalKey1, const EvalKeyDCRTPoly& evalKey2,
+    const std::string& keyId /* "" */) const
+{
+    return std::make_unique<EvalKeyDCRTPoly>(m_cryptoContextImplSharedPtr->MultiAddEvalMultKeys(
+        evalKey1.GetInternal(), evalKey2.GetInternal(), keyId));
+}
+void CryptoContextDCRTPoly::EvalSumKeyGen(const std::shared_ptr<PrivateKeyImpl> privateKey,
+    const std::shared_ptr<PublicKeyImpl> publicKey /* nullptr */) const
+{
+    m_cryptoContextImplSharedPtr->EvalSumKeyGen(privateKey, publicKey);
 }
 std::shared_ptr<CryptoContextImpl> CryptoContextDCRTPoly::GetInternal() const
 {

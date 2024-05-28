@@ -33,6 +33,7 @@ class KeyPairDCRTPoly;
 class PublicKeyDCRTPoly;
 class Plaintext;
 class CiphertextDCRTPoly;
+class EvalKeyDCRTPoly;
 
 using SCHEME = lbcrypto::SCHEME;
 using PKESchemeFeature = lbcrypto::PKESchemeFeature;
@@ -287,6 +288,38 @@ public:
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalInnerProductByPlaintext(
         const CiphertextDCRTPoly& ciphertext, const Plaintext& plaintext,
         const uint32_t batchSize) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> KeySwitch(
+        const CiphertextDCRTPoly& ciphertext, const EvalKeyDCRTPoly& evalKey) const;
+    void KeySwitchInPlace(const CiphertextDCRTPoly& ciphertext,
+        const EvalKeyDCRTPoly& evalKey) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> LevelReduce(
+        const CiphertextDCRTPoly& ciphertext, const EvalKeyDCRTPoly& evalKey,
+        const size_t levels /* 1 */) const;
+    void LevelReduceInPlace(const CiphertextDCRTPoly& ciphertext, const EvalKeyDCRTPoly& evalKey,
+        const size_t levels /* 1 */) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> ReEncrypt(
+        const CiphertextDCRTPoly& ciphertext, const EvalKeyDCRTPoly& evalKey,
+        const std::shared_ptr<PublicKeyImpl> publicKey /* nullptr */) const;
+    [[nodiscard]] std::unique_ptr<EvalKeyDCRTPoly> KeySwitchGen(
+        const std::shared_ptr<PrivateKeyImpl> oldPrivateKey,
+        const std::shared_ptr<PrivateKeyImpl> newPrivateKey) const;
+    [[nodiscard]] std::unique_ptr<EvalKeyDCRTPoly> ReKeyGen(
+        const std::shared_ptr<PrivateKeyImpl> oldPrivateKey,
+        const std::shared_ptr<PublicKeyImpl> newPublicKey) const;
+    [[nodiscard]] std::unique_ptr<EvalKeyDCRTPoly> MultiKeySwitchGen(
+        const std::shared_ptr<PrivateKeyImpl> originalPrivateKey,
+        const std::shared_ptr<PrivateKeyImpl> newPrivateKey, const EvalKeyDCRTPoly& evalKey) const;
+    [[nodiscard]] std::unique_ptr<EvalKeyDCRTPoly> MultiAddEvalKeys(
+        const EvalKeyDCRTPoly& evalKey1, const EvalKeyDCRTPoly& evalKey2,
+        const std::string& keyId /* "" */) const;
+    [[nodiscard]] std::unique_ptr<EvalKeyDCRTPoly> MultiMultEvalKey(
+        const std::shared_ptr<PrivateKeyImpl> privateKey, const EvalKeyDCRTPoly& evalKey,
+        const std::string& keyId /* "" */) const;
+    [[nodiscard]] std::unique_ptr<EvalKeyDCRTPoly> MultiAddEvalMultKeys(
+        const EvalKeyDCRTPoly& evalKey1, const EvalKeyDCRTPoly& evalKey2,
+        const std::string& keyId /* "" */) const;
+    void EvalSumKeyGen(const std::shared_ptr<PrivateKeyImpl> privateKey,
+        const std::shared_ptr<PublicKeyImpl> publicKey /* nullptr */) const;
     [[nodiscard]] std::shared_ptr<CryptoContextImpl> GetInternal() const;
 };
 // cxx currently does not support static class methods

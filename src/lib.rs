@@ -153,6 +153,7 @@ pub mod ffi
         include!("openfhe/src/Plaintext.h");
         include!("openfhe/src/PublicKey.h");
         include!("openfhe/src/SerialDeserial.h");
+        include!("openfhe/src/EvalKey.h");
 
         type COMPRESSION_LEVEL;
         type DecryptionNoiseMode;
@@ -183,6 +184,7 @@ pub mod ffi
         type PrivateKeyImpl;
         type PublicKeyDCRTPoly;
         type PublicKeyImpl;
+        type EvalKeyDCRTPoly;
     }
 
     // Params
@@ -794,6 +796,36 @@ pub mod ffi
         fn EvalInnerProductByPlaintext(self: &CryptoContextDCRTPoly,
                                        ciphertext: &CiphertextDCRTPoly, plaintext: &Plaintext,
                                        batchSize: u32) -> UniquePtr<CiphertextDCRTPoly>;
+        fn KeySwitch(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
+                     evalKey: &EvalKeyDCRTPoly) -> UniquePtr<CiphertextDCRTPoly>;
+        fn KeySwitchInPlace(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
+                            evalKey: &EvalKeyDCRTPoly);
+        fn LevelReduce(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
+                       evalKey: &EvalKeyDCRTPoly, levels: /* 1 */ usize)
+                       -> UniquePtr<CiphertextDCRTPoly>;
+        fn LevelReduceInPlace(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
+                              evalKey: &EvalKeyDCRTPoly, levels: /* 1 */ usize);
+        fn ReEncrypt(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
+                     evalKey: &EvalKeyDCRTPoly, publicKey: /* null() */ SharedPtr<PublicKeyImpl>)
+                     -> UniquePtr<CiphertextDCRTPoly>;
+        fn KeySwitchGen(self: &CryptoContextDCRTPoly, oldPrivateKey: SharedPtr<PrivateKeyImpl>,
+                        newPrivateKey: SharedPtr<PrivateKeyImpl>) -> UniquePtr<EvalKeyDCRTPoly>;
+        fn ReKeyGen(self: &CryptoContextDCRTPoly, oldPrivateKey: SharedPtr<PrivateKeyImpl>,
+                    newPublicKey: SharedPtr<PublicKeyImpl>) -> UniquePtr<EvalKeyDCRTPoly>;
+        fn MultiKeySwitchGen(self: &CryptoContextDCRTPoly, originalPrivateKey: SharedPtr<PrivateKeyImpl>,
+                             newPrivateKey: SharedPtr<PrivateKeyImpl>, evalKey: &EvalKeyDCRTPoly)
+                             -> UniquePtr<EvalKeyDCRTPoly>;
+        fn MultiAddEvalKeys(self: &CryptoContextDCRTPoly, evalKey1: &EvalKeyDCRTPoly,
+                            evalKey2: &EvalKeyDCRTPoly, keyId: /* "" */ &CxxString)
+                            -> UniquePtr<EvalKeyDCRTPoly>;
+        fn MultiMultEvalKey(self: &CryptoContextDCRTPoly, privateKey: SharedPtr<PrivateKeyImpl>,
+                            evalKey: &EvalKeyDCRTPoly, keyId: &CxxString /* "" */)
+                            -> UniquePtr<EvalKeyDCRTPoly>;
+        fn MultiAddEvalMultKeys(self: &CryptoContextDCRTPoly, evalKey1: &EvalKeyDCRTPoly,
+                                evalKey2: &EvalKeyDCRTPoly, keyId: /* "" */ &CxxString)
+                                -> UniquePtr<EvalKeyDCRTPoly>;
+        fn EvalSumKeyGen(self: &CryptoContextDCRTPoly, privateKey: SharedPtr<PrivateKeyImpl>,
+                         publicKey: /* null() */ SharedPtr<PublicKeyImpl>);
 
         // cxx currently does not support static class methods
         fn ClearEvalMultKeys();
