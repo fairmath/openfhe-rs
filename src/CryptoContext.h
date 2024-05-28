@@ -327,6 +327,8 @@ public:
         const uint32_t dim1 /* 0 */, const uint32_t L /* 0 */) const;
     void EvalSchemeSwitchingKeyGen(const KeyPairDCRTPoly& keyPair,
         const LWEPrivateKey& lwesk) const;
+    [[nodiscard]] uint64_t GetModulus() const;
+    [[nodiscard]] uint64_t GetRootOfUnity() const;
     [[nodiscard]] std::shared_ptr<CryptoContextImpl> GetInternal() const;
 };
 // cxx currently does not support static class methods

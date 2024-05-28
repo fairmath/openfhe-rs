@@ -830,7 +830,6 @@ pub mod ffi
                                 -> UniquePtr<EvalKeyDCRTPoly>;
         fn EvalSumKeyGen(self: &CryptoContextDCRTPoly, privateKey: SharedPtr<PrivateKeyImpl>,
                          publicKey: /* null() */ SharedPtr<PublicKeyImpl>);
-
         fn EvalCKKStoFHEWKeyGen(self: &CryptoContextDCRTPoly, keyPair: &KeyPairDCRTPoly,
                                 lwesk: &LWEPrivateKey);
         fn EvalFHEWtoCKKSKeyGen(self: &CryptoContextDCRTPoly, keyPair: &KeyPairDCRTPoly,
@@ -838,6 +837,8 @@ pub mod ffi
                                 numCtxts: /* 0 */ u32, dim1: /* 0 */ u32, L: /* 0 */ u32);
         fn EvalSchemeSwitchingKeyGen(self: &CryptoContextDCRTPoly, keyPair: &KeyPairDCRTPoly,
                                      lwesk: &LWEPrivateKey);
+        fn GetModulus(self: &CryptoContextDCRTPoly) -> u64;
+        fn GetRootOfUnity(self: &CryptoContextDCRTPoly) -> u64;
 
         // cxx currently does not support static class methods
         fn ClearEvalMultKeys();

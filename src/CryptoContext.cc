@@ -772,6 +772,14 @@ void CryptoContextDCRTPoly::EvalSchemeSwitchingKeyGen(const KeyPairDCRTPoly& key
     m_cryptoContextImplSharedPtr->EvalSchemeSwitchingKeyGen({keyPair.GetPublicKey(),
         keyPair.GetPrivateKey()}, lwesk.GetInternal());
 }
+uint64_t CryptoContextDCRTPoly::GetModulus() const
+{
+    return m_cryptoContextImplSharedPtr->GetModulus().ConvertToInt();
+}
+uint64_t CryptoContextDCRTPoly::GetRootOfUnity() const
+{
+    return m_cryptoContextImplSharedPtr->GetRootOfUnity().ConvertToInt();
+}
 std::shared_ptr<CryptoContextImpl> CryptoContextDCRTPoly::GetInternal() const
 {
     return m_cryptoContextImplSharedPtr;
