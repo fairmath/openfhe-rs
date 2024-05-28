@@ -540,6 +540,12 @@ pub mod ffi
 
         fn Enable(self: &CryptoContextDCRTPoly, feature: PKESchemeFeature);
         fn KeyGen(self: &CryptoContextDCRTPoly) -> UniquePtr<KeyPairDCRTPoly>;
+        fn MultipartyKeyGen(self: &CryptoContextDCRTPoly, publicKey: &PublicKeyDCRTPoly,
+                            makeSparse: /* false */ bool, fresh: /* false */ bool)
+                            -> UniquePtr<KeyPairDCRTPoly>;
+        fn MultiAddPubKeys(self: &CryptoContextDCRTPoly, publicKey1: &PublicKeyDCRTPoly,
+                           publicKey2: &PublicKeyDCRTPoly, keyId: &CxxString /* "" */)
+                           -> UniquePtr<PublicKeyDCRTPoly>;
         fn EvalMultKeyGen(self: &CryptoContextDCRTPoly, key: SharedPtr<PrivateKeyImpl>);
         fn EvalMultKeysGen(self: &CryptoContextDCRTPoly, key: SharedPtr<PrivateKeyImpl>);
         fn EvalRotateKeyGen(self: &CryptoContextDCRTPoly, privateKey: SharedPtr<PrivateKeyImpl>,

@@ -84,6 +84,19 @@ std::unique_ptr<KeyPairDCRTPoly> CryptoContextDCRTPoly::KeyGen() const
 {
     return std::make_unique<KeyPairDCRTPoly>(m_cryptoContextImplSharedPtr->KeyGen());
 }
+std::unique_ptr<KeyPairDCRTPoly> CryptoContextDCRTPoly::MultipartyKeyGen(
+    const PublicKeyDCRTPoly& publicKey, const bool makeSparse, const bool fresh) const
+{
+    return std::make_unique<KeyPairDCRTPoly>(m_cryptoContextImplSharedPtr->MultipartyKeyGen(
+        publicKey.GetInternal(), makeSparse, fresh));
+}
+std::unique_ptr<PublicKeyDCRTPoly> CryptoContextDCRTPoly::MultiAddPubKeys(
+    const PublicKeyDCRTPoly& publicKey1, const PublicKeyDCRTPoly& publicKey2,
+    const std::string& keyId) const
+{
+    return std::make_unique<PublicKeyDCRTPoly>(m_cryptoContextImplSharedPtr->MultiAddPubKeys(
+        publicKey1.GetInternal(), publicKey2.GetInternal(), keyId));
+}
 std::unique_ptr<KeyPairDCRTPoly> CryptoContextDCRTPoly::SparseKeyGen() const
 {
     return std::make_unique<KeyPairDCRTPoly>(m_cryptoContextImplSharedPtr->SparseKeyGen());

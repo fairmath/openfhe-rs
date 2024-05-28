@@ -84,6 +84,12 @@ public:
     void Enable(const PKESchemeFeature feature) const;
     void EnableByMask(const uint32_t featureMask) const;
     [[nodiscard]] std::unique_ptr<KeyPairDCRTPoly> KeyGen() const;
+    [[nodiscard]] std::unique_ptr<KeyPairDCRTPoly> MultipartyKeyGen(
+        const PublicKeyDCRTPoly& publicKey, const bool makeSparse /* false */,
+        const bool fresh /* false */) const;
+    [[nodiscard]] std::unique_ptr<PublicKeyDCRTPoly> MultiAddPubKeys(
+        const PublicKeyDCRTPoly& publicKey1, const PublicKeyDCRTPoly& publicKey2,
+        const std::string& keyId /* "" */) const;
     [[nodiscard]] std::unique_ptr<KeyPairDCRTPoly> SparseKeyGen() const;
     void EvalMultKeyGen(const std::shared_ptr<PrivateKeyImpl> key) const;
     void EvalMultKeysGen(const std::shared_ptr<PrivateKeyImpl> key) const;
