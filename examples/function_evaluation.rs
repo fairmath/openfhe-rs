@@ -2,12 +2,11 @@
 use openfhe::cxx::{CxxVector, SharedPtr};
 use openfhe::ffi as ffi;
 
-
 // In this example, we evaluate the logistic function 1 / (1 + exp(-x)) on an input of doubles
 
 fn EvalLogisticExample()
 {
-    println!("\n--------------------------------- EVALUATION LOGISTIC FUNCTION EXAMPLE ---------------------------------\n");
+    println!("--------------------------------- EVAL LOGISTIC FUNCTION ---------------------------------");
     let mut _cc_params_ckksrns = ffi::GetParamsCKKSRNS();
 
     // We set a smaller ring dimension to improve performance for this example.
@@ -23,14 +22,14 @@ fn EvalLogisticExample()
     let _first_mod_size: u32 = 60;
     _cc_params_ckksrns.pin_mut().SetScalingModSize(_scaling_mod_size);
     _cc_params_ckksrns.pin_mut().SetFirstModSize(_first_mod_size);
-
+    
     // Choosing a higher degree yields better precision, but a longer runtime.
     let _poly_degree: u32 = 16;
 
     // The multiplicative depth depends on the polynomial degree.
     // See the [FUNCTION_EVALUATION.md](../../gitbook-docs/examples/function_evaluation.rs) file
     // for a table mapping polynomial degrees to multiplicative depths.
-    let _mult_depth: u32 = 6;
+    let _mult_depth: u32 = 6;    
     _cc_params_ckksrns.pin_mut().SetMultiplicativeDepth(_mult_depth);
 
     let _cc = ffi::GenCryptoContextByParamsCKKSRNS(&_cc_params_ckksrns);
@@ -41,9 +40,8 @@ fn EvalLogisticExample()
     // We need to enable Advanced SHE to use the Chebyshev approximation.
     _cc.Enable(ffi::PKESchemeFeature::ADVANCEDSHE);
 
-    let _key_pair = _cc.KeyGen();
-
     // We need to generate mult keys to run Chebyshev approximations.
+    let _key_pair = _cc.KeyGen();
     _cc.EvalMultKeyGen(_key_pair.GetPrivateKey());
 
     let mut _input = CxxVector::<ffi::ComplexPair>::new();
@@ -124,10 +122,10 @@ fn EvalFunctionExample()
     // We need to enable Advanced SHE to use the Chebyshev approximation.
     _cc.Enable(ffi::PKESchemeFeature::ADVANCEDSHE);
 
-    let _key_pair = _cc.KeyGen();
-
     // We need to generate mult keys to run Chebyshev approximations.
+    let _key_pair = _cc.KeyGen();
     _cc.EvalMultKeyGen(_key_pair.GetPrivateKey());
+    
     let mut _input = CxxVector::<ffi::ComplexPair>::new();
     _input.pin_mut().push(ffi::ComplexPair{re: 1.0, im: 0.0});
     _input.pin_mut().push(ffi::ComplexPair{re: 2.0, im: 0.0});

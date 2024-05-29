@@ -6,8 +6,8 @@ use openfhe::ffi as ffi;
 fn main()
 {
     use std::time::Instant;
-    println!("\n--------------------------------- POLYNOMIAL EVALUATION EXAMPLE ---------------------------------\n");
-    
+    println!("\n======EXAMPLE FOR EVALPOLY========\n");
+
     let mut _cc_params_ckksrns = ffi::GetParamsCKKSRNS();
     _cc_params_ckksrns.pin_mut().SetMultiplicativeDepth(6);
     _cc_params_ckksrns.pin_mut().SetScalingModSize(50);
@@ -78,12 +78,13 @@ fn main()
     _coefficients_2.pin_mut().push(-0.5);
 
     let _plain_text_1 = _cc.MakeCKKSPackedPlaintextByVectorOfComplex(&_input, 1, 0, SharedPtr::<ffi::DCRTPolyParams>::null(), 0);
-    let _key_pair = _cc.KeyGen();
     
-    // Generating evaluation key for homomorphic multiplication
+    // Generating evaluation key
+    let _key_pair = _cc.KeyGen();
     print!("Generating evaluation key for homomorphic multiplication...");
     _cc.EvalMultKeyGen(_key_pair.GetPrivateKey());
     println!("Completed.\n");
+
     let mut _cipher_text_1 = _cc.EncryptByPublicKey(_key_pair.GetPublicKey(), &_plain_text_1);
 
     let mut _start = Instant::now();
