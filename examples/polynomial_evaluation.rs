@@ -1,28 +1,29 @@
 use openfhe::cxx::{CxxVector, SharedPtr};
 use openfhe::ffi as ffi;
 
+// Example of polynomial evaluation using CKKS.
+
 fn main()
 {
     use std::time::Instant;
-    println!("\n======EXAMPLE FOR EVALPOLY========\n");
-
+    println!("\n--------------------------------- POLYNOMIAL EVALUATION EXAMPLE ---------------------------------\n");
+    
     let mut _cc_params_ckksrns = ffi::GetParamsCKKSRNS();
     _cc_params_ckksrns.pin_mut().SetMultiplicativeDepth(6);
     _cc_params_ckksrns.pin_mut().SetScalingModSize(50);
 
-    let mut _cc = ffi::GenCryptoContextByParamsCKKSRNS(&_cc_params_ckksrns);
+    let _cc = ffi::GenCryptoContextByParamsCKKSRNS(&_cc_params_ckksrns);
     _cc.Enable(ffi::PKESchemeFeature::PKE);
     _cc.Enable(ffi::PKESchemeFeature::KEYSWITCH);
     _cc.Enable(ffi::PKESchemeFeature::LEVELEDSHE);
     _cc.Enable(ffi::PKESchemeFeature::ADVANCEDSHE);
 
-    let mut _vals = CxxVector::<ffi::ComplexPair>::new();
-    _vals.pin_mut().push(ffi::ComplexPair{re: 0.5, im: 0.0});
-    _vals.pin_mut().push(ffi::ComplexPair{re: 0.7, im: 0.0});
-    _vals.pin_mut().push(ffi::ComplexPair{re: 0.9, im: 0.0});
-    _vals.pin_mut().push(ffi::ComplexPair{re: 0.95, im: 0.0});
-    _vals.pin_mut().push(ffi::ComplexPair{re: 0.93, im: 0.0});
-    let _input = ffi::GenVectorOfComplex(&_vals);
+    let mut _input = CxxVector::<ffi::ComplexPair>::new();
+    _input.pin_mut().push(ffi::ComplexPair{re: 0.5, im: 0.0});
+    _input.pin_mut().push(ffi::ComplexPair{re: 0.7, im: 0.0});
+    _input.pin_mut().push(ffi::ComplexPair{re: 0.9, im: 0.0});
+    _input.pin_mut().push(ffi::ComplexPair{re: 0.95, im: 0.0});
+    _input.pin_mut().push(ffi::ComplexPair{re: 0.93, im: 0.0});
     let _encoded_length = _input.len();
 
     let mut _coefficients_1 = CxxVector::<f64>::new();
@@ -76,26 +77,28 @@ fn main()
     _coefficients_2.pin_mut().push(-0.4);
     _coefficients_2.pin_mut().push(-0.5);
 
-    let mut _plain_text_1 = _cc.MakeCKKSPackedPlaintextByVectorOfComplex(&_input, 1, 0, SharedPtr::<ffi::DCRTPolyParams>::null(), 0);
-    let mut _key_pair = _cc.KeyGen();
+    let _plain_text_1 = _cc.MakeCKKSPackedPlaintextByVectorOfComplex(&_input, 1, 0, SharedPtr::<ffi::DCRTPolyParams>::null(), 0);
+    let _key_pair = _cc.KeyGen();
+    
+    // Generating evaluation key for homomorphic multiplication
     print!("Generating evaluation key for homomorphic multiplication...");
     _cc.EvalMultKeyGen(_key_pair.GetPrivateKey());
     println!("Completed.\n");
-    let mut _cipher_text_1 = _cc.Encrypt(_key_pair.GetPublicKey(), _plain_text_1.GetPlainText());
+    let mut _cipher_text_1 = _cc.EncryptByPublicKey(_key_pair.GetPublicKey(), &_plain_text_1);
 
     let mut _start = Instant::now();
-    let mut _result = _cc.EvalPoly(_cipher_text_1.GetCipherText(), &_coefficients_1);
+    let _result = _cc.EvalPoly(&_cipher_text_1, &_coefficients_1);
     let _time_eval_poly_1 = _start.elapsed();
 
     _start = Instant::now();
-    let mut _result_2 = _cc.EvalPoly(_cipher_text_1.GetCipherText(), &_coefficients_2);
+    let _result_2 = _cc.EvalPoly(&_cipher_text_1, &_coefficients_2);
     let _time_eval_poly_2 = _start.elapsed();
 
     let mut _plain_text_dec = ffi::GenEmptyPlainText();
-    _cc.Decrypt(_key_pair.GetPrivateKey(), _result.GetCipherText(), _plain_text_dec.pin_mut());
+    _cc.DecryptByPrivateKeyAndCiphertext(_key_pair.GetPrivateKey(), &_result, _plain_text_dec.pin_mut());
     _plain_text_dec.SetLength(_encoded_length);
     let mut _plain_text_dec_2 = ffi::GenEmptyPlainText();
-    _cc.Decrypt(_key_pair.GetPrivateKey(), _result_2.GetCipherText(), _plain_text_dec_2.pin_mut());
+    _cc.DecryptByPrivateKeyAndCiphertext(_key_pair.GetPrivateKey(), &_result_2, _plain_text_dec_2.pin_mut());
     _plain_text_dec_2.SetLength(_encoded_length);
 
     println!("\n Original Plaintext #1:");

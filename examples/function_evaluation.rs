@@ -2,12 +2,12 @@
 use openfhe::cxx::{CxxVector, SharedPtr};
 use openfhe::ffi as ffi;
 
-// Example of evaluating arbitrary smooth functions with the Chebyshev approximation using CKKS.
+
 // In this example, we evaluate the logistic function 1 / (1 + exp(-x)) on an input of doubles
 
 fn EvalLogisticExample()
 {
-    println!("--------------------------------- EVAL LOGISTIC FUNCTION ---------------------------------");
+    println!("\n--------------------------------- EVALUATION LOGISTIC FUNCTION EXAMPLE ---------------------------------\n");
     let mut _cc_params_ckksrns = ffi::GetParamsCKKSRNS();
 
     // We set a smaller ring dimension to improve performance for this example.
