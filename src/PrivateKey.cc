@@ -5,9 +5,6 @@
 namespace openfhe
 {
 
-PrivateKeyDCRTPoly::PrivateKeyDCRTPoly()
-    : m_privateKey(std::make_shared<PrivateKeyImpl>())
-{ }
 PrivateKeyDCRTPoly::PrivateKeyDCRTPoly(const std::shared_ptr<PrivateKeyImpl>& privateKey)
     : m_privateKey(privateKey)
 { }

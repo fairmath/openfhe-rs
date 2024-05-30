@@ -11,7 +11,6 @@ class LWEPrivateKey final
 {
     std::shared_ptr<LWEPrivateKeyImpl> m_lwePrivateKey;
 public:
-    explicit LWEPrivateKey();
     explicit LWEPrivateKey(const std::shared_ptr<LWEPrivateKeyImpl>& lwePrivateKey);
     LWEPrivateKey(const LWEPrivateKey&) = delete;
     LWEPrivateKey(LWEPrivateKey&&) = delete;

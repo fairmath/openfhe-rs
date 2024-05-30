@@ -945,7 +945,7 @@ std::unique_ptr<std::vector<uint32_t>> GetUniqueValues(const std::vector<uint32_
     return std::make_unique<std::vector<uint32_t>>(CryptoContextImpl::GetUniqueValues(oldValues,
         newValues));
 }
-std::unique_ptr<CryptoContextDCRTPoly> GenEmptyCryptoContext()
+std::unique_ptr<CryptoContextDCRTPoly> GenNullCryptoContext()
 {
     return std::make_unique<CryptoContextDCRTPoly>();
 }

@@ -12,7 +12,6 @@ class PrivateKeyDCRTPoly final
 {
     std::shared_ptr<PrivateKeyImpl> m_privateKey;
 public:
-    explicit PrivateKeyDCRTPoly();
     explicit PrivateKeyDCRTPoly(const std::shared_ptr<PrivateKeyImpl>& privateKey);
     PrivateKeyDCRTPoly(const PrivateKeyDCRTPoly&) = delete;
     PrivateKeyDCRTPoly(PrivateKeyDCRTPoly&&) = delete;

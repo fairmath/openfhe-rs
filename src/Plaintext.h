@@ -18,7 +18,7 @@ class Plaintext final
 {
     std::shared_ptr<PlaintextImpl> m_plaintext;
 public:
-    explicit Plaintext() = default;
+    Plaintext() = default;
     explicit Plaintext(const std::shared_ptr<PlaintextImpl>& plaintext);
     Plaintext(const Plaintext&) = delete;
     Plaintext(Plaintext&&) = delete;
@@ -56,6 +56,6 @@ public:
     [[nodiscard]] const std::vector<int64_t>& GetCoefPackedValue() const;
     [[nodiscard]] const std::string& GetStringValue() const;
 };
-[[nodiscard]] std::unique_ptr<Plaintext> GenEmptyPlainText();
+[[nodiscard]] std::unique_ptr<Plaintext> GenNullPlainText();
 
 } // openfhe

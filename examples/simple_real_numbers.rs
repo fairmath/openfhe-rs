@@ -7,7 +7,7 @@ fn main()
     let _scale_mod_size: u32 = 50;
     let _batch_size: u32 = 8;
 
-    let mut _cc_params_ckksrns = ffi::GetParamsCKKSRNS();
+    let mut _cc_params_ckksrns = ffi::GenParamsCKKSRNS();
     _cc_params_ckksrns.pin_mut().SetMultiplicativeDepth(_mult_depth);
     _cc_params_ckksrns.pin_mut().SetScalingModSize(_scale_mod_size);
     _cc_params_ckksrns.pin_mut().SetBatchSize(_batch_size);
@@ -62,7 +62,7 @@ fn main()
     let _c_rot_1 = _cc.EvalRotate(&_c1, 1);
     let _c_rot_2 = _cc.EvalRotate(&_c1, -2);
 
-    let mut _result = ffi::GenEmptyPlainText();
+    let mut _result = ffi::GenNullPlainText();
     println!("\nResults of homomorphic computations:");
 
     _cc.DecryptByPrivateKeyAndCiphertext(&_key_pair.GetPrivateKey(), &_c1, _result.pin_mut());

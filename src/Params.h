@@ -26,17 +26,17 @@ using ParamsBFVRNS = lbcrypto::CCParams<lbcrypto::CryptoContextBFVRNS>;
 using ParamsBGVRNS = lbcrypto::CCParams<lbcrypto::CryptoContextBGVRNS>;
 using ParamsCKKSRNS = lbcrypto::CCParams<lbcrypto::CryptoContextCKKSRNS>;
 
-[[nodiscard]] std::unique_ptr<Params> GetParamsByScheme(const SCHEME scheme);
-[[nodiscard]] std::unique_ptr<Params> GetParamsByVectorOfString(
+[[nodiscard]] std::unique_ptr<Params> GenParamsByScheme(const SCHEME scheme);
+[[nodiscard]] std::unique_ptr<Params> GenParamsByVectorOfString(
     const std::vector<std::string>& vals);
-[[nodiscard]] std::unique_ptr<ParamsBFVRNS> GetParamsBFVRNS();
-[[nodiscard]] std::unique_ptr<ParamsBFVRNS> GetParamsBFVRNSbyVectorOfString(
+[[nodiscard]] std::unique_ptr<ParamsBFVRNS> GenParamsBFVRNS();
+[[nodiscard]] std::unique_ptr<ParamsBFVRNS> GenParamsBFVRNSbyVectorOfString(
     const std::vector<std::string>& vals);
-[[nodiscard]] std::unique_ptr<ParamsBGVRNS> GetParamsBGVRNS();
-[[nodiscard]] std::unique_ptr<ParamsBGVRNS> GetParamsBGVRNSbyVectorOfString(
+[[nodiscard]] std::unique_ptr<ParamsBGVRNS> GenParamsBGVRNS();
+[[nodiscard]] std::unique_ptr<ParamsBGVRNS> GenParamsBGVRNSbyVectorOfString(
     const std::vector<std::string>& vals);
-[[nodiscard]] std::unique_ptr<ParamsCKKSRNS> GetParamsCKKSRNS();
-[[nodiscard]] std::unique_ptr<ParamsCKKSRNS> GetParamsCKKSRNSbyVectorOfString(
+[[nodiscard]] std::unique_ptr<ParamsCKKSRNS> GenParamsCKKSRNS();
+[[nodiscard]] std::unique_ptr<ParamsCKKSRNS> GenParamsCKKSRNSbyVectorOfString(
     const std::vector<std::string>& vals);
 
 } // openfhe

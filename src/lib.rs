@@ -196,8 +196,8 @@ pub mod ffi
     // Params
     unsafe extern "C++"
     {
-        fn GetParamsByScheme(scheme: SCHEME) -> UniquePtr<Params>;
-        fn GetParamsByVectorOfString(vals: &CxxVector<CxxString>) -> UniquePtr<Params>;
+        fn GenParamsByScheme(scheme: SCHEME) -> UniquePtr<Params>;
+        fn GenParamsByVectorOfString(vals: &CxxVector<CxxString>) -> UniquePtr<Params>;
 
         // getters
         fn GetScheme(self: &Params) -> SCHEME;
@@ -269,8 +269,8 @@ pub mod ffi
     // ParamsBFVRNS
     unsafe extern "C++"
     {
-        fn GetParamsBFVRNS() -> UniquePtr<ParamsBFVRNS>;
-        fn GetParamsBFVRNSbyVectorOfString(vals: &CxxVector<CxxString>) -> UniquePtr<ParamsBFVRNS>;
+        fn GenParamsBFVRNS() -> UniquePtr<ParamsBFVRNS>;
+        fn GenParamsBFVRNSbyVectorOfString(vals: &CxxVector<CxxString>) -> UniquePtr<ParamsBFVRNS>;
         // getters
         fn GetScheme(self: &ParamsBFVRNS) -> SCHEME;
         fn GetPlaintextModulus(self: &ParamsBFVRNS) -> u64;
@@ -341,8 +341,8 @@ pub mod ffi
     // ParamsBGVRNS
     unsafe extern "C++"
     {
-        fn GetParamsBGVRNS() -> UniquePtr<ParamsBGVRNS>;
-        fn GetParamsBGVRNSbyVectorOfString(vals: &CxxVector<CxxString>) -> UniquePtr<ParamsBGVRNS>;
+        fn GenParamsBGVRNS() -> UniquePtr<ParamsBGVRNS>;
+        fn GenParamsBGVRNSbyVectorOfString(vals: &CxxVector<CxxString>) -> UniquePtr<ParamsBGVRNS>;
         // getters
         fn GetScheme(self: &ParamsBGVRNS) -> SCHEME;
         fn GetPlaintextModulus(self: &ParamsBGVRNS) -> u64;
@@ -413,8 +413,8 @@ pub mod ffi
     // ParamsCKKSRNS
     unsafe extern "C++"
     {
-        fn GetParamsCKKSRNS() -> UniquePtr<ParamsCKKSRNS>;
-        fn GetParamsCKKSRNSbyVectorOfString(vals: &CxxVector<CxxString>)
+        fn GenParamsCKKSRNS() -> UniquePtr<ParamsCKKSRNS>;
+        fn GenParamsCKKSRNSbyVectorOfString(vals: &CxxVector<CxxString>)
                                             -> UniquePtr<ParamsCKKSRNS>;
         // getters
         fn GetScheme(self: &ParamsCKKSRNS) -> SCHEME;
@@ -486,7 +486,6 @@ pub mod ffi
     // PublicKeyDCRTPoly
     unsafe extern "C++"
     {
-        fn GenDefaultConstructedPublicKey() -> UniquePtr<PublicKeyDCRTPoly>;
         fn GenNullPublicKey() -> UniquePtr<PublicKeyDCRTPoly>;
     }
 
@@ -500,7 +499,7 @@ pub mod ffi
     // Plaintext
     unsafe extern "C++"
     {
-        fn GenEmptyPlainText() -> UniquePtr<Plaintext>;
+        fn GenNullPlainText() -> UniquePtr<Plaintext>;
         fn SetLength(self: &Plaintext, newSize: usize);
         fn GetString(self: &Plaintext) -> String;
         fn GetLogPrecision(self: &Plaintext) -> f64;
@@ -533,13 +532,13 @@ pub mod ffi
     // CiphertextDCRTPoly
     unsafe extern "C++"
     {
-        fn GenDefaultConstructedCiphertext() -> UniquePtr<CiphertextDCRTPoly>;
+        fn GenNullCiphertext() -> UniquePtr<CiphertextDCRTPoly>;
     }
 
     // CryptoContextDCRTPoly
     unsafe extern "C++"
     {
-        fn GenEmptyCryptoContext() -> UniquePtr<CryptoContextDCRTPoly>;
+        fn GenNullCryptoContext() -> UniquePtr<CryptoContextDCRTPoly>;
         fn GenCryptoContextByParamsBFVRNS(params: &ParamsBFVRNS)
                                           -> UniquePtr<CryptoContextDCRTPoly>;
         fn GenCryptoContextByParamsBGVRNS(params: &ParamsBGVRNS)
@@ -952,7 +951,7 @@ mod tests
     #[test]
     fn SimpleIntegersExample()
     {
-        let mut _cc_params_bfvrns = ffi::GetParamsBFVRNS();
+        let mut _cc_params_bfvrns = ffi::GenParamsBFVRNS();
         _cc_params_bfvrns.pin_mut().SetPlaintextModulus(65537);
         _cc_params_bfvrns.pin_mut().SetMultiplicativeDepth(2);
 
@@ -1031,17 +1030,17 @@ mod tests
         let _cipher_text_rot_3 = _cc.EvalRotate(&_cipher_text_1, -1);
         let _cipher_text_rot_4 = _cc.EvalRotate(&_cipher_text_1, -2);
 
-        let mut _plain_text_add_result = ffi::GenEmptyPlainText();
+        let mut _plain_text_add_result = ffi::GenNullPlainText();
         _cc.DecryptByPrivateKeyAndCiphertext(&_key_pair.GetPrivateKey(), &_cipher_text_add_result, _plain_text_add_result.pin_mut());
-        let mut _plain_text_mult_result = ffi::GenEmptyPlainText();
+        let mut _plain_text_mult_result = ffi::GenNullPlainText();
         _cc.DecryptByPrivateKeyAndCiphertext(&_key_pair.GetPrivateKey(), &_cipher_text_mult_result, _plain_text_mult_result.pin_mut());
-        let mut _plain_text_rot_1 = ffi::GenEmptyPlainText();
+        let mut _plain_text_rot_1 = ffi::GenNullPlainText();
         _cc.DecryptByPrivateKeyAndCiphertext(&_key_pair.GetPrivateKey(), &_cipher_text_rot_1, _plain_text_rot_1.pin_mut());
-        let mut _plain_text_rot_2 = ffi::GenEmptyPlainText();
+        let mut _plain_text_rot_2 = ffi::GenNullPlainText();
         _cc.DecryptByPrivateKeyAndCiphertext(&_key_pair.GetPrivateKey(), &_cipher_text_rot_2, _plain_text_rot_2.pin_mut());
-        let mut _plain_text_rot_3 = ffi::GenEmptyPlainText();
+        let mut _plain_text_rot_3 = ffi::GenNullPlainText();
         _cc.DecryptByPrivateKeyAndCiphertext(&_key_pair.GetPrivateKey(), &_cipher_text_rot_3, _plain_text_rot_3.pin_mut());
-        let mut _plain_text_rot_4 = ffi::GenEmptyPlainText();
+        let mut _plain_text_rot_4 = ffi::GenNullPlainText();
         _cc.DecryptByPrivateKeyAndCiphertext(&_key_pair.GetPrivateKey(), &_cipher_text_rot_4, _plain_text_rot_4.pin_mut());
 
         _plain_text_rot_1.SetLength(_vector_of_ints_1.len());
@@ -1069,7 +1068,7 @@ mod tests
         let _scale_mod_size: u32 = 50;
         let _batch_size: u32 = 8;
 
-        let mut _cc_params_ckksrns = ffi::GetParamsCKKSRNS();
+        let mut _cc_params_ckksrns = ffi::GenParamsCKKSRNS();
         _cc_params_ckksrns.pin_mut().SetMultiplicativeDepth(_mult_depth);
         _cc_params_ckksrns.pin_mut().SetScalingModSize(_scale_mod_size);
         _cc_params_ckksrns.pin_mut().SetBatchSize(_batch_size);
@@ -1124,7 +1123,7 @@ mod tests
         let _c_rot_1 = _cc.EvalRotate(&_c1, 1);
         let _c_rot_2 = _cc.EvalRotate(&_c1, -2);
 
-        let mut _result = ffi::GenEmptyPlainText();
+        let mut _result = ffi::GenNullPlainText();
         println!("\nResults of homomorphic computations:");
 
         _cc.DecryptByPrivateKeyAndCiphertext(&_key_pair.GetPrivateKey(), &_c1, _result.pin_mut());
@@ -1163,7 +1162,7 @@ mod tests
         use std::time::Instant;
         println!("\n======EXAMPLE FOR EVALPOLY========\n");
 
-        let mut _cc_params_ckksrns = ffi::GetParamsCKKSRNS();
+        let mut _cc_params_ckksrns = ffi::GenParamsCKKSRNS();
         _cc_params_ckksrns.pin_mut().SetMultiplicativeDepth(6);
         _cc_params_ckksrns.pin_mut().SetScalingModSize(50);
 
@@ -1247,10 +1246,10 @@ mod tests
         let _result_2 = _cc.EvalPoly(&_cipher_text_1, &_coefficients_2);
         let _time_eval_poly_2 = _start.elapsed();
 
-        let mut _plain_text_dec = ffi::GenEmptyPlainText();
+        let mut _plain_text_dec = ffi::GenNullPlainText();
         _cc.DecryptByPrivateKeyAndCiphertext(&_key_pair.GetPrivateKey(), &_result, _plain_text_dec.pin_mut());
         _plain_text_dec.SetLength(_encoded_length);
-        let mut _plain_text_dec_2 = ffi::GenEmptyPlainText();
+        let mut _plain_text_dec_2 = ffi::GenNullPlainText();
         _cc.DecryptByPrivateKeyAndCiphertext(&_key_pair.GetPrivateKey(), &_result_2, _plain_text_dec_2.pin_mut());
         _plain_text_dec_2.SetLength(_encoded_length);
 

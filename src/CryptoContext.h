@@ -67,7 +67,7 @@ public:
     friend bool SerializeEvalAutomorphismKeyToFile(const std::string& automorphismKeyLocation,
         const CryptoContextDCRTPoly& cryptoContext, const SerialMode serialMode);
 
-    explicit CryptoContextDCRTPoly() = default;
+    CryptoContextDCRTPoly() = default;
     explicit CryptoContextDCRTPoly(const ParamsBFVRNS& params);
     explicit CryptoContextDCRTPoly(const ParamsBGVRNS& params);
     explicit CryptoContextDCRTPoly(const ParamsCKKSRNS& params);
@@ -387,7 +387,7 @@ void ClearEvalAutomorphismKeysByCryptoContext(const CryptoContextDCRTPoly& crypt
 [[nodiscard]] std::unique_ptr<std::vector<uint32_t>> GetUniqueValues(
     const std::vector<uint32_t>& oldValues, const std::vector<uint32_t>& newValues);
 
-[[nodiscard]] std::unique_ptr<CryptoContextDCRTPoly> GenEmptyCryptoContext();
+[[nodiscard]] std::unique_ptr<CryptoContextDCRTPoly> GenNullCryptoContext();
 [[nodiscard]] std::unique_ptr<CryptoContextDCRTPoly> GenCryptoContextByParamsBFVRNS(
     const ParamsBFVRNS& params);
 [[nodiscard]] std::unique_ptr<CryptoContextDCRTPoly> GenCryptoContextByParamsBGVRNS(

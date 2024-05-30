@@ -5,7 +5,7 @@ use openfhe::ffi as ffi;
 fn EvalLogisticExample()
 {
     println!("--------------------------------- EVAL LOGISTIC FUNCTION ---------------------------------");
-    let mut _cc_params_ckksrns = ffi::GetParamsCKKSRNS();
+    let mut _cc_params_ckksrns = ffi::GenParamsCKKSRNS();
     _cc_params_ckksrns.pin_mut().SetSecurityLevel(ffi::SecurityLevel::HEStd_NotSet);
     _cc_params_ckksrns.pin_mut().SetRingDim(1 << 10);
     // #if NATIVEINT == 128
@@ -45,7 +45,7 @@ fn EvalLogisticExample()
     let _upper_bound: f64 = 5.0;
     let _result = _cc.EvalLogistic(&_cipher_text, _lower_bound, _upper_bound, _poly_degree);
 
-    let mut _plain_text_dec = ffi::GenEmptyPlainText();
+    let mut _plain_text_dec = ffi::GenNullPlainText();
     _cc.DecryptByPrivateKeyAndCiphertext(&_key_pair.GetPrivateKey(), &_result, _plain_text_dec.pin_mut());
     _plain_text_dec.SetLength(_encoded_length);
 
@@ -73,7 +73,7 @@ fn GetSqrt(x: f64, ret: &mut f64)
 fn EvalFunctionExample()
 {
     println!("--------------------------------- EVAL SQUARE ROOT FUNCTION ---------------------------------");
-    let mut _cc_params_ckksrns = ffi::GetParamsCKKSRNS();
+    let mut _cc_params_ckksrns = ffi::GenParamsCKKSRNS();
     _cc_params_ckksrns.pin_mut().SetSecurityLevel(ffi::SecurityLevel::HEStd_NotSet);
     _cc_params_ckksrns.pin_mut().SetRingDim(1 << 10);
     // #if NATIVEINT == 128
@@ -113,7 +113,7 @@ fn EvalFunctionExample()
     let _upper_bound: f64 = 10.0;
     let _result = _cc.EvalChebyshevFunction(GetSqrt, &_cipher_text, _lower_bound, _upper_bound, _poly_degree);
 
-    let mut _plain_text_dec = ffi::GenEmptyPlainText();
+    let mut _plain_text_dec = ffi::GenNullPlainText();
     _cc.DecryptByPrivateKeyAndCiphertext(&_key_pair.GetPrivateKey(), &_result, _plain_text_dec.pin_mut());
     _plain_text_dec.SetLength(_encoded_length);
 

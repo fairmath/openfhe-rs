@@ -19,7 +19,7 @@ public:
     friend bool DeserializeCiphertextFromFile(const std::string& ciphertextLocation,
         CiphertextDCRTPoly& ciphertext, const SerialMode serialMode);
 
-    explicit CiphertextDCRTPoly();
+    CiphertextDCRTPoly() = default;
     explicit CiphertextDCRTPoly(const std::shared_ptr<CiphertextImpl>& ciphertext);
     CiphertextDCRTPoly(const CiphertextDCRTPoly&) = delete;
     CiphertextDCRTPoly(CiphertextDCRTPoly&&) = delete;
@@ -28,6 +28,6 @@ public:
 
     [[nodiscard]] std::shared_ptr<CiphertextImpl> GetInternal() const;
 };
-[[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> GenDefaultConstructedCiphertext();
+[[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> GenNullCiphertext();
 
 } // openfhe

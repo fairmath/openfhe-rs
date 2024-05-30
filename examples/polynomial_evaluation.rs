@@ -6,7 +6,7 @@ fn main()
     use std::time::Instant;
     println!("\n======EXAMPLE FOR EVALPOLY========\n");
 
-    let mut _cc_params_ckksrns = ffi::GetParamsCKKSRNS();
+    let mut _cc_params_ckksrns = ffi::GenParamsCKKSRNS();
     _cc_params_ckksrns.pin_mut().SetMultiplicativeDepth(6);
     _cc_params_ckksrns.pin_mut().SetScalingModSize(50);
 
@@ -90,10 +90,10 @@ fn main()
     let _result_2 = _cc.EvalPoly(&_cipher_text_1, &_coefficients_2);
     let _time_eval_poly_2 = _start.elapsed();
 
-    let mut _plain_text_dec = ffi::GenEmptyPlainText();
+    let mut _plain_text_dec = ffi::GenNullPlainText();
     _cc.DecryptByPrivateKeyAndCiphertext(&_key_pair.GetPrivateKey(), &_result, _plain_text_dec.pin_mut());
     _plain_text_dec.SetLength(_encoded_length);
-    let mut _plain_text_dec_2 = ffi::GenEmptyPlainText();
+    let mut _plain_text_dec_2 = ffi::GenNullPlainText();
     _cc.DecryptByPrivateKeyAndCiphertext(&_key_pair.GetPrivateKey(), &_result_2, _plain_text_dec_2.pin_mut());
     _plain_text_dec_2.SetLength(_encoded_length);
 
