@@ -2,6 +2,9 @@
 
 #include "openfhe/pke/key/keypair.h"
 
+#include "PublicKey.h"
+#include "PrivateKey.h"
+
 namespace openfhe
 {
 
@@ -9,13 +12,13 @@ KeyPairDCRTPoly::KeyPairDCRTPoly(const KeyPair& keyPair)
     : m_publicKey(keyPair.publicKey)
     , m_privateKey(keyPair.secretKey)
 { }
-std::shared_ptr<PublicKeyImpl> KeyPairDCRTPoly::GetPublicKey() const
+std::unique_ptr<PublicKeyDCRTPoly> KeyPairDCRTPoly::GetPublicKey() const
 {
-    return m_publicKey;
+    return std::make_unique<PublicKeyDCRTPoly>(m_publicKey);
 }
-std::shared_ptr<PrivateKeyImpl> KeyPairDCRTPoly::GetPrivateKey() const
+std::unique_ptr<PrivateKeyDCRTPoly> KeyPairDCRTPoly::GetPrivateKey() const
 {
-    return m_privateKey;
+    return std::make_unique<PrivateKeyDCRTPoly>(m_privateKey);
 }
 
 } // openfhe

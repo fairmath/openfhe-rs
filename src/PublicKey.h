@@ -20,7 +20,9 @@ public:
         PublicKeyDCRTPoly& publicKey, const SerialMode serialMode);
 
     explicit PublicKeyDCRTPoly();
+    explicit PublicKeyDCRTPoly(const std::nullptr_t);
     explicit PublicKeyDCRTPoly(const std::shared_ptr<PublicKeyImpl>& publicKey);
+
     PublicKeyDCRTPoly(const PublicKeyDCRTPoly&) = delete;
     PublicKeyDCRTPoly(PublicKeyDCRTPoly&&) = delete;
     PublicKeyDCRTPoly& operator=(const PublicKeyDCRTPoly&) = delete;
@@ -29,5 +31,6 @@ public:
     [[nodiscard]] std::shared_ptr<PublicKeyImpl> GetInternal() const;
 };
 [[nodiscard]] std::unique_ptr<PublicKeyDCRTPoly> GenDefaultConstructedPublicKey();
+[[nodiscard]] std::unique_ptr<PublicKeyDCRTPoly> GenNullPublicKey();
 
 } // openfhe

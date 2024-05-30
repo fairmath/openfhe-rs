@@ -30,6 +30,7 @@ namespace openfhe
 struct ComplexPair;
 
 class KeyPairDCRTPoly;
+class PrivateKeyDCRTPoly;
 class PublicKeyDCRTPoly;
 class Plaintext;
 class CiphertextDCRTPoly;
@@ -94,14 +95,14 @@ public:
         const PublicKeyDCRTPoly& publicKey1, const PublicKeyDCRTPoly& publicKey2,
         const std::string& keyId /* "" */) const;
     [[nodiscard]] std::unique_ptr<KeyPairDCRTPoly> SparseKeyGen() const;
-    void EvalMultKeyGen(const std::shared_ptr<PrivateKeyImpl> key) const;
-    void EvalMultKeysGen(const std::shared_ptr<PrivateKeyImpl> key) const;
-    void EvalRotateKeyGen(const std::shared_ptr<PrivateKeyImpl> privateKey,
+    void EvalMultKeyGen(const PrivateKeyDCRTPoly& key) const;
+    void EvalMultKeysGen(const PrivateKeyDCRTPoly& key) const;
+    void EvalRotateKeyGen(const PrivateKeyDCRTPoly& privateKey,
         const std::vector<int32_t>& indexList,
-        const std::shared_ptr<PublicKeyImpl> publicKey /* nullptr */) const;
-    void EvalAtIndexKeyGen(const std::shared_ptr<PrivateKeyImpl> privateKey,
+        const PublicKeyDCRTPoly& publicKey /* GenNullPublicKey() */) const;
+    void EvalAtIndexKeyGen(const PrivateKeyDCRTPoly& privateKey,
         const std::vector<int32_t>& indexList,
-        const std::shared_ptr<PublicKeyImpl> publicKey /* nullptr */) const;
+        const PublicKeyDCRTPoly& publicKey /* GenNullPublicKey() */) const;
     void EvalCKKStoFHEWPrecompute(const double scale /* 1.0 */) const;
     [[nodiscard]] uint32_t GetRingDimension() const;
     [[nodiscard]] uint32_t GetCyclotomicOrder() const;
@@ -110,9 +111,9 @@ public:
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalCos(const CiphertextDCRTPoly& ciphertext,
         const double a, const double b, const uint32_t degree) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EncryptByPublicKey(
-        const std::shared_ptr<PublicKeyImpl> publicKey, const Plaintext& plaintext) const;
+        const PublicKeyDCRTPoly& publicKey, const Plaintext& plaintext) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EncryptByPrivateKey(
-        const std::shared_ptr<PrivateKeyImpl> privateKey, const Plaintext& plaintext) const;
+        const PrivateKeyDCRTPoly& privateKey, const Plaintext& plaintext) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalAddByCiphertexts(
         const CiphertextDCRTPoly& ciphertext1, const CiphertextDCRTPoly& ciphertext2) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalAddByCiphertextAndPlaintext(
@@ -261,14 +262,13 @@ public:
     void EvalBootstrapSetup(const std::vector<uint32_t>& levelBudget /* {5, 4} */,
         const std::vector<uint32_t>& dim1 /* {0, 0} */, const uint32_t slots /* 0 */,
         const uint32_t correctionFactor /* 0 */, const bool precompute /* true */) const;
-    void EvalBootstrapKeyGen(const std::shared_ptr<PrivateKeyImpl> privateKey,
-        const uint32_t slots) const;
+    void EvalBootstrapKeyGen(const PrivateKeyDCRTPoly& privateKey, const uint32_t slots) const;
     void EvalBootstrapPrecompute(const uint32_t slots /* 0 */) const;
     [[nodiscard]] std::unique_ptr<DecryptResult> DecryptByPrivateKeyAndCiphertext(
-        const std::shared_ptr<PrivateKeyImpl> privateKey, const CiphertextDCRTPoly& ciphertext,
+        const PrivateKeyDCRTPoly& privateKey, const CiphertextDCRTPoly& ciphertext,
         Plaintext& plaintext) const;
     [[nodiscard]] std::unique_ptr<DecryptResult> DecryptByCiphertextAndPrivateKey(
-        const CiphertextDCRTPoly& ciphertext, const std::shared_ptr<PrivateKeyImpl> privateKey,
+        const CiphertextDCRTPoly& ciphertext, const PrivateKeyDCRTPoly& privateKey,
         Plaintext& plaintext) const;
     [[nodiscard]] std::unique_ptr<Plaintext> MakePackedPlaintext(
         const std::vector<int64_t>& value, const size_t noiseScaleDeg /* 1 */,
@@ -304,27 +304,25 @@ public:
         const size_t levels /* 1 */) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> ReEncrypt(
         const CiphertextDCRTPoly& ciphertext, const EvalKeyDCRTPoly& evalKey,
-        const std::shared_ptr<PublicKeyImpl> publicKey /* nullptr */) const;
+        const PublicKeyDCRTPoly& publicKey /* GenNullPublicKey() */) const;
     [[nodiscard]] std::unique_ptr<EvalKeyDCRTPoly> KeySwitchGen(
-        const std::shared_ptr<PrivateKeyImpl> oldPrivateKey,
-        const std::shared_ptr<PrivateKeyImpl> newPrivateKey) const;
-    [[nodiscard]] std::unique_ptr<EvalKeyDCRTPoly> ReKeyGen(
-        const std::shared_ptr<PrivateKeyImpl> oldPrivateKey,
-        const std::shared_ptr<PublicKeyImpl> newPublicKey) const;
+        const PrivateKeyDCRTPoly& oldPrivateKey, const PrivateKeyDCRTPoly& newPrivateKey) const;
+    [[nodiscard]] std::unique_ptr<EvalKeyDCRTPoly> ReKeyGen(const PrivateKeyDCRTPoly& oldPrivateKey,
+        const PublicKeyDCRTPoly& newPublicKey) const;
     [[nodiscard]] std::unique_ptr<EvalKeyDCRTPoly> MultiKeySwitchGen(
-        const std::shared_ptr<PrivateKeyImpl> originalPrivateKey,
-        const std::shared_ptr<PrivateKeyImpl> newPrivateKey, const EvalKeyDCRTPoly& evalKey) const;
+        const PrivateKeyDCRTPoly& originalPrivateKey, const PrivateKeyDCRTPoly& newPrivateKey,
+        const EvalKeyDCRTPoly& evalKey) const;
     [[nodiscard]] std::unique_ptr<EvalKeyDCRTPoly> MultiAddEvalKeys(
         const EvalKeyDCRTPoly& evalKey1, const EvalKeyDCRTPoly& evalKey2,
         const std::string& keyId /* "" */) const;
     [[nodiscard]] std::unique_ptr<EvalKeyDCRTPoly> MultiMultEvalKey(
-        const std::shared_ptr<PrivateKeyImpl> privateKey, const EvalKeyDCRTPoly& evalKey,
+        const PrivateKeyDCRTPoly& privateKey, const EvalKeyDCRTPoly& evalKey,
         const std::string& keyId /* "" */) const;
     [[nodiscard]] std::unique_ptr<EvalKeyDCRTPoly> MultiAddEvalMultKeys(
         const EvalKeyDCRTPoly& evalKey1, const EvalKeyDCRTPoly& evalKey2,
         const std::string& keyId /* "" */) const;
-    void EvalSumKeyGen(const std::shared_ptr<PrivateKeyImpl> privateKey,
-        const std::shared_ptr<PublicKeyImpl> publicKey /* nullptr */) const;
+    void EvalSumKeyGen(const PrivateKeyDCRTPoly& privateKey,
+        const PublicKeyDCRTPoly& publicKey /* GenNullPublicKey() */) const;
     void EvalCKKStoFHEWKeyGen(const KeyPairDCRTPoly& keyPair, const LWEPrivateKey& lwesk) const;
     void EvalFHEWtoCKKSKeyGen(const KeyPairDCRTPoly& keyPair, const LWEPrivateKey& lwesk,
         const uint32_t numSlots /* 0 */, const uint32_t numCtxts /* 0 */,
@@ -334,13 +332,11 @@ public:
     [[nodiscard]] uint64_t GetModulus() const;
     [[nodiscard]] uint64_t GetRootOfUnity() const;
     [[nodiscard]] std::unique_ptr<VectorOfCiphertexts> MultipartyDecryptLead(
-        const VectorOfCiphertexts& ciphertextVec,
-        const std::shared_ptr<PrivateKeyImpl> privateKey) const;
+        const VectorOfCiphertexts& ciphertextVec, const PrivateKeyDCRTPoly& privateKey) const;
     [[nodiscard]] std::unique_ptr<VectorOfCiphertexts> MultipartyDecryptMain(
-        const VectorOfCiphertexts& ciphertextVec,
-        const std::shared_ptr<PrivateKeyImpl> privateKey) const;
+        const VectorOfCiphertexts& ciphertextVec, const PrivateKeyDCRTPoly& privateKey) const;
     [[nodiscard]] std::unique_ptr<VectorOfCiphertexts> IntMPBootDecrypt(
-        const std::shared_ptr<PrivateKeyImpl> privateKey, const CiphertextDCRTPoly& ciphertext,
+        const PrivateKeyDCRTPoly& privateKey, const CiphertextDCRTPoly& ciphertext,
         const CiphertextDCRTPoly& a) const;
     [[nodiscard]] std::unique_ptr<VectorOfCiphertexts> EvalMinSchemeSwitching(
         const CiphertextDCRTPoly& ciphertext, const PublicKeyDCRTPoly& publicKey,

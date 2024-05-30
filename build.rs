@@ -6,6 +6,7 @@ fn main()
         .file("src/KeyPair.cc")
         .file("src/Params.cc")
         .file("src/Plaintext.cc")
+        .file("src/PrivateKey.cc")
         .file("src/PublicKey.cc")
         .file("src/SerialDeserial.cc")
         .file("src/EvalKey.cc")
@@ -38,6 +39,8 @@ fn main()
     println!("cargo::rerun-if-changed=src/Params.cc");
     println!("cargo::rerun-if-changed=src/Plaintext.h");
     println!("cargo::rerun-if-changed=src/Plaintext.cc");
+    println!("cargo::rerun-if-changed=src/PrivateKey.h");
+    println!("cargo::rerun-if-changed=src/PrivateKey.cc");
     println!("cargo::rerun-if-changed=src/PublicKey.h");
     println!("cargo::rerun-if-changed=src/PublicKey.cc");
     println!("cargo::rerun-if-changed=src/SerialDeserial.h");

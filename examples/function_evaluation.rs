@@ -26,7 +26,7 @@ fn EvalLogisticExample()
     _cc.Enable(ffi::PKESchemeFeature::ADVANCEDSHE);
 
     let _key_pair = _cc.KeyGen();
-    _cc.EvalMultKeyGen(_key_pair.GetPrivateKey());
+    _cc.EvalMultKeyGen(&_key_pair.GetPrivateKey());
 
     let mut _input = CxxVector::<ffi::ComplexPair>::new();
     _input.pin_mut().push(ffi::ComplexPair{re: -4.0, im: 0.0});
@@ -40,13 +40,13 @@ fn EvalLogisticExample()
     _input.pin_mut().push(ffi::ComplexPair{re: 4.0, im: 0.0});
     let _encoded_length: usize = _input.len();
     let _plain_text = _cc.MakeCKKSPackedPlaintextByVectorOfComplex(&_input, 1, 0, SharedPtr::<ffi::DCRTPolyParams>::null(), 0);
-    let _cipher_text = _cc.EncryptByPublicKey(_key_pair.GetPublicKey(), &_plain_text);
+    let _cipher_text = _cc.EncryptByPublicKey(&_key_pair.GetPublicKey(), &_plain_text);
     let _lower_bound: f64 = -5.0;
     let _upper_bound: f64 = 5.0;
     let _result = _cc.EvalLogistic(&_cipher_text, _lower_bound, _upper_bound, _poly_degree);
 
     let mut _plain_text_dec = ffi::GenEmptyPlainText();
-    _cc.DecryptByPrivateKeyAndCiphertext(_key_pair.GetPrivateKey(), &_result, _plain_text_dec.pin_mut());
+    _cc.DecryptByPrivateKeyAndCiphertext(&_key_pair.GetPrivateKey(), &_result, _plain_text_dec.pin_mut());
     _plain_text_dec.SetLength(_encoded_length);
 
     let mut _expected_output = CxxVector::<ffi::ComplexPair>::new();
@@ -94,7 +94,7 @@ fn EvalFunctionExample()
     _cc.Enable(ffi::PKESchemeFeature::ADVANCEDSHE);
 
     let _key_pair = _cc.KeyGen();
-    _cc.EvalMultKeyGen(_key_pair.GetPrivateKey());
+    _cc.EvalMultKeyGen(&_key_pair.GetPrivateKey());
     let mut _input = CxxVector::<ffi::ComplexPair>::new();
     _input.pin_mut().push(ffi::ComplexPair{re: 1.0, im: 0.0});
     _input.pin_mut().push(ffi::ComplexPair{re: 2.0, im: 0.0});
@@ -108,13 +108,13 @@ fn EvalFunctionExample()
 
     let _encoded_length: usize = _input.len();
     let _plain_text = _cc.MakeCKKSPackedPlaintextByVectorOfComplex(&_input, 1, 0, SharedPtr::<ffi::DCRTPolyParams>::null(), 0);
-    let _cipher_text = _cc.EncryptByPublicKey(_key_pair.GetPublicKey(), &_plain_text);
+    let _cipher_text = _cc.EncryptByPublicKey(&_key_pair.GetPublicKey(), &_plain_text);
     let _lower_bound: f64 = 0.0;
     let _upper_bound: f64 = 10.0;
     let _result = _cc.EvalChebyshevFunction(GetSqrt, &_cipher_text, _lower_bound, _upper_bound, _poly_degree);
 
     let mut _plain_text_dec = ffi::GenEmptyPlainText();
-    _cc.DecryptByPrivateKeyAndCiphertext(_key_pair.GetPrivateKey(), &_result, _plain_text_dec.pin_mut());
+    _cc.DecryptByPrivateKeyAndCiphertext(&_key_pair.GetPrivateKey(), &_result, _plain_text_dec.pin_mut());
     _plain_text_dec.SetLength(_encoded_length);
 
     let mut _expected_output = CxxVector::<ffi::ComplexPair>::new();

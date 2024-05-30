@@ -15,6 +15,9 @@ class KeyPair;
 namespace openfhe
 {
 
+class PublicKeyDCRTPoly;
+class PrivateKeyDCRTPoly;
+
 using PublicKeyImpl = lbcrypto::PublicKeyImpl<lbcrypto::DCRTPoly>;
 using PrivateKeyImpl = lbcrypto::PrivateKeyImpl<lbcrypto::DCRTPoly>;
 using KeyPair = lbcrypto::KeyPair<lbcrypto::DCRTPoly>;
@@ -30,8 +33,8 @@ public:
     KeyPairDCRTPoly& operator=(const KeyPairDCRTPoly&) = delete;
     KeyPairDCRTPoly& operator=(KeyPairDCRTPoly&&) = delete;
 
-    [[nodiscard]] std::shared_ptr<PublicKeyImpl> GetPublicKey() const;
-    [[nodiscard]] std::shared_ptr<PrivateKeyImpl> GetPrivateKey() const;
+    [[nodiscard]] std::unique_ptr<PublicKeyDCRTPoly> GetPublicKey() const;
+    [[nodiscard]] std::unique_ptr<PrivateKeyDCRTPoly> GetPrivateKey() const;
 };
 
 } // openfhe
