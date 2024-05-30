@@ -35,6 +35,7 @@ class Plaintext;
 class CiphertextDCRTPoly;
 class EvalKeyDCRTPoly;
 class LWEPrivateKey;
+class VectorOfCiphertexts;
 
 using SCHEME = lbcrypto::SCHEME;
 using PKESchemeFeature = lbcrypto::PKESchemeFeature;
@@ -332,6 +333,47 @@ public:
         const LWEPrivateKey& lwesk) const;
     [[nodiscard]] uint64_t GetModulus() const;
     [[nodiscard]] uint64_t GetRootOfUnity() const;
+    [[nodiscard]] std::unique_ptr<VectorOfCiphertexts> MultipartyDecryptLead(
+        const VectorOfCiphertexts& ciphertextVec,
+        const std::shared_ptr<PrivateKeyImpl> privateKey) const;
+    [[nodiscard]] std::unique_ptr<VectorOfCiphertexts> MultipartyDecryptMain(
+        const VectorOfCiphertexts& ciphertextVec,
+        const std::shared_ptr<PrivateKeyImpl> privateKey) const;
+    [[nodiscard]] std::unique_ptr<VectorOfCiphertexts> IntMPBootDecrypt(
+        const std::shared_ptr<PrivateKeyImpl> privateKey, const CiphertextDCRTPoly& ciphertext,
+        const CiphertextDCRTPoly& a) const;
+    [[nodiscard]] std::unique_ptr<VectorOfCiphertexts> EvalMinSchemeSwitching(
+        const CiphertextDCRTPoly& ciphertext, const PublicKeyDCRTPoly& publicKey,
+        const uint32_t numValues /* 0 */, const uint32_t numSlots /* 0 */,
+        const uint32_t pLWE /* 0 */, const double scaleSign /* 1.0 */) const;
+    [[nodiscard]] std::unique_ptr<VectorOfCiphertexts> EvalMinSchemeSwitchingAlt(
+        const CiphertextDCRTPoly& ciphertext, const PublicKeyDCRTPoly& publicKey,
+        const uint32_t numValues /* 0 */, const uint32_t numSlots /* 0 */,
+        const uint32_t pLWE /* 0 */, const double scaleSign /* 1.0 */) const;
+    [[nodiscard]] std::unique_ptr<VectorOfCiphertexts> EvalMaxSchemeSwitching(
+        const CiphertextDCRTPoly& ciphertext, const PublicKeyDCRTPoly& publicKey,
+        const uint32_t numValues /* 0 */, const uint32_t numSlots /* 0 */,
+        const uint32_t pLWE /* 0 */, const double scaleSign /* 1.0 */) const;
+    [[nodiscard]] std::unique_ptr<VectorOfCiphertexts> EvalMaxSchemeSwitchingAlt(
+        const CiphertextDCRTPoly& ciphertext, const PublicKeyDCRTPoly& publicKey,
+        const uint32_t numValues /* 0 */, const uint32_t numSlots /* 0 */,
+        const uint32_t pLWE /* 0 */, const double scaleSign /* 1.0 */) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalAddMany(
+        const VectorOfCiphertexts& ciphertextVec) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalMultMany(
+        const VectorOfCiphertexts& ciphertextVec) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalMerge(
+        const VectorOfCiphertexts& ciphertextVec) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> IntMPBootEncrypt(
+        const PublicKeyDCRTPoly& publicKey, const VectorOfCiphertexts& sharesPair,
+        const CiphertextDCRTPoly& a, const CiphertextDCRTPoly& ciphertext) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalAddManyInPlace(
+        VectorOfCiphertexts& ciphertextVec) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalLinearWSumMutable(
+        VectorOfCiphertexts& ciphertextVec, const std::vector<double>& constantsVec) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalLinearWSumMutable(
+        const std::vector<double>& constantsVec, VectorOfCiphertexts& ciphertextVec) const;
+
     [[nodiscard]] std::shared_ptr<CryptoContextImpl> GetInternal() const;
 };
 // cxx currently does not support static class methods

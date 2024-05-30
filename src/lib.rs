@@ -155,6 +155,7 @@ pub mod ffi
         include!("openfhe/src/SerialDeserial.h");
         include!("openfhe/src/EvalKey.h");
         include!("openfhe/src/LWEPrivateKey.h");
+        include!("openfhe/src/VectorOfCiphertexts.h");
 
         type COMPRESSION_LEVEL;
         type DecryptionNoiseMode;
@@ -187,6 +188,7 @@ pub mod ffi
         type PublicKeyImpl;
         type EvalKeyDCRTPoly;
         type LWEPrivateKey;
+        type VectorOfCiphertexts;
     }
 
     // Params
@@ -843,6 +845,40 @@ pub mod ffi
                                      lwesk: &LWEPrivateKey);
         fn GetModulus(self: &CryptoContextDCRTPoly) -> u64;
         fn GetRootOfUnity(self: &CryptoContextDCRTPoly) -> u64;
+        fn MultipartyDecryptLead(self: &CryptoContextDCRTPoly, ciphertextVec: &VectorOfCiphertexts,
+                                 privateKey: SharedPtr<PrivateKeyImpl>)
+                                 -> UniquePtr<VectorOfCiphertexts>;
+        fn MultipartyDecryptMain(self: &CryptoContextDCRTPoly, ciphertextVec: &VectorOfCiphertexts,
+                                 privateKey: SharedPtr<PrivateKeyImpl>)
+                                 -> UniquePtr<VectorOfCiphertexts>;
+        fn IntMPBootDecrypt(self: &CryptoContextDCRTPoly, privateKey: SharedPtr<PrivateKeyImpl>,
+                            ciphertext: &CiphertextDCRTPoly, a: &CiphertextDCRTPoly)
+                            -> UniquePtr<VectorOfCiphertexts>;
+        fn EvalMinSchemeSwitching(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
+                                  publicKey: &PublicKeyDCRTPoly, numValues: /* 0 */ u32,
+                                  numSlots: /* 0 */ u32, pLWE: /* 0 */ u32,
+                                  scaleSign: /* 1.0 */ f64) -> UniquePtr<VectorOfCiphertexts>;
+        fn EvalMinSchemeSwitchingAlt(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
+                                     publicKey: &PublicKeyDCRTPoly, numValues: /* 0 */ u32,
+                                     numSlots: /* 0 */ u32, pLWE: /* 0 */ u32,
+                                     scaleSign: /* 1.0 */ f64) -> UniquePtr<VectorOfCiphertexts>;
+        fn EvalMaxSchemeSwitching(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
+                                  publicKey: &PublicKeyDCRTPoly, numValues: /* 0 */ u32,
+                                  numSlots: /* 0 */ u32, pLWE: /* 0 */ u32,
+                                  scaleSign: /* 1.0 */ f64) -> UniquePtr<VectorOfCiphertexts>;
+        fn EvalMaxSchemeSwitchingAlt(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
+                                     publicKey: &PublicKeyDCRTPoly, numValues: /* 0 */ u32,
+                                     numSlots: /* 0 */ u32, pLWE: /* 0 */ u32,
+                                     scaleSign: /* 1.0 */ f64) -> UniquePtr<VectorOfCiphertexts>;
+        fn EvalAddMany(self: &CryptoContextDCRTPoly, ciphertextVec: &VectorOfCiphertexts)
+                       -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalMultMany(self: &CryptoContextDCRTPoly, ciphertextVec: &VectorOfCiphertexts)
+                        -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalMerge(self: &CryptoContextDCRTPoly, ciphertextVec: &VectorOfCiphertexts)
+                     -> UniquePtr<CiphertextDCRTPoly>;
+        fn IntMPBootEncrypt(self: &CryptoContextDCRTPoly, publicKey: &PublicKeyDCRTPoly,
+                            sharesPair: &VectorOfCiphertexts, a: &CiphertextDCRTPoly,
+                            ciphertext: &CiphertextDCRTPoly) -> UniquePtr<CiphertextDCRTPoly>;
 
         // cxx currently does not support static class methods
         fn ClearEvalMultKeys();
