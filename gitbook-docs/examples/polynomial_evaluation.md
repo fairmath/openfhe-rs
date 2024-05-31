@@ -17,9 +17,9 @@ This code gives an example of how to run `EvalPoly` function and outputs in the 
 Our Rust wrapper is based on the original OpenFHE interface; `EvalPoly` function requires the following input parameters:
 
 - `ciphertext`: the ciphertext we wish to operate on.
-- `coefficients`: the coefficients to run polynomial evaluation upon, vector array of doubles.
+- `coefficients`: the coefficients to run polynomial evaluation upon, a vector array of doubles.
 In this example, we run the evaluation upon two sets of coefficients:
     1. {0.15, 0.75, 0, 1.25, 0, 0, 1, 0, 1, 2, 0, 1, 0, 0, 0, 0, 1}
     2. {1, 2, 3, 4, 5, -1, -2, -3, -4, -5, 0.1, 0.2, 0.3, 0.4, 0.5, -0.1, -0.2, -0.3, -0.4, -0.5, 0.1, 0.2, 0.3, 0.4, 0.5, -0.1, -0.2, -0.3, -0.4, -0.5}.
 
-For this example, we set the multiplicative depth at 6 and scaling mod size at 50.
+For this example, we set the multiplicative depth at 6 and the scaling mod size at 50.

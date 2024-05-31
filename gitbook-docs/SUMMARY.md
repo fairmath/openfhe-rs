@@ -17,9 +17,9 @@
 
 * [Examples](examples/examples.md)
     * [Function evaluation](examples/function_evaluation.md)
-    * [Polynomial evaluation](examples/olynomial_evaluation.md)
+    * [Polynomial evaluation](examples/polynomial_evaluation.md)
     * [Simple integers](examples/simple_integers.md)
-    * [Simple real numbers](examples/simple_integers.md)
+    * [Simple real numbers](examples/simple_real_numbers.md)
 
 <!-- ## FHE-(E)VM
 * [Collaborative FHE-(E)VM](fhe-e-vm/collaborative-fhe-e-vm.md) -->
