@@ -1,4 +1,4 @@
-#include "VectorOfCiphertexts.h"
+#include "SequenceContainerOfOpaqueTypes.h"
 
 namespace openfhe
 {
@@ -13,6 +13,14 @@ const std::vector<std::shared_ptr<CiphertextImpl>>& VectorOfCiphertexts::GetInte
 std::vector<std::shared_ptr<CiphertextImpl>>& VectorOfCiphertexts::GetInternal()
 {
     return m_ciphertexts;
+}
+
+VectorOfPrivateKeys::VectorOfPrivateKeys(std::vector<std::shared_ptr<PrivateKeyImpl>> privateKeys)
+    : m_privateKeys(std::move(privateKeys))
+{ }
+const std::vector<std::shared_ptr<PrivateKeyImpl>>& VectorOfPrivateKeys::GetInternal() const
+{
+    return m_privateKeys;
 }
 
 } // openfhe

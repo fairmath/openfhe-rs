@@ -12,6 +12,8 @@ std::shared_ptr<PublicKeyImpl> PublicKeyDCRTPoly::GetInternal() const
 {
     return m_publicKey;
 }
+
+// Generator functions
 std::unique_ptr<PublicKeyDCRTPoly> GenNullPublicKey()
 {
     return std::make_unique<PublicKeyDCRTPoly>();

@@ -136,6 +136,8 @@ const std::string& Plaintext::GetStringValue() const
 {
     return m_plaintext->GetStringValue();
 }
+
+// Generator functions
 std::unique_ptr<Plaintext> GenNullPlainText()
 {
     return std::make_unique<Plaintext>();

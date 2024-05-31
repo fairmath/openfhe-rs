@@ -29,14 +29,17 @@ namespace openfhe
 
 struct ComplexPair;
 
-class KeyPairDCRTPoly;
-class PrivateKeyDCRTPoly;
-class PublicKeyDCRTPoly;
-class Plaintext;
 class CiphertextDCRTPoly;
 class EvalKeyDCRTPoly;
+class KeyPairDCRTPoly;
 class LWEPrivateKey;
+class MapFromIndexToEvalKey;
+class Plaintext;
+class PrivateKeyDCRTPoly;
+class PublicKeyDCRTPoly;
+class UnorderedMapFromIndexToDCRTPoly;
 class VectorOfCiphertexts;
+class VectorOfPrivateKeys;
 
 using SCHEME = lbcrypto::SCHEME;
 using PKESchemeFeature = lbcrypto::PKESchemeFeature;
@@ -88,7 +91,7 @@ public:
     void Enable(const PKESchemeFeature feature) const;
     void EnableByMask(const uint32_t featureMask) const;
     [[nodiscard]] std::unique_ptr<KeyPairDCRTPoly> KeyGen() const;
-    [[nodiscard]] std::unique_ptr<KeyPairDCRTPoly> MultipartyKeyGen(
+    [[nodiscard]] std::unique_ptr<KeyPairDCRTPoly> MultipartyKeyGenByPublicKey(
         const PublicKeyDCRTPoly& publicKey, const bool makeSparse /* false */,
         const bool fresh /* false */) const;
     [[nodiscard]] std::unique_ptr<PublicKeyDCRTPoly> MultiAddPubKeys(
@@ -309,8 +312,8 @@ public:
         const PublicKeyDCRTPoly& publicKey /* GenNullPublicKey() */) const;
     [[nodiscard]] std::unique_ptr<EvalKeyDCRTPoly> KeySwitchGen(
         const PrivateKeyDCRTPoly& oldPrivateKey, const PrivateKeyDCRTPoly& newPrivateKey) const;
-    [[nodiscard]] std::unique_ptr<EvalKeyDCRTPoly> ReKeyGen(const PrivateKeyDCRTPoly& oldPrivateKey,
-        const PublicKeyDCRTPoly& newPublicKey) const;
+    [[nodiscard]] std::unique_ptr<EvalKeyDCRTPoly> ReKeyGen(
+        const PrivateKeyDCRTPoly& oldPrivateKey, const PublicKeyDCRTPoly& newPublicKey) const;
     [[nodiscard]] std::unique_ptr<EvalKeyDCRTPoly> MultiKeySwitchGen(
         const PrivateKeyDCRTPoly& originalPrivateKey, const PrivateKeyDCRTPoly& newPrivateKey,
         const EvalKeyDCRTPoly& evalKey) const;
@@ -371,9 +374,25 @@ public:
         VectorOfCiphertexts& ciphertextVec, const std::vector<double>& constantsVec) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalLinearWSumMutable(
         const std::vector<double>& constantsVec, VectorOfCiphertexts& ciphertextVec) const;
-
+    [[nodiscard]] std::unique_ptr<KeyPairDCRTPoly> MultipartyKeyGenByVectorOfPrivateKeys(
+        const VectorOfPrivateKeys& privateKeyVec) const;
+    [[nodiscard]] std::unique_ptr<UnorderedMapFromIndexToDCRTPoly> ShareKeys(
+        const PrivateKeyDCRTPoly& sk, const uint32_t N, const uint32_t threshold,
+        const uint32_t index, const std::string& shareType) const;
+    void RecoverSharedKey(PrivateKeyDCRTPoly& sk, UnorderedMapFromIndexToDCRTPoly& sk_shares,
+        const uint32_t N, const uint32_t threshold, const std::string& shareType) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalAutomorphism(
+        const CiphertextDCRTPoly& ciphertext, const uint32_t i,
+        const MapFromIndexToEvalKey& evalKeyMap) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalSumRows(
+        const CiphertextDCRTPoly& ciphertext, const uint32_t rowSize,
+        const MapFromIndexToEvalKey& evalSumKeyMap, const uint32_t subringDim /* 0 */) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalSumCols(
+        const CiphertextDCRTPoly& ciphertext, const uint32_t rowSize,
+        const MapFromIndexToEvalKey& evalSumKeyMap) const;
     [[nodiscard]] std::shared_ptr<CryptoContextImpl> GetInternal() const;
 };
+
 // cxx currently does not support static class methods
 void ClearEvalMultKeys();
 void ClearEvalMultKeysById(const std::string& id);
@@ -388,7 +407,11 @@ void ClearEvalAutomorphismKeysByCryptoContext(const CryptoContextDCRTPoly& crypt
     const std::string& keyTag);
 [[nodiscard]] std::unique_ptr<std::vector<uint32_t>> GetUniqueValues(
     const std::vector<uint32_t>& oldValues, const std::vector<uint32_t>& newValues);
+[[nodiscard]] std::unique_ptr<MapFromIndexToEvalKey> GetEvalAutomorphismKeyMap(
+    const std::string& keyID);
+[[nodiscard]] std::unique_ptr<MapFromIndexToEvalKey> GetCopyOfEvalSumKeyMap(const std::string& id);
 
+// Generator functions
 [[nodiscard]] std::unique_ptr<CryptoContextDCRTPoly> GenNullCryptoContext();
 [[nodiscard]] std::unique_ptr<CryptoContextDCRTPoly> GenCryptoContextByParamsBFVRNS(
     const ParamsBFVRNS& params);

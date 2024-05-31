@@ -56,6 +56,8 @@ public:
     [[nodiscard]] const std::vector<int64_t>& GetCoefPackedValue() const;
     [[nodiscard]] const std::string& GetStringValue() const;
 };
+
+// Generator functions
 [[nodiscard]] std::unique_ptr<Plaintext> GenNullPlainText();
 
 } // openfhe

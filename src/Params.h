@@ -26,6 +26,7 @@ using ParamsBFVRNS = lbcrypto::CCParams<lbcrypto::CryptoContextBFVRNS>;
 using ParamsBGVRNS = lbcrypto::CCParams<lbcrypto::CryptoContextBGVRNS>;
 using ParamsCKKSRNS = lbcrypto::CCParams<lbcrypto::CryptoContextCKKSRNS>;
 
+// Generator functions
 [[nodiscard]] std::unique_ptr<Params> GenParamsByScheme(const SCHEME scheme);
 [[nodiscard]] std::unique_ptr<Params> GenParamsByVectorOfString(
     const std::vector<std::string>& vals);

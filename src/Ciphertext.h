@@ -28,6 +28,8 @@ public:
 
     [[nodiscard]] std::shared_ptr<CiphertextImpl> GetInternal() const;
 };
+
+// Generator functions
 [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> GenNullCiphertext();
 
 } // openfhe

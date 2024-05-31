@@ -21,7 +21,6 @@ public:
 
     PublicKeyDCRTPoly() = default;
     explicit PublicKeyDCRTPoly(const std::shared_ptr<PublicKeyImpl>& publicKey);
-
     PublicKeyDCRTPoly(const PublicKeyDCRTPoly&) = delete;
     PublicKeyDCRTPoly(PublicKeyDCRTPoly&&) = delete;
     PublicKeyDCRTPoly& operator=(const PublicKeyDCRTPoly&) = delete;
@@ -29,6 +28,8 @@ public:
 
     [[nodiscard]] std::shared_ptr<PublicKeyImpl> GetInternal() const;
 };
+
+// Generator functions
 [[nodiscard]] std::unique_ptr<PublicKeyDCRTPoly> GenNullPublicKey();
 
 } // openfhe

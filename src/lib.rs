@@ -156,7 +156,8 @@ pub mod ffi
         include!("openfhe/src/SerialDeserial.h");
         include!("openfhe/src/EvalKey.h");
         include!("openfhe/src/LWEPrivateKey.h");
-        include!("openfhe/src/VectorOfCiphertexts.h");
+        include!("openfhe/src/SequenceContainerOfOpaqueTypes.h");
+        include!("openfhe/src/AssociativeContainerOfOpaqueTypes.h");
 
         type COMPRESSION_LEVEL;
         type DecryptionNoiseMode;
@@ -184,13 +185,14 @@ pub mod ffi
         type ParamsBGVRNS;
         type ParamsCKKSRNS;
         type Plaintext;
-        type PrivateKeyImpl;
         type PrivateKeyDCRTPoly;
         type PublicKeyDCRTPoly;
-        type PublicKeyImpl;
         type EvalKeyDCRTPoly;
         type LWEPrivateKey;
+        type MapFromIndexToEvalKey;
+        type UnorderedMapFromIndexToDCRTPoly;
         type VectorOfCiphertexts;
+        type VectorOfPrivateKeys;
     }
 
     // Params
@@ -548,9 +550,9 @@ pub mod ffi
 
         fn Enable(self: &CryptoContextDCRTPoly, feature: PKESchemeFeature);
         fn KeyGen(self: &CryptoContextDCRTPoly) -> UniquePtr<KeyPairDCRTPoly>;
-        fn MultipartyKeyGen(self: &CryptoContextDCRTPoly, publicKey: &PublicKeyDCRTPoly,
-                            makeSparse: /* false */ bool, fresh: /* false */ bool)
-                            -> UniquePtr<KeyPairDCRTPoly>;
+        fn MultipartyKeyGenByPublicKey(self: &CryptoContextDCRTPoly, publicKey: &PublicKeyDCRTPoly,
+                                       makeSparse: /* false */ bool, fresh: /* false */ bool)
+                                       -> UniquePtr<KeyPairDCRTPoly>;
         fn MultiAddPubKeys(self: &CryptoContextDCRTPoly, publicKey1: &PublicKeyDCRTPoly,
                            publicKey2: &PublicKeyDCRTPoly, keyId: /* "" */ &CxxString)
                            -> UniquePtr<PublicKeyDCRTPoly>;
@@ -885,6 +887,22 @@ pub mod ffi
         fn IntMPBootEncrypt(self: &CryptoContextDCRTPoly, publicKey: &PublicKeyDCRTPoly,
                             sharesPair: &VectorOfCiphertexts, a: &CiphertextDCRTPoly,
                             ciphertext: &CiphertextDCRTPoly) -> UniquePtr<CiphertextDCRTPoly>;
+        fn MultipartyKeyGenByVectorOfPrivateKeys(self: &CryptoContextDCRTPoly,
+                                                 privateKeyVec: &VectorOfPrivateKeys)
+                                                 -> UniquePtr<KeyPairDCRTPoly>;
+        fn ShareKeys(self: &CryptoContextDCRTPoly, sk: &PrivateKeyDCRTPoly, N: u32, threshold: u32,
+                     index: u32, shareType: &CxxString)
+                     -> UniquePtr<UnorderedMapFromIndexToDCRTPoly>;
+        fn RecoverSharedKey(self: &CryptoContextDCRTPoly, sk: Pin<&mut PrivateKeyDCRTPoly>,
+                            sk_shares: Pin<&mut UnorderedMapFromIndexToDCRTPoly>, N: u32,
+                            threshold: u32, shareType: &CxxString);
+        fn EvalAutomorphism(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly, i: u32,
+                            evalKeyMap: &MapFromIndexToEvalKey) -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalSumRows(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly, rowSize: u32,
+                       evalSumKeyMap: &MapFromIndexToEvalKey, subringDim: /* 0 */ u32)
+                       -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalSumCols(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly, rowSize: u32,
+                       evalSumKeyMap: &MapFromIndexToEvalKey) -> UniquePtr<CiphertextDCRTPoly>;
 
         // cxx currently does not support static class methods
         fn ClearEvalMultKeys();
@@ -899,6 +917,8 @@ pub mod ffi
         fn GetExistingEvalAutomorphismKeyIndices(keyTag: &CxxString) -> UniquePtr<CxxVector<u32>>;
         fn GetUniqueValues(oldValues: &CxxVector<u32>, newValues: &CxxVector<u32>)
                            -> UniquePtr<CxxVector<u32>>;
+        fn GetEvalAutomorphismKeyMap(keyID: &CxxString) -> UniquePtr<MapFromIndexToEvalKey>;
+        fn GetCopyOfEvalSumKeyMap(id: &CxxString) -> UniquePtr<MapFromIndexToEvalKey>;
     }
 
     // Serialize / Deserialize

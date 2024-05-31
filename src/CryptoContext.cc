@@ -1,20 +1,24 @@
 #include "CryptoContext.h"
 
+#include "openfhe/core/utils/caller_info.h" // CALLER_INFO_ARGS_HDR
 #include "openfhe/pke/gen-cryptocontext.h"
 #include "openfhe/pke/scheme/bfvrns/gen-cryptocontext-bfvrns.h"
 #include "openfhe/pke/scheme/bgvrns/gen-cryptocontext-bgvrns.h"
 #include "openfhe/pke/scheme/ckksrns/gen-cryptocontext-ckksrns.h"
 
+
+
 #include "openfhe/src/lib.rs.h" // ComplexPair
 
+#include "AssociativeContainerOfOpaqueTypes.h"
 #include "Ciphertext.h"
+#include "EvalKey.h"
 #include "KeyPair.h"
+#include "LWEPrivateKey.h"
 #include "Plaintext.h"
 #include "PrivateKey.h"
 #include "PublicKey.h"
-#include "EvalKey.h"
-#include "LWEPrivateKey.h"
-#include "VectorOfCiphertexts.h"
+#include "SequenceContainerOfOpaqueTypes.h"
 
 namespace openfhe
 {
@@ -40,8 +44,8 @@ std::unique_ptr<Plaintext> CryptoContextDCRTPoly::MakeCKKSPackedPlaintextByVecto
     {
         v.emplace_back(elem.re, elem.im);
     }
-    return std::make_unique<Plaintext>(m_cryptoContextImplSharedPtr->MakeCKKSPackedPlaintext(
-        v, scaleDeg, level, params, slots));
+    return std::make_unique<Plaintext>(m_cryptoContextImplSharedPtr->MakeCKKSPackedPlaintext(v,
+        scaleDeg, level, params, slots));
 }
 void CryptoContextDCRTPoly::SetSchemeId(const SCHEME schemeTag) const
 {
@@ -88,7 +92,7 @@ std::unique_ptr<KeyPairDCRTPoly> CryptoContextDCRTPoly::KeyGen() const
 {
     return std::make_unique<KeyPairDCRTPoly>(m_cryptoContextImplSharedPtr->KeyGen());
 }
-std::unique_ptr<KeyPairDCRTPoly> CryptoContextDCRTPoly::MultipartyKeyGen(
+std::unique_ptr<KeyPairDCRTPoly> CryptoContextDCRTPoly::MultipartyKeyGenByPublicKey(
     const PublicKeyDCRTPoly& publicKey, const bool makeSparse, const bool fresh) const
 {
     return std::make_unique<KeyPairDCRTPoly>(m_cryptoContextImplSharedPtr->MultipartyKeyGen(
@@ -117,13 +121,13 @@ void CryptoContextDCRTPoly::EvalRotateKeyGen(const PrivateKeyDCRTPoly& privateKe
     const std::vector<int32_t>& indexList, const PublicKeyDCRTPoly& publicKey) const
 {
     m_cryptoContextImplSharedPtr->EvalRotateKeyGen(privateKey.GetInternal(), indexList,
-    publicKey.GetInternal());
+        publicKey.GetInternal());
 }
 void CryptoContextDCRTPoly::EvalAtIndexKeyGen(const PrivateKeyDCRTPoly& privateKey,
     const std::vector<int32_t>& indexList, const PublicKeyDCRTPoly& publicKey) const
 {
     m_cryptoContextImplSharedPtr->EvalAtIndexKeyGen(privateKey.GetInternal(), indexList,
-    publicKey.GetInternal());
+        publicKey.GetInternal());
 }
 void CryptoContextDCRTPoly::EvalCKKStoFHEWPrecompute(const double scale) const
 {
@@ -193,8 +197,8 @@ std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalAddMutableByCiphe
 {
     std::shared_ptr<CiphertextImpl> c1 = ciphertext1.GetInternal();
     std::shared_ptr<CiphertextImpl> c2 = ciphertext2.GetInternal();
-    return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalAddMutable(
-        c1, c2));
+    return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalAddMutable(c1,
+        c2));
 }
 std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalAddMutableByCiphertextAndPlaintext(
     const CiphertextDCRTPoly& ciphertext, const Plaintext& plaintext) const
@@ -282,8 +286,8 @@ std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalSubMutableByCiphe
 {
     std::shared_ptr<CiphertextImpl> c1 = ciphertext1.GetInternal();
     std::shared_ptr<CiphertextImpl> c2 = ciphertext2.GetInternal();
-    return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalSubMutable(
-        c1, c2));
+    return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalSubMutable(c1,
+        c2));
 }
 std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalSubMutableByCiphertextAndPlaintext(
     const CiphertextDCRTPoly& ciphertext, const Plaintext& plaintext) const
@@ -359,8 +363,8 @@ std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalMultMutableByCiph
 {
     std::shared_ptr<CiphertextImpl> c1 = ciphertext1.GetInternal();
     std::shared_ptr<CiphertextImpl> c2 = ciphertext2.GetInternal();
-    return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalMultMutable(
-        c1, c2));
+    return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalMultMutable(c1,
+        c2));
 }
 std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalMultMutableByCiphertextAndPlaintext(
     const CiphertextDCRTPoly& ciphertext, const Plaintext& plaintext) const
@@ -701,7 +705,7 @@ void CryptoContextDCRTPoly::KeySwitchInPlace(const CiphertextDCRTPoly& ciphertex
     const EvalKeyDCRTPoly& evalKey) const
 {
     std::shared_ptr<CiphertextImpl> c = ciphertext.GetInternal();
-    m_cryptoContextImplSharedPtr->KeySwitchInPlace(c, evalKey.GetInternal());
+        m_cryptoContextImplSharedPtr->KeySwitchInPlace(c, evalKey.GetInternal());
 }
 std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::LevelReduce(
     const CiphertextDCRTPoly& ciphertext, const EvalKeyDCRTPoly& evalKey,
@@ -898,6 +902,48 @@ std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalLinearWSumMutable
         m_cryptoContextImplSharedPtr->EvalLinearWSumMutable(constantsVec,
         ciphertextVec.GetInternal()));
 }
+std::unique_ptr<KeyPairDCRTPoly> CryptoContextDCRTPoly::MultipartyKeyGenByVectorOfPrivateKeys(
+    const VectorOfPrivateKeys& privateKeyVec) const
+{
+    return std::make_unique<KeyPairDCRTPoly>(m_cryptoContextImplSharedPtr->MultipartyKeyGen(
+        privateKeyVec.GetInternal()));
+}
+std::unique_ptr<UnorderedMapFromIndexToDCRTPoly> CryptoContextDCRTPoly::ShareKeys(
+    const PrivateKeyDCRTPoly& sk, const uint32_t N, const uint32_t threshold, const uint32_t index,
+    const std::string& shareType) const
+{
+    return std::make_unique<UnorderedMapFromIndexToDCRTPoly>(
+        m_cryptoContextImplSharedPtr->ShareKeys(sk.GetInternal(), N, threshold, index, shareType));
+}
+void CryptoContextDCRTPoly::RecoverSharedKey(PrivateKeyDCRTPoly& sk,
+    UnorderedMapFromIndexToDCRTPoly& sk_shares, const uint32_t N, const uint32_t threshold,
+    const std::string& shareType) const
+{
+	std::shared_ptr<PrivateKeyImpl> p = sk.GetInternal();
+	m_cryptoContextImplSharedPtr->RecoverSharedKey(p, sk_shares.GetInternal(), N,
+        threshold, shareType);
+}
+std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalAutomorphism(
+    const CiphertextDCRTPoly& ciphertext, const uint32_t i,
+    const MapFromIndexToEvalKey& evalKeyMap) const
+{
+    return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalAutomorphism(
+        ciphertext.GetInternal(), i, evalKeyMap.GetInternal()));
+}
+std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalSumRows(
+    const CiphertextDCRTPoly& ciphertext, const uint32_t rowSize,
+    const MapFromIndexToEvalKey& evalSumKeyMap, const uint32_t subringDim) const
+{
+    return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalSumRows(
+        ciphertext.GetInternal(), rowSize, evalSumKeyMap.GetInternal(), subringDim));
+}
+std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalSumCols(
+    const CiphertextDCRTPoly& ciphertext, const uint32_t rowSize,
+    const MapFromIndexToEvalKey& evalSumKeyMap) const
+{
+    return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalSumCols(
+        ciphertext.GetInternal(), rowSize, evalSumKeyMap.GetInternal()));
+}
 std::shared_ptr<CryptoContextImpl> CryptoContextDCRTPoly::GetInternal() const
 {
     return m_cryptoContextImplSharedPtr;
@@ -952,6 +998,17 @@ std::unique_ptr<std::vector<uint32_t>> GetUniqueValues(const std::vector<uint32_
     return std::make_unique<std::vector<uint32_t>>(CryptoContextImpl::GetUniqueValues(oldValues,
         newValues));
 }
+std::unique_ptr<MapFromIndexToEvalKey> GetEvalAutomorphismKeyMap(const std::string& keyID)
+{
+    return std::make_unique<MapFromIndexToEvalKey>(std::move(
+        CryptoContextImpl::GetEvalAutomorphismKeyMap(keyID)));
+}
+std::unique_ptr<MapFromIndexToEvalKey> GetCopyOfEvalSumKeyMap(const std::string& id)
+{
+    return std::make_unique<MapFromIndexToEvalKey>(CryptoContextImpl::GetEvalSumKeyMap(id));
+}
+
+// Generator functions
 std::unique_ptr<CryptoContextDCRTPoly> GenNullCryptoContext()
 {
     return std::make_unique<CryptoContextDCRTPoly>();
