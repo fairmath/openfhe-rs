@@ -1,9 +1,12 @@
-use openfhe::cxx::{CxxVector, SharedPtr};
+use openfhe::cxx::{CxxVector};
 use openfhe::ffi as ffi;
+
+// A simple example showing homomorphic additions, multiplications, and rotations
+// for vectors of integers using BFVrns3
 
 fn main()
 {
-    let mut _cc_params_bfvrns = ffi::GetParamsBFVRNS();
+    let mut _cc_params_bfvrns = ffi::GenParamsBFVRNS();
     _cc_params_bfvrns.pin_mut().SetPlaintextModulus(65537);
     _cc_params_bfvrns.pin_mut().SetMultiplicativeDepth(2);
 
@@ -13,14 +16,14 @@ fn main()
     _cc.Enable(ffi::PKESchemeFeature::LEVELEDSHE);
 
     let _key_pair = _cc.KeyGen();
-    _cc.EvalMultKeyGen(_key_pair.GetPrivateKey());
+    _cc.EvalMultKeyGen(&_key_pair.GetPrivateKey());
 
     let mut _index_list = CxxVector::<i32>::new();
     _index_list.pin_mut().push(1);
     _index_list.pin_mut().push(2);
     _index_list.pin_mut().push(-1);
     _index_list.pin_mut().push(-2);
-    _cc.EvalRotateKeyGen(_key_pair.GetPrivateKey(), &_index_list, SharedPtr::<ffi::PublicKeyImpl>::null());
+    _cc.EvalRotateKeyGen(&_key_pair.GetPrivateKey(), &_index_list, &ffi::GenNullPublicKey());
 
     let mut _vector_of_ints_1 = CxxVector::<i64>::new();
     _vector_of_ints_1.pin_mut().push(1);
@@ -67,9 +70,9 @@ fn main()
     _vector_of_ints_3.pin_mut().push(12);
     let _plain_text_3 = _cc.MakePackedPlaintext(&_vector_of_ints_3, 1, 0);
 
-    let _cipher_text_1 = _cc.EncryptByPublicKey(_key_pair.GetPublicKey(), &_plain_text_1);
-    let _cipher_text_2 = _cc.EncryptByPublicKey(_key_pair.GetPublicKey(), &_plain_text_2);
-    let _cipher_text_3 = _cc.EncryptByPublicKey(_key_pair.GetPublicKey(), &_plain_text_3);
+    let _cipher_text_1 = _cc.EncryptByPublicKey(&_key_pair.GetPublicKey(), &_plain_text_1);
+    let _cipher_text_2 = _cc.EncryptByPublicKey(&_key_pair.GetPublicKey(), &_plain_text_2);
+    let _cipher_text_3 = _cc.EncryptByPublicKey(&_key_pair.GetPublicKey(), &_plain_text_3);
 
     let _cipher_text_add_1_2 = _cc.EvalAddByCiphertexts(&_cipher_text_1, &_cipher_text_2);
     let _cipher_text_add_result = _cc.EvalAddByCiphertexts(&_cipher_text_add_1_2, &_cipher_text_3);
@@ -82,18 +85,18 @@ fn main()
     let _cipher_text_rot_3 = _cc.EvalRotate(&_cipher_text_1, -1);
     let _cipher_text_rot_4 = _cc.EvalRotate(&_cipher_text_1, -2);
 
-    let mut _plain_text_add_result = ffi::GenEmptyPlainText();
-    _cc.DecryptByPrivateKeyAndCiphertext(_key_pair.GetPrivateKey(), &_cipher_text_add_result, _plain_text_add_result.pin_mut());
-    let mut _plain_text_mult_result = ffi::GenEmptyPlainText();
-    _cc.DecryptByPrivateKeyAndCiphertext(_key_pair.GetPrivateKey(), &_cipher_text_mult_result, _plain_text_mult_result.pin_mut());
-    let mut _plain_text_rot_1 = ffi::GenEmptyPlainText();
-    _cc.DecryptByPrivateKeyAndCiphertext(_key_pair.GetPrivateKey(), &_cipher_text_rot_1, _plain_text_rot_1.pin_mut());
-    let mut _plain_text_rot_2 = ffi::GenEmptyPlainText();
-    _cc.DecryptByPrivateKeyAndCiphertext(_key_pair.GetPrivateKey(), &_cipher_text_rot_2, _plain_text_rot_2.pin_mut());
-    let mut _plain_text_rot_3 = ffi::GenEmptyPlainText();
-    _cc.DecryptByPrivateKeyAndCiphertext(_key_pair.GetPrivateKey(), &_cipher_text_rot_3, _plain_text_rot_3.pin_mut());
-    let mut _plain_text_rot_4 = ffi::GenEmptyPlainText();
-    _cc.DecryptByPrivateKeyAndCiphertext(_key_pair.GetPrivateKey(), &_cipher_text_rot_4, _plain_text_rot_4.pin_mut());
+    let mut _plain_text_add_result = ffi::GenNullPlainText();
+    _cc.DecryptByPrivateKeyAndCiphertext(&_key_pair.GetPrivateKey(), &_cipher_text_add_result, _plain_text_add_result.pin_mut());
+    let mut _plain_text_mult_result = ffi::GenNullPlainText();
+    _cc.DecryptByPrivateKeyAndCiphertext(&_key_pair.GetPrivateKey(), &_cipher_text_mult_result, _plain_text_mult_result.pin_mut());
+    let mut _plain_text_rot_1 = ffi::GenNullPlainText();
+    _cc.DecryptByPrivateKeyAndCiphertext(&_key_pair.GetPrivateKey(), &_cipher_text_rot_1, _plain_text_rot_1.pin_mut());
+    let mut _plain_text_rot_2 = ffi::GenNullPlainText();
+    _cc.DecryptByPrivateKeyAndCiphertext(&_key_pair.GetPrivateKey(), &_cipher_text_rot_2, _plain_text_rot_2.pin_mut());
+    let mut _plain_text_rot_3 = ffi::GenNullPlainText();
+    _cc.DecryptByPrivateKeyAndCiphertext(&_key_pair.GetPrivateKey(), &_cipher_text_rot_3, _plain_text_rot_3.pin_mut());
+    let mut _plain_text_rot_4 = ffi::GenNullPlainText();
+    _cc.DecryptByPrivateKeyAndCiphertext(&_key_pair.GetPrivateKey(), &_cipher_text_rot_4, _plain_text_rot_4.pin_mut());
 
     _plain_text_rot_1.SetLength(_vector_of_ints_1.len());
     _plain_text_rot_2.SetLength(_vector_of_ints_1.len());

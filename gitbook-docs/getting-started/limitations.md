@@ -2,16 +2,18 @@
 description:
 ---
 
-
-
 # Limitations
-The library is WIP and may contain some unpulished interfaces. If you struggle with anything or have suggestions, feel free to ping us on our Discord server or open a new issue in the [Github repository](https://github.com/fairmath/openfhe-rs/tree/master). 
+## OpenFHE
+
+See the [Security Notes for Homomorphic Encryption](https://openfhe-development.readthedocs.io/en/latest/sphinx_rsts/intro/security.html) in OpenFHE's documentation.
+
+## Rust wrapper
+The library is WIP and may contain some unpolished interfaces. If you struggle with anything or have suggestions, feel free to ping us on our Discord server or open a new issue in the [Github repository](https://github.com/fairmath/openfhe-rs/tree/master). 
 
 At the moment, only a certain set of OpenFHE functionality has been implemented.
-We use [CXX crate](https://cxx.rs/) for our Rust binding to reduce the amount of abstraction levels.
-OpenFHE types represented as opaque types on the Rust side using [cxx::UniquePtr](https://docs.rs/cxx/latest/cxx/struct.UniquePtr.html) from the CXX crate.
+We use [CXX crate](https://cxx.rs/) for our Rust binding to reduce the amount of abstraction levels.OpenFHE types are represented as opaque types on the Rust side using [cxx::UniquePtr](https://docs.rs/cxx/latest/cxx/struct.UniquePtr.html) from the CXX crate.
 Instead of the usual [std::vec](https://doc.rust-lang.org/std/vec/), we use [cxx::vector](https://docs.rs/cxx/latest/cxx/struct.CxxVector.html).
-The main difference lies in the initialization method: you need to init the vector element by element, otherwise it will be stored in memory twice.
+The main difference lies in the initialization method: you need to init the vector element by element, otherwise, it will be stored in memory twice.
 Currently only supported CxxVector of the primitive and "ComplexPair" types.
 Since Rust does not support default parameters and function overloading, default parameters are mentioned in comments after the
 corresponding parameter name and overloaded library functions are represented by slightly different names.

@@ -7,3 +7,4 @@ target/
 
 Cargo.lock
 
+.vscode/ltex.dictionary.en-US.txt

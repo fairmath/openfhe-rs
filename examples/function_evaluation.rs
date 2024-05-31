@@ -7,7 +7,7 @@ use openfhe::ffi as ffi;
 fn EvalLogisticExample()
 {
     println!("--------------------------------- EVAL LOGISTIC FUNCTION ---------------------------------");
-    let mut _cc_params_ckksrns = ffi::GetParamsCKKSRNS();
+    let mut _cc_params_ckksrns = ffi::GenParamsCKKSRNS();
 
     // We set a smaller ring dimension to improve performance for this example.
     // In production environments, the security level should be set to
@@ -15,23 +15,25 @@ fn EvalLogisticExample()
     // or 256-bit security, respectively.
     _cc_params_ckksrns.pin_mut().SetSecurityLevel(ffi::SecurityLevel::HEStd_NotSet);
     _cc_params_ckksrns.pin_mut().SetRingDim(1 << 10);
+
     // #if NATIVEINT == 128
     // let _scaling_mod_size: u32 = 78;
     // let _first_mod_size: u32 = 89;
+
     let _scaling_mod_size: u32 = 50;
     let _first_mod_size: u32 = 60;
     _cc_params_ckksrns.pin_mut().SetScalingModSize(_scaling_mod_size);
     _cc_params_ckksrns.pin_mut().SetFirstModSize(_first_mod_size);
-    
+
     // Choosing a higher degree yields better precision, but a longer runtime.
     let _poly_degree: u32 = 16;
 
     // The multiplicative depth depends on the polynomial degree.
     // See the [FUNCTION_EVALUATION.md](../../gitbook-docs/examples/function_evaluation.rs) file
     // for a table mapping polynomial degrees to multiplicative depths.
-    let _mult_depth: u32 = 6;    
+    let _mult_depth: u32 = 6;
     _cc_params_ckksrns.pin_mut().SetMultiplicativeDepth(_mult_depth);
-
+    
     let _cc = ffi::GenCryptoContextByParamsCKKSRNS(&_cc_params_ckksrns);
     _cc.Enable(ffi::PKESchemeFeature::PKE);
     _cc.Enable(ffi::PKESchemeFeature::KEYSWITCH);
@@ -42,7 +44,7 @@ fn EvalLogisticExample()
 
     // We need to generate mult keys to run Chebyshev approximations.
     let _key_pair = _cc.KeyGen();
-    _cc.EvalMultKeyGen(_key_pair.GetPrivateKey());
+    _cc.EvalMultKeyGen(&_key_pair.GetPrivateKey());
 
     let mut _input = CxxVector::<ffi::ComplexPair>::new();
     _input.pin_mut().push(ffi::ComplexPair{re: -4.0, im: 0.0});
@@ -56,13 +58,13 @@ fn EvalLogisticExample()
     _input.pin_mut().push(ffi::ComplexPair{re: 4.0, im: 0.0});
     let _encoded_length: usize = _input.len();
     let _plain_text = _cc.MakeCKKSPackedPlaintextByVectorOfComplex(&_input, 1, 0, SharedPtr::<ffi::DCRTPolyParams>::null(), 0);
-    let _cipher_text = _cc.EncryptByPublicKey(_key_pair.GetPublicKey(), &_plain_text);
+    let _cipher_text = _cc.EncryptByPublicKey(&_key_pair.GetPublicKey(), &_plain_text);
     let _lower_bound: f64 = -5.0;
     let _upper_bound: f64 = 5.0;
     let _result = _cc.EvalLogistic(&_cipher_text, _lower_bound, _upper_bound, _poly_degree);
 
-    let mut _plain_text_dec = ffi::GenEmptyPlainText();
-    _cc.DecryptByPrivateKeyAndCiphertext(_key_pair.GetPrivateKey(), &_result, _plain_text_dec.pin_mut());
+    let mut _plain_text_dec = ffi::GenNullPlainText();
+    _cc.DecryptByPrivateKeyAndCiphertext(&_key_pair.GetPrivateKey(), &_result, _plain_text_dec.pin_mut());
     _plain_text_dec.SetLength(_encoded_length);
 
     let mut _expected_output = CxxVector::<ffi::ComplexPair>::new();
@@ -89,7 +91,7 @@ fn GetSqrt(x: f64, ret: &mut f64)
 fn EvalFunctionExample()
 {
     println!("--------------------------------- EVAL SQUARE ROOT FUNCTION ---------------------------------");
-    let mut _cc_params_ckksrns = ffi::GetParamsCKKSRNS();
+    let mut _cc_params_ckksrns = ffi::GenParamsCKKSRNS();
 
     // We set a smaller ring dimension to improve performance for this example.
     // In production environments, the security level should be set to
@@ -97,9 +99,11 @@ fn EvalFunctionExample()
     // or 256-bit security, respectively.
     _cc_params_ckksrns.pin_mut().SetSecurityLevel(ffi::SecurityLevel::HEStd_NotSet);
     _cc_params_ckksrns.pin_mut().SetRingDim(1 << 10);
+
     // #if NATIVEINT == 128
     // let _scaling_mod_size: u32 = 78;
     // let _first_mod_size: u32 = 89;
+
     let _scaling_mod_size: u32 = 50;
     let _first_mod_size: u32 = 60;
     _cc_params_ckksrns.pin_mut().SetScalingModSize(_scaling_mod_size);
@@ -124,7 +128,7 @@ fn EvalFunctionExample()
 
     // We need to generate mult keys to run Chebyshev approximations.
     let _key_pair = _cc.KeyGen();
-    _cc.EvalMultKeyGen(_key_pair.GetPrivateKey());
+    _cc.EvalMultKeyGen(&_key_pair.GetPrivateKey());
     
     let mut _input = CxxVector::<ffi::ComplexPair>::new();
     _input.pin_mut().push(ffi::ComplexPair{re: 1.0, im: 0.0});
@@ -139,13 +143,13 @@ fn EvalFunctionExample()
 
     let _encoded_length: usize = _input.len();
     let _plain_text = _cc.MakeCKKSPackedPlaintextByVectorOfComplex(&_input, 1, 0, SharedPtr::<ffi::DCRTPolyParams>::null(), 0);
-    let _cipher_text = _cc.EncryptByPublicKey(_key_pair.GetPublicKey(), &_plain_text);
+    let _cipher_text = _cc.EncryptByPublicKey(&_key_pair.GetPublicKey(), &_plain_text);
     let _lower_bound: f64 = 0.0;
     let _upper_bound: f64 = 10.0;
     let _result = _cc.EvalChebyshevFunction(GetSqrt, &_cipher_text, _lower_bound, _upper_bound, _poly_degree);
 
-    let mut _plain_text_dec = ffi::GenEmptyPlainText();
-    _cc.DecryptByPrivateKeyAndCiphertext(_key_pair.GetPrivateKey(), &_result, _plain_text_dec.pin_mut());
+    let mut _plain_text_dec = ffi::GenNullPlainText();
+    _cc.DecryptByPrivateKeyAndCiphertext(&_key_pair.GetPrivateKey(), &_result, _plain_text_dec.pin_mut());
     _plain_text_dec.SetLength(_encoded_length);
 
     let mut _expected_output = CxxVector::<ffi::ComplexPair>::new();
