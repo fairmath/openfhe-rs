@@ -270,6 +270,8 @@ public:
     [[nodiscard]] std::unique_ptr<DecryptResult> DecryptByCiphertextAndPrivateKey(
         const CiphertextDCRTPoly& ciphertext, const PrivateKeyDCRTPoly& privateKey,
         Plaintext& plaintext) const;
+    [[nodiscard]] std::unique_ptr<DecryptResult> MultipartyDecryptFusion(
+        const VectorOfCiphertexts& partialCiphertextVec, Plaintext& plaintext) const;
     [[nodiscard]] std::unique_ptr<Plaintext> MakePackedPlaintext(
         const std::vector<int64_t>& value, const size_t noiseScaleDeg /* 1 */,
         const uint32_t level /* 0 */) const;

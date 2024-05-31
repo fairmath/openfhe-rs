@@ -725,6 +725,9 @@ pub mod ffi
                                             privateKey: &PrivateKeyDCRTPoly,
                                             plaintext: Pin<&mut Plaintext>)
                                             -> UniquePtr<DecryptResult>;
+        fn MultipartyDecryptFusion(self: &CryptoContextDCRTPoly,
+                                   partialCiphertextVec: &VectorOfCiphertexts,
+                                   plaintext: Pin<&mut Plaintext>) -> UniquePtr<DecryptResult>;
         fn GetRingDimension(self: &CryptoContextDCRTPoly) -> u32;
         fn GetCyclotomicOrder(self: &CryptoContextDCRTPoly) -> u32;
         fn MakeStringPlaintext(self: &CryptoContextDCRTPoly, s: &CxxString)
