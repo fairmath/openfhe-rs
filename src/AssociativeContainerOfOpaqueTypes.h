@@ -29,11 +29,13 @@ using EvalKeyImpl = lbcrypto::EvalKeyImpl<lbcrypto::DCRTPoly>;
 
 class MapFromIndexToEvalKey final
 {
-    std::map<uint32_t, std::shared_ptr<EvalKeyImpl>> m_indexToEvalKeyDCRTPolyMap;
+    std::shared_ptr<std::map<uint32_t, std::shared_ptr<EvalKeyImpl>>>
+        m_sharedPtrToindexToEvalKeyDCRTPolyMap;
 public:
-    explicit MapFromIndexToEvalKey(std::map<uint32_t,
-        std::shared_ptr<EvalKeyImpl>> indexToEvalKeyDCRTPolyMap);
-    [[nodiscard]] const std::map<uint32_t, std::shared_ptr<EvalKeyImpl>>& GetInternal() const;
+    explicit MapFromIndexToEvalKey(
+        std::shared_ptr<std::map<uint32_t, std::shared_ptr<EvalKeyImpl>>> indexToEvalKeyDCRTPolyMap);
+    [[nodiscard]] const std::map<uint32_t, std::shared_ptr<EvalKeyImpl>>& GetInternalMap() const;
+    [[nodiscard]] std::shared_ptr<std::map<uint32_t, std::shared_ptr<EvalKeyImpl>>> GetInternal() const;
 };
 
 } // openfhe

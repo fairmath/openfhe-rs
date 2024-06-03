@@ -903,6 +903,34 @@ pub mod ffi
                        -> UniquePtr<CiphertextDCRTPoly>;
         fn EvalSumCols(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly, rowSize: u32,
                        evalSumKeyMap: &MapFromIndexToEvalKey) -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalAutomorphismKeyGen(self: &CryptoContextDCRTPoly, privateKey: &PrivateKeyDCRTPoly,
+                                  indexList: &CxxVector<u32>) -> UniquePtr<MapFromIndexToEvalKey>;
+        fn EvalSumRowsKeyGen(self: &CryptoContextDCRTPoly, privateKey: &PrivateKeyDCRTPoly,
+                             publicKey: /* GenNullPublicKey() */ &PublicKeyDCRTPoly,
+                             rowSize: /* 0 */ u32, subringDim: /* 0 */ u32)
+                             -> UniquePtr<MapFromIndexToEvalKey>;
+        fn EvalSumColsKeyGen(self: &CryptoContextDCRTPoly, privateKey: &PrivateKeyDCRTPoly,
+                             publicKey: /* GenNullPublicKey() */ &PublicKeyDCRTPoly)
+                             -> UniquePtr<MapFromIndexToEvalKey>;
+        fn MultiEvalAutomorphismKeyGen(self: &CryptoContextDCRTPoly,
+                                       privateKey: &PrivateKeyDCRTPoly,
+                                       evalKeyMap: &MapFromIndexToEvalKey,
+                                       indexList: &CxxVector<u32>, keyId: /* "" */ &CxxString)
+                                       -> UniquePtr<MapFromIndexToEvalKey>;
+        fn MultiEvalAtIndexKeyGen(self: &CryptoContextDCRTPoly, privateKey: &PrivateKeyDCRTPoly,
+                                  evalKeyMap: &MapFromIndexToEvalKey, indexList: &CxxVector<i32>,
+                                  keyId: /* "" */ &CxxString) -> UniquePtr<MapFromIndexToEvalKey>;
+        fn MultiEvalSumKeyGen(self: &CryptoContextDCRTPoly, privateKey: &PrivateKeyDCRTPoly,
+                              evalKeyMap: &MapFromIndexToEvalKey, keyId: /* "" */ &CxxString)
+                              -> UniquePtr<MapFromIndexToEvalKey>;
+        fn MultiAddEvalSumKeys(self: &CryptoContextDCRTPoly, evalKeyMap1: &MapFromIndexToEvalKey,
+                               evalKeyMap2: &MapFromIndexToEvalKey, keyId: /* "" */ &CxxString)
+                               -> UniquePtr<MapFromIndexToEvalKey>;
+        fn MultiAddEvalAutomorphismKeys(self: &CryptoContextDCRTPoly,
+                                        evalKeyMap1: &MapFromIndexToEvalKey,
+                                        evalKeyMap2: &MapFromIndexToEvalKey,
+                                        keyId: /* "" */ &CxxString)
+                                        -> UniquePtr<MapFromIndexToEvalKey>;
 
         // cxx currently does not support static class methods
         fn ClearEvalMultKeys();
@@ -919,6 +947,10 @@ pub mod ffi
                            -> UniquePtr<CxxVector<u32>>;
         fn GetEvalAutomorphismKeyMap(keyID: &CxxString) -> UniquePtr<MapFromIndexToEvalKey>;
         fn GetCopyOfEvalSumKeyMap(id: &CxxString) -> UniquePtr<MapFromIndexToEvalKey>;
+        fn GetEvalAutomorphismKeyMapPtr(keyID: &CxxString) -> UniquePtr<MapFromIndexToEvalKey>;
+        fn InsertEvalAutomorphismKey(evalKeyMap: &MapFromIndexToEvalKey,
+                                     keyTag: /* "" */ &CxxString);
+        fn InsertEvalSumKey(mapToInsert: &MapFromIndexToEvalKey, keyTag: /* "" */ &CxxString);
     }
 
     // Serialize / Deserialize

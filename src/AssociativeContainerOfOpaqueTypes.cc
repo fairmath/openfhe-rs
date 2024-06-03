@@ -13,12 +13,19 @@ std::unordered_map<uint32_t, DCRTPoly>& UnorderedMapFromIndexToDCRTPoly::GetInte
 }
 
 MapFromIndexToEvalKey::MapFromIndexToEvalKey(
-    std::map<uint32_t, std::shared_ptr<EvalKeyImpl>> indexToEvalKeyDCRTPolyMap)
-    : m_indexToEvalKeyDCRTPolyMap(std::move(indexToEvalKeyDCRTPolyMap))
+    std::shared_ptr<std::map<uint32_t, std::shared_ptr<EvalKeyImpl>>>
+    sharedPtrToindexToEvalKeyDCRTPolyMap)
+    : m_sharedPtrToindexToEvalKeyDCRTPolyMap(sharedPtrToindexToEvalKeyDCRTPolyMap)
 { }
-const std::map<uint32_t, std::shared_ptr<EvalKeyImpl>>& MapFromIndexToEvalKey::GetInternal() const
+const std::map<uint32_t, std::shared_ptr<EvalKeyImpl>>&
+    MapFromIndexToEvalKey::GetInternalMap() const
 {
-    return m_indexToEvalKeyDCRTPolyMap;
+    return *m_sharedPtrToindexToEvalKeyDCRTPolyMap;
+}
+std::shared_ptr<std::map<uint32_t, std::shared_ptr<EvalKeyImpl>>>
+    MapFromIndexToEvalKey::GetInternal() const
+{
+    return m_sharedPtrToindexToEvalKeyDCRTPolyMap;
 }
 
 } // openfhe

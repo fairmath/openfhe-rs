@@ -928,21 +928,80 @@ std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalAutomorphism(
     const MapFromIndexToEvalKey& evalKeyMap) const
 {
     return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalAutomorphism(
-        ciphertext.GetInternal(), i, evalKeyMap.GetInternal()));
+        ciphertext.GetInternal(), i, evalKeyMap.GetInternalMap()));
 }
 std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalSumRows(
     const CiphertextDCRTPoly& ciphertext, const uint32_t rowSize,
     const MapFromIndexToEvalKey& evalSumKeyMap, const uint32_t subringDim) const
 {
     return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalSumRows(
-        ciphertext.GetInternal(), rowSize, evalSumKeyMap.GetInternal(), subringDim));
+        ciphertext.GetInternal(), rowSize, evalSumKeyMap.GetInternalMap(), subringDim));
 }
 std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalSumCols(
     const CiphertextDCRTPoly& ciphertext, const uint32_t rowSize,
     const MapFromIndexToEvalKey& evalSumKeyMap) const
 {
     return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalSumCols(
-        ciphertext.GetInternal(), rowSize, evalSumKeyMap.GetInternal()));
+        ciphertext.GetInternal(), rowSize, evalSumKeyMap.GetInternalMap()));
+}
+std::unique_ptr<MapFromIndexToEvalKey> CryptoContextDCRTPoly::EvalAutomorphismKeyGen(
+    const PrivateKeyDCRTPoly& privateKey, const std::vector<uint32_t>& indexList) const
+{
+    return std::make_unique<MapFromIndexToEvalKey>(
+        m_cryptoContextImplSharedPtr->EvalAutomorphismKeyGen(privateKey.GetInternal(), indexList));
+}
+std::unique_ptr<MapFromIndexToEvalKey> CryptoContextDCRTPoly::EvalSumRowsKeyGen(
+    const PrivateKeyDCRTPoly& privateKey, const PublicKeyDCRTPoly& publicKey,
+    const uint32_t rowSize, const uint32_t subringDim) const
+{
+    return std::make_unique<MapFromIndexToEvalKey>(m_cryptoContextImplSharedPtr->EvalSumRowsKeyGen(
+        privateKey.GetInternal(), publicKey.GetInternal(), rowSize, subringDim));
+}
+std::unique_ptr<MapFromIndexToEvalKey> CryptoContextDCRTPoly::EvalSumColsKeyGen(
+    const PrivateKeyDCRTPoly& privateKey, const PublicKeyDCRTPoly& publicKey) const
+{
+    return std::make_unique<MapFromIndexToEvalKey>(m_cryptoContextImplSharedPtr->EvalSumColsKeyGen(
+        privateKey.GetInternal(), publicKey.GetInternal()));
+}
+std::unique_ptr<MapFromIndexToEvalKey> CryptoContextDCRTPoly::MultiEvalAutomorphismKeyGen(
+    const PrivateKeyDCRTPoly& privateKey, const MapFromIndexToEvalKey& evalKeyMap,
+    const std::vector<uint32_t>& indexList, const std::string& keyId) const
+{
+    return std::make_unique<MapFromIndexToEvalKey>(
+        m_cryptoContextImplSharedPtr->MultiEvalAutomorphismKeyGen(privateKey.GetInternal(),
+        evalKeyMap.GetInternal(), indexList, keyId));
+}
+std::unique_ptr<MapFromIndexToEvalKey> CryptoContextDCRTPoly::MultiEvalAtIndexKeyGen(
+    const PrivateKeyDCRTPoly& privateKey, const MapFromIndexToEvalKey& evalKeyMap,
+    const std::vector<int32_t>& indexList, const std::string& keyId) const
+{
+    return std::make_unique<MapFromIndexToEvalKey>(
+        m_cryptoContextImplSharedPtr->MultiEvalAtIndexKeyGen(privateKey.GetInternal(),
+        evalKeyMap.GetInternal(), indexList, keyId));
+}
+std::unique_ptr<MapFromIndexToEvalKey> CryptoContextDCRTPoly::MultiEvalSumKeyGen(
+    const PrivateKeyDCRTPoly& privateKey, const MapFromIndexToEvalKey& evalKeyMap,
+    const std::string& keyId) const
+{
+    return std::make_unique<MapFromIndexToEvalKey>(
+        m_cryptoContextImplSharedPtr->MultiEvalSumKeyGen(privateKey.GetInternal(),
+        evalKeyMap.GetInternal(), keyId));
+}
+std::unique_ptr<MapFromIndexToEvalKey> CryptoContextDCRTPoly::MultiAddEvalSumKeys(
+    const MapFromIndexToEvalKey& evalKeyMap1, const MapFromIndexToEvalKey& evalKeyMap2,
+    const std::string& keyId) const
+{
+    return std::make_unique<MapFromIndexToEvalKey>(
+        m_cryptoContextImplSharedPtr->MultiAddEvalSumKeys(evalKeyMap1.GetInternal(),
+        evalKeyMap2.GetInternal(), keyId));
+}
+std::unique_ptr<MapFromIndexToEvalKey> CryptoContextDCRTPoly::MultiAddEvalAutomorphismKeys(
+    const MapFromIndexToEvalKey& evalKeyMap1, const MapFromIndexToEvalKey& evalKeyMap2,
+    const std::string& keyId) const
+{
+    return std::make_unique<MapFromIndexToEvalKey>(
+        m_cryptoContextImplSharedPtr->MultiAddEvalAutomorphismKeys(evalKeyMap1.GetInternal(),
+        evalKeyMap2.GetInternal(), keyId));
 }
 std::shared_ptr<CryptoContextImpl> CryptoContextDCRTPoly::GetInternal() const
 {
@@ -1000,12 +1059,26 @@ std::unique_ptr<std::vector<uint32_t>> GetUniqueValues(const std::vector<uint32_
 }
 std::unique_ptr<MapFromIndexToEvalKey> GetEvalAutomorphismKeyMap(const std::string& keyID)
 {
-    return std::make_unique<MapFromIndexToEvalKey>(std::move(
-        CryptoContextImpl::GetEvalAutomorphismKeyMap(keyID)));
+    return std::make_unique<MapFromIndexToEvalKey>(
+        CryptoContextImpl::GetEvalAutomorphismKeyMapPtr(keyID));
 }
 std::unique_ptr<MapFromIndexToEvalKey> GetCopyOfEvalSumKeyMap(const std::string& id)
 {
-    return std::make_unique<MapFromIndexToEvalKey>(CryptoContextImpl::GetEvalSumKeyMap(id));
+    return std::make_unique<MapFromIndexToEvalKey>(
+        std::make_shared<std::map<uint32_t, std::shared_ptr<EvalKeyImpl>>>(
+        CryptoContextImpl::GetEvalSumKeyMap(id)));
+}
+std::unique_ptr<MapFromIndexToEvalKey> GetEvalAutomorphismKeyMapPtr(const std::string& keyID)
+{
+    return std::make_unique<MapFromIndexToEvalKey>(CryptoContextImpl::GetEvalAutomorphismKeyMapPtr(keyID));
+}
+void InsertEvalAutomorphismKey(const MapFromIndexToEvalKey& evalKeyMap, const std::string& keyTag)
+{
+    CryptoContextImpl::InsertEvalAutomorphismKey(evalKeyMap.GetInternal(), keyTag);
+}
+void InsertEvalSumKey(const MapFromIndexToEvalKey& mapToInsert, const std::string& keyTag)
+{
+    CryptoContextImpl::InsertEvalSumKey(mapToInsert.GetInternal(), keyTag);
 }
 
 // Generator functions
