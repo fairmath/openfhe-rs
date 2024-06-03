@@ -32,4 +32,12 @@ public:
     [[nodiscard]] const std::vector<std::shared_ptr<PrivateKeyImpl>>& GetInternal() const;
 };
 
+class VectorOfDCRTPoly final
+{
+    std::shared_ptr<std::vector<lbcrypto::DCRTPoly>> m_elements;
+public:
+    explicit VectorOfDCRTPoly(const std::shared_ptr<std::vector<lbcrypto::DCRTPoly>> elements);
+    [[nodiscard]] std::shared_ptr<std::vector<lbcrypto::DCRTPoly>> GetInternal() const;
+};
+
 } // openfhe

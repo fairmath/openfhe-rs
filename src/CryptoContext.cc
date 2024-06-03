@@ -1003,6 +1003,26 @@ std::unique_ptr<MapFromIndexToEvalKey> CryptoContextDCRTPoly::MultiAddEvalAutomo
         m_cryptoContextImplSharedPtr->MultiAddEvalAutomorphismKeys(evalKeyMap1.GetInternal(),
         evalKeyMap2.GetInternal(), keyId));
 }
+std::unique_ptr<VectorOfDCRTPoly> CryptoContextDCRTPoly::EvalFastRotationPrecompute(
+    const CiphertextDCRTPoly& ciphertext) const
+{
+    return std::make_unique<VectorOfDCRTPoly>(
+        m_cryptoContextImplSharedPtr->EvalFastRotationPrecompute(ciphertext.GetInternal()));
+}
+std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalFastRotation(
+    const CiphertextDCRTPoly& ciphertext, const uint32_t index, const uint32_t m,
+    const VectorOfDCRTPoly& digits) const
+{
+    return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalFastRotation(
+        ciphertext.GetInternal(), index, m, digits.GetInternal()));
+}
+std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalFastRotationExt(
+    const CiphertextDCRTPoly& ciphertext, const uint32_t index, const VectorOfDCRTPoly& digits,
+    const bool addFirst) const
+{
+    return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalFastRotationExt(
+        ciphertext.GetInternal(), index, digits.GetInternal(), addFirst));
+}
 std::shared_ptr<CryptoContextImpl> CryptoContextDCRTPoly::GetInternal() const
 {
     return m_cryptoContextImplSharedPtr;

@@ -33,9 +33,11 @@ class MapFromIndexToEvalKey final
         m_sharedPtrToindexToEvalKeyDCRTPolyMap;
 public:
     explicit MapFromIndexToEvalKey(
-        std::shared_ptr<std::map<uint32_t, std::shared_ptr<EvalKeyImpl>>> indexToEvalKeyDCRTPolyMap);
+        const std::shared_ptr<std::map<uint32_t, std::shared_ptr<EvalKeyImpl>>>
+        indexToEvalKeyDCRTPolyMap);
     [[nodiscard]] const std::map<uint32_t, std::shared_ptr<EvalKeyImpl>>& GetInternalMap() const;
-    [[nodiscard]] std::shared_ptr<std::map<uint32_t, std::shared_ptr<EvalKeyImpl>>> GetInternal() const;
+    [[nodiscard]] std::shared_ptr<std::map<uint32_t, std::shared_ptr<EvalKeyImpl>>>
+	    GetInternal() const;
 };
 
 } // openfhe

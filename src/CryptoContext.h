@@ -39,6 +39,7 @@ class PrivateKeyDCRTPoly;
 class PublicKeyDCRTPoly;
 class UnorderedMapFromIndexToDCRTPoly;
 class VectorOfCiphertexts;
+class VectorOfDCRTPoly;
 class VectorOfPrivateKeys;
 
 using SCHEME = lbcrypto::SCHEME;
@@ -414,6 +415,14 @@ public:
     [[nodiscard]] std::unique_ptr<MapFromIndexToEvalKey> MultiAddEvalAutomorphismKeys(
         const MapFromIndexToEvalKey& evalKeyMap1, const MapFromIndexToEvalKey& evalKeyMap2,
         const std::string& keyId /* "" */) const;
+    [[nodiscard]] std::unique_ptr<VectorOfDCRTPoly> EvalFastRotationPrecompute(
+        const CiphertextDCRTPoly& ciphertext) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalFastRotation(
+        const CiphertextDCRTPoly& ciphertext, const uint32_t index, const uint32_t m,
+        const VectorOfDCRTPoly& digits) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalFastRotationExt(
+        const CiphertextDCRTPoly& ciphertext, const uint32_t index, const VectorOfDCRTPoly& digits,
+        const bool addFirst) const;
     [[nodiscard]] std::shared_ptr<CryptoContextImpl> GetInternal() const;
 };
 

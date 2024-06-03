@@ -13,7 +13,7 @@ std::unordered_map<uint32_t, DCRTPoly>& UnorderedMapFromIndexToDCRTPoly::GetInte
 }
 
 MapFromIndexToEvalKey::MapFromIndexToEvalKey(
-    std::shared_ptr<std::map<uint32_t, std::shared_ptr<EvalKeyImpl>>>
+    const std::shared_ptr<std::map<uint32_t, std::shared_ptr<EvalKeyImpl>>>
     sharedPtrToindexToEvalKeyDCRTPolyMap)
     : m_sharedPtrToindexToEvalKeyDCRTPolyMap(sharedPtrToindexToEvalKeyDCRTPolyMap)
 { }

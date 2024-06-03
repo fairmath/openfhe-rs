@@ -23,4 +23,12 @@ const std::vector<std::shared_ptr<PrivateKeyImpl>>& VectorOfPrivateKeys::GetInte
     return m_privateKeys;
 }
 
+VectorOfDCRTPoly::VectorOfDCRTPoly(const std::shared_ptr<std::vector<lbcrypto::DCRTPoly>> elements)
+    : m_elements(elements)
+{ }
+std::shared_ptr<std::vector<lbcrypto::DCRTPoly>> VectorOfDCRTPoly::GetInternal() const
+{
+    return m_elements;
+}
+
 } // openfhe

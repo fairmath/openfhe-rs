@@ -192,6 +192,7 @@ pub mod ffi
         type MapFromIndexToEvalKey;
         type UnorderedMapFromIndexToDCRTPoly;
         type VectorOfCiphertexts;
+        type VectorOfDCRTPoly;
         type VectorOfPrivateKeys;
     }
 
@@ -931,6 +932,16 @@ pub mod ffi
                                         evalKeyMap2: &MapFromIndexToEvalKey,
                                         keyId: /* "" */ &CxxString)
                                         -> UniquePtr<MapFromIndexToEvalKey>;
+        fn EvalFastRotationPrecompute(self: &CryptoContextDCRTPoly,
+                                      ciphertext: &CiphertextDCRTPoly)
+                                      -> UniquePtr<VectorOfDCRTPoly>;
+        fn EvalFastRotation(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
+                            index: u32, m: u32, digits: &VectorOfDCRTPoly)
+                            -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalFastRotationExt(self: &CryptoContextDCRTPoly,
+                               ciphertext: &CiphertextDCRTPoly, index: u32,
+                               digits: &VectorOfDCRTPoly, addFirst: bool)
+                               -> UniquePtr<CiphertextDCRTPoly>;
 
         // cxx currently does not support static class methods
         fn ClearEvalMultKeys();
