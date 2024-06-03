@@ -23,12 +23,21 @@ const std::vector<std::shared_ptr<PrivateKeyImpl>>& VectorOfPrivateKeys::GetInte
     return m_privateKeys;
 }
 
-VectorOfDCRTPoly::VectorOfDCRTPoly(const std::shared_ptr<std::vector<lbcrypto::DCRTPoly>> elements)
+VectorOfDCRTPolys::VectorOfDCRTPolys(
+    const std::shared_ptr<std::vector<lbcrypto::DCRTPoly>> elements)
     : m_elements(elements)
 { }
-std::shared_ptr<std::vector<lbcrypto::DCRTPoly>> VectorOfDCRTPoly::GetInternal() const
+std::shared_ptr<std::vector<lbcrypto::DCRTPoly>> VectorOfDCRTPolys::GetInternal() const
 {
     return m_elements;
+}
+
+VectorOfEvalKeys::VectorOfEvalKeys(std::vector<std::shared_ptr<EvalKeyImpl>> evalKeys)
+    : m_evalKeys(std::move(evalKeys))
+{ }
+const std::vector<std::shared_ptr<EvalKeyImpl>>& VectorOfEvalKeys::GetInternal() const
+{
+    return m_evalKeys;
 }
 
 } // openfhe

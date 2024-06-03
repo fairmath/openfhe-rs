@@ -6,8 +6,6 @@
 #include "openfhe/pke/scheme/bgvrns/gen-cryptocontext-bgvrns.h"
 #include "openfhe/pke/scheme/ckksrns/gen-cryptocontext-ckksrns.h"
 
-
-
 #include "openfhe/src/lib.rs.h" // ComplexPair
 
 #include "AssociativeContainerOfOpaqueTypes.h"
@@ -1003,21 +1001,21 @@ std::unique_ptr<MapFromIndexToEvalKey> CryptoContextDCRTPoly::MultiAddEvalAutomo
         m_cryptoContextImplSharedPtr->MultiAddEvalAutomorphismKeys(evalKeyMap1.GetInternal(),
         evalKeyMap2.GetInternal(), keyId));
 }
-std::unique_ptr<VectorOfDCRTPoly> CryptoContextDCRTPoly::EvalFastRotationPrecompute(
+std::unique_ptr<VectorOfDCRTPolys> CryptoContextDCRTPoly::EvalFastRotationPrecompute(
     const CiphertextDCRTPoly& ciphertext) const
 {
-    return std::make_unique<VectorOfDCRTPoly>(
+    return std::make_unique<VectorOfDCRTPolys>(
         m_cryptoContextImplSharedPtr->EvalFastRotationPrecompute(ciphertext.GetInternal()));
 }
 std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalFastRotation(
     const CiphertextDCRTPoly& ciphertext, const uint32_t index, const uint32_t m,
-    const VectorOfDCRTPoly& digits) const
+    const VectorOfDCRTPolys& digits) const
 {
     return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalFastRotation(
         ciphertext.GetInternal(), index, m, digits.GetInternal()));
 }
 std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalFastRotationExt(
-    const CiphertextDCRTPoly& ciphertext, const uint32_t index, const VectorOfDCRTPoly& digits,
+    const CiphertextDCRTPoly& ciphertext, const uint32_t index, const VectorOfDCRTPolys& digits,
     const bool addFirst) const
 {
     return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalFastRotationExt(
@@ -1099,6 +1097,14 @@ void InsertEvalAutomorphismKey(const MapFromIndexToEvalKey& evalKeyMap, const st
 void InsertEvalSumKey(const MapFromIndexToEvalKey& mapToInsert, const std::string& keyTag)
 {
     CryptoContextImpl::InsertEvalSumKey(mapToInsert.GetInternal(), keyTag);
+}
+std::unique_ptr<VectorOfEvalKeys> GetCopyOfEvalMultKeyVector(const std::string& keyID)
+{
+    return std::make_unique<VectorOfEvalKeys>(CryptoContextImpl::GetEvalMultKeyVector(keyID));
+}
+void InsertEvalMultKey(const VectorOfEvalKeys& evalKeyVec)
+{
+    CryptoContextImpl::InsertEvalMultKey(evalKeyVec.GetInternal());
 }
 
 // Generator functions

@@ -39,7 +39,8 @@ class PrivateKeyDCRTPoly;
 class PublicKeyDCRTPoly;
 class UnorderedMapFromIndexToDCRTPoly;
 class VectorOfCiphertexts;
-class VectorOfDCRTPoly;
+class VectorOfDCRTPolys;
+class VectorOfEvalKeys;
 class VectorOfPrivateKeys;
 
 using SCHEME = lbcrypto::SCHEME;
@@ -415,13 +416,13 @@ public:
     [[nodiscard]] std::unique_ptr<MapFromIndexToEvalKey> MultiAddEvalAutomorphismKeys(
         const MapFromIndexToEvalKey& evalKeyMap1, const MapFromIndexToEvalKey& evalKeyMap2,
         const std::string& keyId /* "" */) const;
-    [[nodiscard]] std::unique_ptr<VectorOfDCRTPoly> EvalFastRotationPrecompute(
+    [[nodiscard]] std::unique_ptr<VectorOfDCRTPolys> EvalFastRotationPrecompute(
         const CiphertextDCRTPoly& ciphertext) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalFastRotation(
         const CiphertextDCRTPoly& ciphertext, const uint32_t index, const uint32_t m,
-        const VectorOfDCRTPoly& digits) const;
+        const VectorOfDCRTPolys& digits) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalFastRotationExt(
-        const CiphertextDCRTPoly& ciphertext, const uint32_t index, const VectorOfDCRTPoly& digits,
+        const CiphertextDCRTPoly& ciphertext, const uint32_t index, const VectorOfDCRTPolys& digits,
         const bool addFirst) const;
     [[nodiscard]] std::shared_ptr<CryptoContextImpl> GetInternal() const;
 };
@@ -448,6 +449,9 @@ void ClearEvalAutomorphismKeysByCryptoContext(const CryptoContextDCRTPoly& crypt
 void InsertEvalAutomorphismKey(const MapFromIndexToEvalKey& evalKeyMap,
     const std::string& keyTag /* "" */);
 void InsertEvalSumKey(const MapFromIndexToEvalKey& mapToInsert, const std::string& keyTag /* "" */);
+[[nodiscard]] std::unique_ptr<VectorOfEvalKeys> GetCopyOfEvalMultKeyVector(
+    const std::string& keyID);
+void InsertEvalMultKey(const VectorOfEvalKeys& evalKeyVec);
 
 // Generator functions
 [[nodiscard]] std::unique_ptr<CryptoContextDCRTPoly> GenNullCryptoContext();

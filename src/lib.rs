@@ -192,7 +192,8 @@ pub mod ffi
         type MapFromIndexToEvalKey;
         type UnorderedMapFromIndexToDCRTPoly;
         type VectorOfCiphertexts;
-        type VectorOfDCRTPoly;
+        type VectorOfDCRTPolys;
+        type VectorOfEvalKeys;
         type VectorOfPrivateKeys;
     }
 
@@ -934,13 +935,13 @@ pub mod ffi
                                         -> UniquePtr<MapFromIndexToEvalKey>;
         fn EvalFastRotationPrecompute(self: &CryptoContextDCRTPoly,
                                       ciphertext: &CiphertextDCRTPoly)
-                                      -> UniquePtr<VectorOfDCRTPoly>;
+                                      -> UniquePtr<VectorOfDCRTPolys>;
         fn EvalFastRotation(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
-                            index: u32, m: u32, digits: &VectorOfDCRTPoly)
+                            index: u32, m: u32, digits: &VectorOfDCRTPolys)
                             -> UniquePtr<CiphertextDCRTPoly>;
         fn EvalFastRotationExt(self: &CryptoContextDCRTPoly,
                                ciphertext: &CiphertextDCRTPoly, index: u32,
-                               digits: &VectorOfDCRTPoly, addFirst: bool)
+                               digits: &VectorOfDCRTPolys, addFirst: bool)
                                -> UniquePtr<CiphertextDCRTPoly>;
 
         // cxx currently does not support static class methods
@@ -962,6 +963,8 @@ pub mod ffi
         fn InsertEvalAutomorphismKey(evalKeyMap: &MapFromIndexToEvalKey,
                                      keyTag: /* "" */ &CxxString);
         fn InsertEvalSumKey(mapToInsert: &MapFromIndexToEvalKey, keyTag: /* "" */ &CxxString);
+        fn GetCopyOfEvalMultKeyVector(keyID: &CxxString) -> UniquePtr<VectorOfEvalKeys>;
+        fn InsertEvalMultKey(evalKeyVec: &VectorOfEvalKeys);
     }
 
     // Serialize / Deserialize
