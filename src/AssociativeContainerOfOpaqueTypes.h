@@ -37,7 +37,26 @@ public:
         indexToEvalKeyDCRTPolyMap);
     [[nodiscard]] const std::map<uint32_t, std::shared_ptr<EvalKeyImpl>>& GetInternalMap() const;
     [[nodiscard]] std::shared_ptr<std::map<uint32_t, std::shared_ptr<EvalKeyImpl>>>
-	    GetInternal() const;
+	      GetInternal() const;
+};
+
+class MapFromStringToVectorOfEvalKeys final
+{
+    std::map<std::string, std::vector<std::shared_ptr<EvalKeyImpl>>> m_stringToVectorOfEvalKeysMap;
+public:
+    explicit MapFromStringToVectorOfEvalKeys(
+        std::map<std::string, std::vector<std::shared_ptr<EvalKeyImpl>>>
+        stringToVectorOfEvalKeysMap);
+};
+
+class MapFromStringToMapFromIndexToEvalKey final
+{
+    std::map<std::string, std::shared_ptr<std::map<uint32_t, std::shared_ptr<EvalKeyImpl>>>>
+        m_stringToMapFromIndexToEvalKeyMap;
+public:
+    explicit MapFromStringToMapFromIndexToEvalKey(
+        std::map<std::string, std::shared_ptr<std::map<uint32_t, std::shared_ptr<EvalKeyImpl>>>>
+        stringToMapFromIndexToEvalKeyMap);
 };
 
 } // openfhe

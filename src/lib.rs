@@ -146,23 +146,26 @@ pub mod ffi
 
     unsafe extern "C++"
     {
+        include!("openfhe/src/AssociativeContainerOfOpaqueTypes.h");
         include!("openfhe/src/Ciphertext.h");
         include!("openfhe/src/CryptoContext.h");
+        include!("openfhe/src/CryptoParametersBase.h");
+        include!("openfhe/src/EvalKey.h");
         include!("openfhe/src/KeyPair.h");
+        include!("openfhe/src/LWEPrivateKey.h");
         include!("openfhe/src/Params.h");
         include!("openfhe/src/Plaintext.h");
         include!("openfhe/src/PrivateKey.h");
         include!("openfhe/src/PublicKey.h");
-        include!("openfhe/src/SerialDeserial.h");
-        include!("openfhe/src/EvalKey.h");
-        include!("openfhe/src/LWEPrivateKey.h");
+        include!("openfhe/src/SchemeBase.h");
         include!("openfhe/src/SequenceContainerOfOpaqueTypes.h");
-        include!("openfhe/src/AssociativeContainerOfOpaqueTypes.h");
+        include!("openfhe/src/SerialDeserial.h");
 
         type COMPRESSION_LEVEL;
         type DecryptionNoiseMode;
         type EncryptionTechnique;
         type ExecutionMode;
+        type Format;
         type KeySwitchTechnique;
         type MultipartyMode;
         type MultiplicationTechnique;
@@ -173,13 +176,18 @@ pub mod ffi
         type SecretKeyDist;
         type SecurityLevel;
         type SerialMode;
-        type Format;
 
         type CiphertextDCRTPoly;
         type CryptoContextDCRTPoly;
+        type CryptoParametersBaseDCRTPoly;
         type DCRTPolyParams;
         type DecryptResult;
+        type EvalKeyDCRTPoly;
         type KeyPairDCRTPoly;
+        type LWEPrivateKey;
+        type MapFromIndexToEvalKey;
+        type MapFromStringToMapFromIndexToEvalKey;
+        type MapFromStringToVectorOfEvalKeys;
         type Params;
         type ParamsBFVRNS;
         type ParamsBGVRNS;
@@ -187,15 +195,14 @@ pub mod ffi
         type Plaintext;
         type PrivateKeyDCRTPoly;
         type PublicKeyDCRTPoly;
-        type EvalKeyDCRTPoly;
-        type LWEPrivateKey;
-        type MapFromIndexToEvalKey;
+        type SchemeBaseDCRTPoly;
         type UnorderedMapFromIndexToDCRTPoly;
         type VectorOfCiphertexts;
         type VectorOfDCRTPolys;
         type VectorOfEvalKeys;
         type VectorOfLWECiphertexts;
         type VectorOfPrivateKeys;
+        type VectorOfVectorOfCiphertexts;
     }
 
     // Params
@@ -950,6 +957,12 @@ pub mod ffi
                           pmax: /* 2.0 */ f64, dim1: /* 0 */ u32) -> UniquePtr<CiphertextDCRTPoly>;
         fn EvalCKKStoFHEW(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
                           numCtxts: /* 0 */ u32) -> UniquePtr<VectorOfLWECiphertexts>;
+        fn IntMPBootAdd(self: &CryptoContextDCRTPoly,
+                        sharesPairVec: Pin<&mut VectorOfVectorOfCiphertexts>)
+                        -> UniquePtr<VectorOfCiphertexts>;
+        fn GetScheme(self: &CryptoContextDCRTPoly) -> UniquePtr<SchemeBaseDCRTPoly>;
+        fn GetCryptoParameters(self: &CryptoContextDCRTPoly)
+                               -> UniquePtr<CryptoParametersBaseDCRTPoly>;
 
         // cxx currently does not support static class methods
         fn ClearEvalMultKeys();
@@ -972,6 +985,9 @@ pub mod ffi
         fn InsertEvalSumKey(mapToInsert: &MapFromIndexToEvalKey, keyTag: /* "" */ &CxxString);
         fn GetCopyOfEvalMultKeyVector(keyID: &CxxString) -> UniquePtr<VectorOfEvalKeys>;
         fn InsertEvalMultKey(evalKeyVec: &VectorOfEvalKeys);
+        fn GetCopyOfAllEvalMultKeys() -> UniquePtr<MapFromStringToVectorOfEvalKeys>;
+        fn GetCopyOfAllEvalSumKeys() -> UniquePtr<MapFromStringToMapFromIndexToEvalKey>;
+        fn GetCopyOfAllEvalAutomorphismKeys() -> UniquePtr<MapFromStringToMapFromIndexToEvalKey>;
     }
 
     // Serialize / Deserialize

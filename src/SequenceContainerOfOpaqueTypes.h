@@ -24,6 +24,15 @@ public:
     [[nodiscard]] std::vector<std::shared_ptr<CiphertextImpl>>& GetInternal();
 };
 
+class VectorOfVectorOfCiphertexts final
+{
+    std::vector<std::vector<std::shared_ptr<CiphertextImpl>>> m_ciphertexts;
+public:
+    explicit VectorOfVectorOfCiphertexts(
+        std::vector<std::vector<std::shared_ptr<CiphertextImpl>>> ciphertexts);
+    [[nodiscard]] std::vector<std::vector<std::shared_ptr<CiphertextImpl>>>& GetInternal();
+};
+
 using PrivateKeyImpl = lbcrypto::PrivateKeyImpl<lbcrypto::DCRTPoly>;
 
 class VectorOfPrivateKeys final
@@ -58,7 +67,8 @@ class VectorOfLWECiphertexts final
 {
     std::vector<std::shared_ptr<LWECiphertextImpl>> m_lweCiphertexts;
 public:
-    explicit VectorOfLWECiphertexts(std::vector<std::shared_ptr<LWECiphertextImpl>> lweCiphertexts);
+    explicit VectorOfLWECiphertexts(
+        std::vector<std::shared_ptr<LWECiphertextImpl>> lweCiphertexts);
     [[nodiscard]] std::vector<std::shared_ptr<LWECiphertextImpl>>& GetInternal();
 };
 

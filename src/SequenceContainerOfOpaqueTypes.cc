@@ -15,6 +15,16 @@ std::vector<std::shared_ptr<CiphertextImpl>>& VectorOfCiphertexts::GetInternal()
     return m_ciphertexts;
 }
 
+VectorOfVectorOfCiphertexts::VectorOfVectorOfCiphertexts(
+    std::vector<std::vector<std::shared_ptr<CiphertextImpl>>> ciphertexts)
+    : m_ciphertexts(std::move(ciphertexts))
+{ }
+std::vector<std::vector<std::shared_ptr<CiphertextImpl>>>&
+    VectorOfVectorOfCiphertexts::GetInternal()
+{
+    return m_ciphertexts;
+}
+
 VectorOfPrivateKeys::VectorOfPrivateKeys(std::vector<std::shared_ptr<PrivateKeyImpl>> privateKeys)
     : m_privateKeys(std::move(privateKeys))
 { }
