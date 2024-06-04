@@ -150,6 +150,7 @@ pub mod ffi
         include!("openfhe/src/Ciphertext.h");
         include!("openfhe/src/CryptoContext.h");
         include!("openfhe/src/CryptoParametersBase.h");
+        include!("openfhe/src/EncodingParams.h");
         include!("openfhe/src/EvalKey.h");
         include!("openfhe/src/KeyPair.h");
         include!("openfhe/src/LWEPrivateKey.h");
@@ -182,6 +183,7 @@ pub mod ffi
         type CryptoParametersBaseDCRTPoly;
         type DCRTPolyParams;
         type DecryptResult;
+        type EncodingParams;
         type EvalKeyDCRTPoly;
         type KeyPairDCRTPoly;
         type LWEPrivateKey;
@@ -963,6 +965,7 @@ pub mod ffi
         fn GetScheme(self: &CryptoContextDCRTPoly) -> UniquePtr<SchemeBaseDCRTPoly>;
         fn GetCryptoParameters(self: &CryptoContextDCRTPoly)
                                -> UniquePtr<CryptoParametersBaseDCRTPoly>;
+        fn GetEncodingParams(self: &CryptoContextDCRTPoly) -> UniquePtr<EncodingParams>;
 
         // cxx currently does not support static class methods
         fn ClearEvalMultKeys();

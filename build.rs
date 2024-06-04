@@ -5,6 +5,7 @@ fn main()
         .file("src/Ciphertext.cc")
         .file("src/CryptoContext.cc")
         .file("src/CryptoParametersBase.cc")
+        .file("src/EncodingParams.cc")
         .file("src/EvalKey.cc")
         .file("src/KeyPair.cc")
         .file("src/LWEPrivateKey.cc")
@@ -41,6 +42,8 @@ fn main()
     println!("cargo::rerun-if-changed=src/CryptoContext.cc");
     println!("cargo::rerun-if-changed=src/CryptoParametersBase.h");
     println!("cargo::rerun-if-changed=src/CryptoParametersBase.cc");
+    println!("cargo::rerun-if-changed=src/EncodingParams.h");
+    println!("cargo::rerun-if-changed=src/EncodingParams.cc");
     println!("cargo::rerun-if-changed=src/EvalKey.h");
     println!("cargo::rerun-if-changed=src/EvalKey.cc");
     println!("cargo::rerun-if-changed=src/KeyPair.h");

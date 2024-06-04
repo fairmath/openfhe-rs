@@ -31,6 +31,7 @@ struct ComplexPair;
 
 class CiphertextDCRTPoly;
 class CryptoParametersBaseDCRTPoly;
+class EncodingParams;
 class EvalKeyDCRTPoly;
 class KeyPairDCRTPoly;
 class LWEPrivateKey;
@@ -440,6 +441,7 @@ public:
         VectorOfVectorOfCiphertexts& sharesPairVec) const;
     [[nodiscard]] std::unique_ptr<SchemeBaseDCRTPoly> GetScheme() const;
     [[nodiscard]] std::unique_ptr<CryptoParametersBaseDCRTPoly> GetCryptoParameters() const;
+    [[nodiscard]] std::unique_ptr<EncodingParams> GetEncodingParams() const;
     [[nodiscard]] std::shared_ptr<CryptoContextImpl> GetInternal() const;
 };
 

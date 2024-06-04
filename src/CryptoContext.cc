@@ -11,6 +11,7 @@
 #include "AssociativeContainerOfOpaqueTypes.h"
 #include "Ciphertext.h"
 #include "CryptoParametersBase.h"
+#include "EncodingParams.h"
 #include "EvalKey.h"
 #include "KeyPair.h"
 #include "LWEPrivateKey.h"
@@ -1050,6 +1051,10 @@ std::unique_ptr<CryptoParametersBaseDCRTPoly> CryptoContextDCRTPoly::GetCryptoPa
 {
     return std::make_unique<CryptoParametersBaseDCRTPoly>(
         m_cryptoContextImplSharedPtr->GetCryptoParameters());
+}
+std::unique_ptr<EncodingParams> CryptoContextDCRTPoly::GetEncodingParams() const
+{
+    return std::make_unique<EncodingParams>(m_cryptoContextImplSharedPtr->GetEncodingParams());
 }
 std::shared_ptr<CryptoContextImpl> CryptoContextDCRTPoly::GetInternal() const
 {
