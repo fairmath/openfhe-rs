@@ -41,6 +41,7 @@ class UnorderedMapFromIndexToDCRTPoly;
 class VectorOfCiphertexts;
 class VectorOfDCRTPolys;
 class VectorOfEvalKeys;
+class VectorOfLWECiphertexts;
 class VectorOfPrivateKeys;
 
 using SCHEME = lbcrypto::SCHEME;
@@ -424,6 +425,12 @@ public:
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalFastRotationExt(
         const CiphertextDCRTPoly& ciphertext, const uint32_t index, const VectorOfDCRTPolys& digits,
         const bool addFirst) const;
+    [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> EvalFHEWtoCKKS(
+        VectorOfLWECiphertexts& LWECiphertexts, const uint32_t numCtxts /* 0 */,
+        const uint32_t numSlots /* 0 */, const uint32_t p /* 4 */, const double pmin /* 0.0 */,
+		const double pmax /* 2.0 */, const uint32_t dim1 /* 0 */) const;
+    [[nodiscard]] std::unique_ptr<VectorOfLWECiphertexts> EvalCKKStoFHEW(
+        const CiphertextDCRTPoly& ciphertext, const uint32_t numCtxts /* 0 */) const;
     [[nodiscard]] std::shared_ptr<CryptoContextImpl> GetInternal() const;
 };
 

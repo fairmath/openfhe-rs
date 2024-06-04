@@ -1021,6 +1021,19 @@ std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalFastRotationExt(
     return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalFastRotationExt(
         ciphertext.GetInternal(), index, digits.GetInternal(), addFirst));
 }
+std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalFHEWtoCKKS(
+    VectorOfLWECiphertexts& LWECiphertexts, const uint32_t numCtxts, const uint32_t numSlots,
+    const uint32_t p, const double pmin, const double pmax, const uint32_t dim1) const
+{
+    return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalFHEWtoCKKS(
+        LWECiphertexts.GetInternal(), numCtxts, numSlots, p, pmin, pmax, dim1));
+}
+std::unique_ptr<VectorOfLWECiphertexts> CryptoContextDCRTPoly::EvalCKKStoFHEW(
+    const CiphertextDCRTPoly& ciphertext, const uint32_t numCtxts) const
+{
+    return std::make_unique<VectorOfLWECiphertexts>(m_cryptoContextImplSharedPtr->EvalCKKStoFHEW(
+        ciphertext.GetInternal(), numCtxts));
+}
 std::shared_ptr<CryptoContextImpl> CryptoContextDCRTPoly::GetInternal() const
 {
     return m_cryptoContextImplSharedPtr;

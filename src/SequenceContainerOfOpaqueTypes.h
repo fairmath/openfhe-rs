@@ -1,5 +1,6 @@
 #pragma once
 
+#include "openfhe/binfhe/lwe-ciphertext-fwd.h"
 #include "openfhe/core/lattice/hal/lat-backend.h"
 #include "openfhe/pke/ciphertext-fwd.h"
 #include "openfhe/pke/key/evalkey-fwd.h"
@@ -49,6 +50,16 @@ class VectorOfEvalKeys final
 public:
     explicit VectorOfEvalKeys(std::vector<std::shared_ptr<EvalKeyImpl>> evalKeys);
     [[nodiscard]] const std::vector<std::shared_ptr<EvalKeyImpl>>& GetInternal() const;
+};
+
+using LWECiphertextImpl = lbcrypto::LWECiphertextImpl;
+
+class VectorOfLWECiphertexts final
+{
+    std::vector<std::shared_ptr<LWECiphertextImpl>> m_lweCiphertexts;
+public:
+    explicit VectorOfLWECiphertexts(std::vector<std::shared_ptr<LWECiphertextImpl>> lweCiphertexts);
+    [[nodiscard]] std::vector<std::shared_ptr<LWECiphertextImpl>>& GetInternal();
 };
 
 } // openfhe

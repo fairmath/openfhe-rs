@@ -194,6 +194,7 @@ pub mod ffi
         type VectorOfCiphertexts;
         type VectorOfDCRTPolys;
         type VectorOfEvalKeys;
+        type VectorOfLWECiphertexts;
         type VectorOfPrivateKeys;
     }
 
@@ -943,6 +944,12 @@ pub mod ffi
                                ciphertext: &CiphertextDCRTPoly, index: u32,
                                digits: &VectorOfDCRTPolys, addFirst: bool)
                                -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalFHEWtoCKKS(self: &CryptoContextDCRTPoly,
+                          LWECiphertexts: Pin<&mut VectorOfLWECiphertexts>, numCtxts: /* 0 */ u32,
+                          numSlots: /* 0 */ u32, p: /* 4 */ u32, pmin: /* 0.0 */ f64,
+                          pmax: /* 2.0 */ f64, dim1: /* 0 */ u32) -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalCKKStoFHEW(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
+                          numCtxts: /* 0 */ u32) -> UniquePtr<VectorOfLWECiphertexts>;
 
         // cxx currently does not support static class methods
         fn ClearEvalMultKeys();

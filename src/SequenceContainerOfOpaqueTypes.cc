@@ -40,4 +40,13 @@ const std::vector<std::shared_ptr<EvalKeyImpl>>& VectorOfEvalKeys::GetInternal()
     return m_evalKeys;
 }
 
+VectorOfLWECiphertexts::VectorOfLWECiphertexts(
+    std::vector<std::shared_ptr<LWECiphertextImpl>> lweCiphertexts)
+    : m_lweCiphertexts(std::move(lweCiphertexts))
+{ }
+std::vector<std::shared_ptr<LWECiphertextImpl>>& VectorOfLWECiphertexts::GetInternal()
+{
+    return m_lweCiphertexts;
+}
+
 } // openfhe
