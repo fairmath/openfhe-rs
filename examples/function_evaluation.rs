@@ -1,5 +1,5 @@
 #![allow(non_snake_case)]
-use openfhe::cxx::{CxxVector, SharedPtr};
+use openfhe::cxx::{CxxVector};
 use openfhe::ffi as ffi;
 
 fn EvalLogisticExample()
@@ -39,7 +39,8 @@ fn EvalLogisticExample()
     _input.pin_mut().push(ffi::ComplexPair{re: 3.0, im: 0.0});
     _input.pin_mut().push(ffi::ComplexPair{re: 4.0, im: 0.0});
     let _encoded_length: usize = _input.len();
-    let _plain_text = _cc.MakeCKKSPackedPlaintextByVectorOfComplex(&_input, 1, 0, SharedPtr::<ffi::DCRTPolyParams>::null(), 0);
+    let _dcrt_poly_params = ffi::GenNullDCRTPolyParams();
+    let _plain_text = _cc.MakeCKKSPackedPlaintextByVectorOfComplex(&_input, 1, 0, &_dcrt_poly_params, 0);
     let _cipher_text = _cc.EncryptByPublicKey(&_key_pair.GetPublicKey(), &_plain_text);
     let _lower_bound: f64 = -5.0;
     let _upper_bound: f64 = 5.0;
@@ -107,7 +108,8 @@ fn EvalFunctionExample()
     _input.pin_mut().push(ffi::ComplexPair{re: 9.0, im: 0.0});
 
     let _encoded_length: usize = _input.len();
-    let _plain_text = _cc.MakeCKKSPackedPlaintextByVectorOfComplex(&_input, 1, 0, SharedPtr::<ffi::DCRTPolyParams>::null(), 0);
+    let _dcrt_poly_params = ffi::GenNullDCRTPolyParams();
+    let _plain_text = _cc.MakeCKKSPackedPlaintextByVectorOfComplex(&_input, 1, 0, &_dcrt_poly_params, 0);
     let _cipher_text = _cc.EncryptByPublicKey(&_key_pair.GetPublicKey(), &_plain_text);
     let _lower_bound: f64 = 0.0;
     let _upper_bound: f64 = 10.0;

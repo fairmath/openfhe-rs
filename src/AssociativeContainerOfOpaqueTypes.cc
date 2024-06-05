@@ -4,10 +4,10 @@ namespace openfhe
 {
 
 UnorderedMapFromIndexToDCRTPoly::UnorderedMapFromIndexToDCRTPoly(
-    std::unordered_map<uint32_t, DCRTPoly> indexToDCRTPolyUnorderedMap)
+    std::unordered_map<uint32_t, lbcrypto::DCRTPoly> indexToDCRTPolyUnorderedMap)
     : m_indexToDCRTPolyUnorderedMap(std::move(indexToDCRTPolyUnorderedMap))
 { }
-std::unordered_map<uint32_t, DCRTPoly>& UnorderedMapFromIndexToDCRTPoly::GetInternal()
+std::unordered_map<uint32_t, lbcrypto::DCRTPoly>& UnorderedMapFromIndexToDCRTPoly::GetInternal()
 {
     return m_indexToDCRTPolyUnorderedMap;
 }

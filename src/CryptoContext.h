@@ -1,15 +1,13 @@
 #pragma once
 
-#include "openfhe/pke/constants-fwd.h" // PKESchemeFeature
-#include "openfhe/pke/cryptocontext-fwd.h" // CryptoContextImpl
-#include "openfhe/pke/key/privatekey-fwd.h" // PrivateKeyImpl
-#include "openfhe/pke/key/publickey-fwd.h" // PublicKeyImpl
-#include "openfhe/pke/scheme/scheme-id.h" // SCHEME
-#include "openfhe/pke/schemebase/decrypt-result.h" // DecryptResult
+#include "openfhe/core/lattice/hal/lat-backend.h"
+#include "openfhe/pke/constants-fwd.h"
+#include "openfhe/pke/cryptocontext-fwd.h"
+#include "openfhe/pke/scheme/scheme-id.h"
 
-#include "rust/cxx.h" // rust::Fn
+#include "rust/cxx.h"
 
-#include "SerialMode.h" // SerialMode
+#include "SerialMode.h"
 
 namespace lbcrypto
 {
@@ -31,6 +29,9 @@ struct ComplexPair;
 
 class CiphertextDCRTPoly;
 class CryptoParametersBaseDCRTPoly;
+class DCRTPoly;
+class DCRTPolyParams;
+class DecryptResult;
 class EncodingParams;
 class EvalKeyDCRTPoly;
 class KeyPairDCRTPoly;
@@ -50,19 +51,14 @@ class VectorOfLWECiphertexts;
 class VectorOfPrivateKeys;
 class VectorOfVectorOfCiphertexts;
 
-using SCHEME = lbcrypto::SCHEME;
-using PKESchemeFeature = lbcrypto::PKESchemeFeature;
-
+using CryptoContextImpl = lbcrypto::CryptoContextImpl<lbcrypto::DCRTPoly>;
 using Params = lbcrypto::Params;
 using ParamsBFVRNS = lbcrypto::CCParams<lbcrypto::CryptoContextBFVRNS>;
 using ParamsBGVRNS = lbcrypto::CCParams<lbcrypto::CryptoContextBGVRNS>;
 using ParamsCKKSRNS = lbcrypto::CCParams<lbcrypto::CryptoContextCKKSRNS>;
-
-using CryptoContextImpl = lbcrypto::CryptoContextImpl<lbcrypto::DCRTPoly>;
-using PublicKeyImpl = lbcrypto::PublicKeyImpl<lbcrypto::DCRTPoly>;
-using PrivateKeyImpl = lbcrypto::PrivateKeyImpl<lbcrypto::DCRTPoly>;
-using DCRTPolyParams = lbcrypto::DCRTPoly::Params;
-using DecryptResult = lbcrypto::DecryptResult;
+using PKESchemeFeature = lbcrypto::PKESchemeFeature;
+using PlaintextEncodings = lbcrypto::PlaintextEncodings;
+using SCHEME = lbcrypto::SCHEME;
 
 class CryptoContextDCRTPoly final
 {
@@ -293,11 +289,11 @@ public:
         const uint32_t level /* 0 */) const;
     [[nodiscard]] std::unique_ptr<Plaintext> MakeCKKSPackedPlaintext(
         const std::vector<double>& value, const size_t scaleDeg /* 1 */,
-        const uint32_t level /* 0 */, const std::shared_ptr<DCRTPolyParams> params /* nullptr */,
+        const uint32_t level /* 0 */, const DCRTPolyParams& params /* GenNullDCRTPolyParams */,
         const uint32_t slots /* 0 */) const;
     [[nodiscard]] std::unique_ptr<Plaintext> MakeCKKSPackedPlaintextByVectorOfComplex(
         const std::vector<ComplexPair>& value, const size_t scaleDeg /* 1 */,
-        const uint32_t level /* 0 */, const std::shared_ptr<DCRTPolyParams> params /* nullptr */,
+        const uint32_t level /* 0 */, const DCRTPolyParams& params /* GenNullDCRTPolyParams */,
         const uint32_t slots /* 0 */) const;
     [[nodiscard]] std::unique_ptr<std::vector<uint32_t>> FindAutomorphismIndices(
         const std::vector<uint32_t>& idxList) const;
@@ -442,6 +438,9 @@ public:
     [[nodiscard]] std::unique_ptr<SchemeBaseDCRTPoly> GetScheme() const;
     [[nodiscard]] std::unique_ptr<CryptoParametersBaseDCRTPoly> GetCryptoParameters() const;
     [[nodiscard]] std::unique_ptr<EncodingParams> GetEncodingParams() const;
+    [[nodiscard]] std::unique_ptr<DCRTPoly> KeySwitchDownFirstElement(
+        const CiphertextDCRTPoly& ciphertext) const;
+    [[nodiscard]] std::unique_ptr<DCRTPolyParams> GetElementParams() const;
     [[nodiscard]] std::shared_ptr<CryptoContextImpl> GetInternal() const;
 };
 
@@ -475,6 +474,8 @@ void InsertEvalMultKey(const VectorOfEvalKeys& evalKeyVec);
 [[nodiscard]] std::unique_ptr<MapFromStringToMapFromIndexToEvalKey> GetCopyOfAllEvalSumKeys();
 [[nodiscard]] std::unique_ptr<MapFromStringToMapFromIndexToEvalKey>
     GetCopyOfAllEvalAutomorphismKeys();
+[[nodiscard]] std::unique_ptr<Plaintext> GetPlaintextForDecrypt(const PlaintextEncodings pte,
+    const DCRTPolyParams& evp, const EncodingParams& ep);
 
 // Generator functions
 [[nodiscard]] std::unique_ptr<CryptoContextDCRTPoly> GenNullCryptoContext();

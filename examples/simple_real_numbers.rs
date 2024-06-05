@@ -1,4 +1,4 @@
-use openfhe::cxx::{CxxVector, SharedPtr};
+use openfhe::cxx::{CxxVector};
 use openfhe::ffi as ffi;
 
 fn main()
@@ -46,8 +46,9 @@ fn main()
     _x_2.pin_mut().push(0.5);
     _x_2.pin_mut().push(0.25);
 
-    let _p_txt_1 = _cc.MakeCKKSPackedPlaintext(&_x_1, 1, 0, SharedPtr::<ffi::DCRTPolyParams>::null(), 0);
-    let _p_txt_2 = _cc.MakeCKKSPackedPlaintext(&_x_2, 1, 0, SharedPtr::<ffi::DCRTPolyParams>::null(), 0);
+    let _dcrt_poly_params = ffi::GenNullDCRTPolyParams();
+    let _p_txt_1 = _cc.MakeCKKSPackedPlaintext(&_x_1, 1, 0, &_dcrt_poly_params, 0);
+    let _p_txt_2 = _cc.MakeCKKSPackedPlaintext(&_x_2, 1, 0, &_dcrt_poly_params, 0);
 
     println!("Input x1: {}", _p_txt_1.GetString());
     println!("Input x2: {}", _p_txt_2.GetString());

@@ -2,7 +2,7 @@
 #![allow(dead_code)]
 #![allow(unused_imports)]
 
-use cxx::{CxxVector, SharedPtr, let_cxx_string};
+use cxx::{CxxVector, let_cxx_string};
 pub use cxx;
 
 #[cxx::bridge(namespace = "openfhe")]
@@ -138,6 +138,16 @@ pub mod ffi
         COEFFICIENT = 1
     }
 
+    #[repr(i32)]
+    enum PlaintextEncodings
+    {
+        INVALID_ENCODING = 0,
+        COEF_PACKED_ENCODING,
+        PACKED_ENCODING,
+        STRING_ENCODING,
+        CKKS_PACKED_ENCODING,
+    }
+
     struct ComplexPair
     {
         re: f64,
@@ -150,6 +160,8 @@ pub mod ffi
         include!("openfhe/src/Ciphertext.h");
         include!("openfhe/src/CryptoContext.h");
         include!("openfhe/src/CryptoParametersBase.h");
+        include!("openfhe/src/DCRTPoly.h");
+        include!("openfhe/src/DecryptResult.h");
         include!("openfhe/src/EncodingParams.h");
         include!("openfhe/src/EvalKey.h");
         include!("openfhe/src/KeyPair.h");
@@ -171,6 +183,7 @@ pub mod ffi
         type MultipartyMode;
         type MultiplicationTechnique;
         type PKESchemeFeature;
+        type PlaintextEncodings;
         type ProxyReEncryptionMode;
         type ScalingTechnique;
         type SCHEME;
@@ -181,6 +194,7 @@ pub mod ffi
         type CiphertextDCRTPoly;
         type CryptoContextDCRTPoly;
         type CryptoParametersBaseDCRTPoly;
+        type DCRTPoly;
         type DCRTPolyParams;
         type DecryptResult;
         type EncodingParams;
@@ -497,6 +511,12 @@ pub mod ffi
                                               interactiveBootCompressionLevel0: COMPRESSION_LEVEL);
     }
 
+    // DCRTPolyParams
+    unsafe extern "C++"
+    {
+        fn GenNullDCRTPolyParams() -> UniquePtr<DCRTPolyParams>;
+    }
+
     // PublicKeyDCRTPoly
     unsafe extern "C++"
     {
@@ -751,12 +771,13 @@ pub mod ffi
                                    -> UniquePtr<Plaintext>;
         fn MakeCKKSPackedPlaintext(self: &CryptoContextDCRTPoly, value: &CxxVector<f64>,
                                    scaleDeg: /* 1 */ usize, level: /* 0 */ u32,
-                                   params: /* null() */ SharedPtr<DCRTPolyParams>,
+                                   params: /* GenNullDCRTPolyParams */ &DCRTPolyParams,
                                    slots: /* 0 */ u32) -> UniquePtr<Plaintext>;
         fn MakeCKKSPackedPlaintextByVectorOfComplex(self: &CryptoContextDCRTPoly,
                                                     value: &CxxVector<ComplexPair>,
                                                     scaleDeg: /* 1 */ usize, level: /* 0 */ u32,
-                                                    params: /* null() */ SharedPtr<DCRTPolyParams>,
+                                                    params:
+                                                    /* GenNullDCRTPolyParams */ &DCRTPolyParams,
                                                     slots: /* 0 */ u32) -> UniquePtr<Plaintext>;
         fn EvalPoly(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
                     coefficients: &CxxVector<f64>) -> UniquePtr<CiphertextDCRTPoly>;
@@ -966,6 +987,9 @@ pub mod ffi
         fn GetCryptoParameters(self: &CryptoContextDCRTPoly)
                                -> UniquePtr<CryptoParametersBaseDCRTPoly>;
         fn GetEncodingParams(self: &CryptoContextDCRTPoly) -> UniquePtr<EncodingParams>;
+        fn KeySwitchDownFirstElement(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly)
+                                     -> UniquePtr<DCRTPoly>;
+        fn GetElementParams(self: &CryptoContextDCRTPoly) -> UniquePtr<DCRTPolyParams>;
 
         // cxx currently does not support static class methods
         fn ClearEvalMultKeys();
@@ -991,6 +1015,8 @@ pub mod ffi
         fn GetCopyOfAllEvalMultKeys() -> UniquePtr<MapFromStringToVectorOfEvalKeys>;
         fn GetCopyOfAllEvalSumKeys() -> UniquePtr<MapFromStringToMapFromIndexToEvalKey>;
         fn GetCopyOfAllEvalAutomorphismKeys() -> UniquePtr<MapFromStringToMapFromIndexToEvalKey>;
+        fn GetPlaintextForDecrypt(pte: PlaintextEncodings, evp: &DCRTPolyParams,
+                                  ep: &EncodingParams) -> UniquePtr<Plaintext>;
     }
 
     // Serialize / Deserialize
@@ -1202,8 +1228,9 @@ mod tests
         _x_2.pin_mut().push(0.5);
         _x_2.pin_mut().push(0.25);
 
-        let _p_txt_1 = _cc.MakeCKKSPackedPlaintext(&_x_1, 1, 0, SharedPtr::<ffi::DCRTPolyParams>::null(), 0);
-        let _p_txt_2 = _cc.MakeCKKSPackedPlaintext(&_x_2, 1, 0, SharedPtr::<ffi::DCRTPolyParams>::null(), 0);
+        let _dcrt_poly_params = ffi::GenNullDCRTPolyParams();
+        let _p_txt_1 = _cc.MakeCKKSPackedPlaintext(&_x_1, 1, 0, &_dcrt_poly_params, 0);
+        let _p_txt_2 = _cc.MakeCKKSPackedPlaintext(&_x_2, 1, 0, &_dcrt_poly_params, 0);
 
         println!("Input x1: {}", _p_txt_1.GetString());
         println!("Input x2: {}", _p_txt_2.GetString());
@@ -1326,7 +1353,8 @@ mod tests
         _coefficients_2.pin_mut().push(-0.4);
         _coefficients_2.pin_mut().push(-0.5);
 
-        let _plain_text_1 = _cc.MakeCKKSPackedPlaintextByVectorOfComplex(&_input, 1, 0, SharedPtr::<ffi::DCRTPolyParams>::null(), 0);
+        let _dcrt_poly_params = ffi::GenNullDCRTPolyParams();
+        let _plain_text_1 = _cc.MakeCKKSPackedPlaintextByVectorOfComplex(&_input, 1, 0, &_dcrt_poly_params, 0);
         let _key_pair = _cc.KeyGen();
         print!("Generating evaluation key for homomorphic multiplication...");
         _cc.EvalMultKeyGen(&_key_pair.GetPrivateKey());

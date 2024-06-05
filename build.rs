@@ -5,6 +5,8 @@ fn main()
         .file("src/Ciphertext.cc")
         .file("src/CryptoContext.cc")
         .file("src/CryptoParametersBase.cc")
+        .file("src/DCRTPoly.cc")
+        .file("src/DecryptResult.cc")
         .file("src/EncodingParams.cc")
         .file("src/EvalKey.cc")
         .file("src/KeyPair.cc")
@@ -16,7 +18,6 @@ fn main()
         .file("src/SchemeBase.cc")
         .file("src/SequenceContainerOfOpaqueTypes.cc")
         .file("src/SerialDeserial.cc")
-
         .include("/usr/local/include/openfhe")
         .include("/usr/local/include/openfhe/third-party/include")
         .include("/usr/local/include/openfhe/core")
@@ -42,6 +43,10 @@ fn main()
     println!("cargo::rerun-if-changed=src/CryptoContext.cc");
     println!("cargo::rerun-if-changed=src/CryptoParametersBase.h");
     println!("cargo::rerun-if-changed=src/CryptoParametersBase.cc");
+    println!("cargo::rerun-if-changed=src/DCRTPoly.h");
+    println!("cargo::rerun-if-changed=src/DCRTPoly.cc");
+    println!("cargo::rerun-if-changed=src/DecryptResult.h");
+    println!("cargo::rerun-if-changed=src/DecryptResult.cc");
     println!("cargo::rerun-if-changed=src/EncodingParams.h");
     println!("cargo::rerun-if-changed=src/EncodingParams.cc");
     println!("cargo::rerun-if-changed=src/EvalKey.h");

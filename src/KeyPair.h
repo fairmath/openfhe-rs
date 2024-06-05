@@ -7,7 +7,7 @@
 namespace lbcrypto
 {
 
-template <class Element>
+template <typename Element>
 class KeyPair;
 
 } // lbcrypto

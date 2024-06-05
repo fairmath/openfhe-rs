@@ -1,4 +1,4 @@
-use openfhe::cxx::{CxxVector, SharedPtr};
+use openfhe::cxx::{CxxVector};
 use openfhe::ffi as ffi;
 
 fn main()
@@ -75,7 +75,8 @@ fn main()
     _coefficients_2.pin_mut().push(-0.4);
     _coefficients_2.pin_mut().push(-0.5);
 
-    let _plain_text_1 = _cc.MakeCKKSPackedPlaintextByVectorOfComplex(&_input, 1, 0, SharedPtr::<ffi::DCRTPolyParams>::null(), 0);
+    let _dcrt_poly_params = ffi::GenNullDCRTPolyParams();
+    let _plain_text_1 = _cc.MakeCKKSPackedPlaintextByVectorOfComplex(&_input, 1, 0, &_dcrt_poly_params, 0);
     let _key_pair = _cc.KeyGen();
     print!("Generating evaluation key for homomorphic multiplication...");
     _cc.EvalMultKeyGen(&_key_pair.GetPrivateKey());

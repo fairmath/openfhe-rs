@@ -11,6 +11,8 @@
 #include "AssociativeContainerOfOpaqueTypes.h"
 #include "Ciphertext.h"
 #include "CryptoParametersBase.h"
+#include "DCRTPoly.h"
+#include "DecryptResult.h"
 #include "EncodingParams.h"
 #include "EvalKey.h"
 #include "KeyPair.h"
@@ -37,7 +39,7 @@ CryptoContextDCRTPoly::CryptoContextDCRTPoly(const ParamsCKKSRNS& params)
 { }
 std::unique_ptr<Plaintext> CryptoContextDCRTPoly::MakeCKKSPackedPlaintextByVectorOfComplex(
     const std::vector<ComplexPair>& value, const size_t scaleDeg, const uint32_t level,
-    const std::shared_ptr<DCRTPolyParams> params, const uint32_t slots) const
+    const DCRTPolyParams& params, const uint32_t slots) const
 {
     std::vector<std::complex<double>> v;
     v.reserve(value.size());
@@ -46,7 +48,7 @@ std::unique_ptr<Plaintext> CryptoContextDCRTPoly::MakeCKKSPackedPlaintextByVecto
         v.emplace_back(elem.re, elem.im);
     }
     return std::make_unique<Plaintext>(m_cryptoContextImplSharedPtr->MakeCKKSPackedPlaintext(v,
-        scaleDeg, level, params, slots));
+        scaleDeg, level, params.GetInternal(), slots));
 }
 void CryptoContextDCRTPoly::SetSchemeId(const SCHEME schemeTag) const
 {
@@ -594,10 +596,10 @@ std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalCos(
 }
 std::unique_ptr<Plaintext> CryptoContextDCRTPoly::MakeCKKSPackedPlaintext(
     const std::vector<double>& value, const size_t scaleDeg, const uint32_t level,
-    const std::shared_ptr<DCRTPolyParams> params, const uint32_t slots) const
+    const DCRTPolyParams& params, const uint32_t slots) const
 {
     return std::make_unique<Plaintext>(m_cryptoContextImplSharedPtr->MakeCKKSPackedPlaintext(
-        value, scaleDeg, level, params, slots));
+        value, scaleDeg, level, params.GetInternal(), slots));
 }
 std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalPoly(
     const CiphertextDCRTPoly& ciphertext, const std::vector<double>& coefficients) const
@@ -920,7 +922,7 @@ void CryptoContextDCRTPoly::RecoverSharedKey(PrivateKeyDCRTPoly& sk,
     UnorderedMapFromIndexToDCRTPoly& sk_shares, const uint32_t N, const uint32_t threshold,
     const std::string& shareType) const
 {
-	std::shared_ptr<PrivateKeyImpl> p = sk.GetInternal();
+	auto p = sk.GetInternal();
 	m_cryptoContextImplSharedPtr->RecoverSharedKey(p, sk_shares.GetInternal(), N,
         threshold, shareType);
 }
@@ -1056,6 +1058,16 @@ std::unique_ptr<EncodingParams> CryptoContextDCRTPoly::GetEncodingParams() const
 {
     return std::make_unique<EncodingParams>(m_cryptoContextImplSharedPtr->GetEncodingParams());
 }
+std::unique_ptr<DCRTPoly> CryptoContextDCRTPoly::KeySwitchDownFirstElement(
+    const CiphertextDCRTPoly& ciphertext) const
+{
+    return std::make_unique<DCRTPoly>(m_cryptoContextImplSharedPtr->KeySwitchDownFirstElement(
+        ciphertext.GetInternal()));
+}
+std::unique_ptr<DCRTPolyParams> CryptoContextDCRTPoly::GetElementParams() const
+{
+    return std::make_unique<DCRTPolyParams>(m_cryptoContextImplSharedPtr->GetElementParams());
+}
 std::shared_ptr<CryptoContextImpl> CryptoContextDCRTPoly::GetInternal() const
 {
     return m_cryptoContextImplSharedPtr;
@@ -1156,6 +1168,12 @@ std::unique_ptr<MapFromStringToMapFromIndexToEvalKey> GetCopyOfAllEvalAutomorphi
 {
     return std::make_unique<MapFromStringToMapFromIndexToEvalKey>(
         CryptoContextImpl::GetAllEvalAutomorphismKeys());
+}
+std::unique_ptr<Plaintext> GetPlaintextForDecrypt(const PlaintextEncodings pte,
+    const DCRTPolyParams& evp, const EncodingParams& ep)
+{
+    return std::make_unique<Plaintext>(CryptoContextImpl::GetPlaintextForDecrypt(pte,
+        evp.GetInternal(), ep.GetInternal()));
 }
 
 // Generator functions

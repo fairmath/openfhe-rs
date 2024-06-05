@@ -14,15 +14,13 @@
 namespace openfhe
 {
 
-using DCRTPoly = lbcrypto::DCRTPoly;
-
 class UnorderedMapFromIndexToDCRTPoly final
 {
-    std::unordered_map<uint32_t, DCRTPoly> m_indexToDCRTPolyUnorderedMap;
+    std::unordered_map<uint32_t, lbcrypto::DCRTPoly> m_indexToDCRTPolyUnorderedMap;
 public:
     explicit UnorderedMapFromIndexToDCRTPoly(
-        std::unordered_map<uint32_t, DCRTPoly> indexToDCRTPolyUnorderedMap);
-    [[nodiscard]] std::unordered_map<uint32_t, DCRTPoly>& GetInternal();
+        std::unordered_map<uint32_t, lbcrypto::DCRTPoly> indexToDCRTPolyUnorderedMap);
+    [[nodiscard]] std::unordered_map<uint32_t, lbcrypto::DCRTPoly>& GetInternal();
 };
 
 using EvalKeyImpl = lbcrypto::EvalKeyImpl<lbcrypto::DCRTPoly>;
