@@ -3,7 +3,7 @@
 #include "openfhe/core/lattice/hal/lat-backend.h"
 #include "openfhe/pke/ciphertext-fwd.h"
 
-#include "SerialMode.h" // SerialMode
+#include "SerialMode.h"
 
 namespace openfhe
 {

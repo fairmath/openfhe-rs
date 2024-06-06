@@ -2,8 +2,6 @@
 
 #include "openfhe/core/lattice/hal/lat-backend.h"
 
-#include <memory>
-
 namespace lbcrypto
 {
 

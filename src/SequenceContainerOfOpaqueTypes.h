@@ -6,8 +6,6 @@
 #include "openfhe/pke/key/evalkey-fwd.h"
 #include "openfhe/pke/key/privatekey-fwd.h"
 
-#include <vector>
-
 // cxx currently does not support std::vector of opaque type
 
 namespace openfhe

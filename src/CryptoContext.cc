@@ -1,12 +1,11 @@
 #include "CryptoContext.h"
 
-#include "openfhe/core/utils/caller_info.h" // CALLER_INFO_ARGS_HDR
 #include "openfhe/pke/gen-cryptocontext.h"
 #include "openfhe/pke/scheme/bfvrns/gen-cryptocontext-bfvrns.h"
 #include "openfhe/pke/scheme/bgvrns/gen-cryptocontext-bgvrns.h"
 #include "openfhe/pke/scheme/ckksrns/gen-cryptocontext-ckksrns.h"
 
-#include "openfhe/src/lib.rs.h" // ComplexPair
+#include "openfhe/src/lib.rs.h"
 
 #include "AssociativeContainerOfOpaqueTypes.h"
 #include "Ciphertext.h"

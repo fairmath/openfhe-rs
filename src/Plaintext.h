@@ -1,10 +1,10 @@
 #pragma once
 
-#include "openfhe/core/utils/inttypes.h" // Format
+#include "openfhe/core/utils/inttypes.h"
 #include "openfhe/pke/encoding/plaintext-fwd.h"
 #include "openfhe/pke/scheme/scheme-id.h"
 
-#include "rust/cxx.h" // rust::String
+#include "rust/cxx.h"
 
 namespace openfhe
 {

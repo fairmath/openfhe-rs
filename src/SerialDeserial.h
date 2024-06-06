@@ -2,7 +2,7 @@
 
 #include "bits/stringfwd.h"
 
-#include "SerialMode.h" // SerialMode
+#include "SerialMode.h"
 
 namespace openfhe
 {

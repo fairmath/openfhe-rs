@@ -2,12 +2,10 @@
 
 #include "openfhe/core/lattice/hal/lat-backend.h"
 
-#include <memory>
-
 namespace lbcrypto
 {
 
-template <class Element>
+template <typename Element>
 class CryptoParametersBase;
 
 } // lbcrypto
