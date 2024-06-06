@@ -20,13 +20,13 @@ public:
         PublicKeyDCRTPoly& publicKey, const SerialMode serialMode);
 
     PublicKeyDCRTPoly() = default;
-    explicit PublicKeyDCRTPoly(const std::shared_ptr<PublicKeyImpl>& publicKey);
+    PublicKeyDCRTPoly(const std::shared_ptr<PublicKeyImpl>& publicKey) noexcept;
     PublicKeyDCRTPoly(const PublicKeyDCRTPoly&) = delete;
     PublicKeyDCRTPoly(PublicKeyDCRTPoly&&) = delete;
     PublicKeyDCRTPoly& operator=(const PublicKeyDCRTPoly&) = delete;
     PublicKeyDCRTPoly& operator=(PublicKeyDCRTPoly&&) = delete;
 
-    [[nodiscard]] std::shared_ptr<PublicKeyImpl> GetInternal() const;
+    [[nodiscard]] std::shared_ptr<PublicKeyImpl> GetInternal() const noexcept;
 };
 
 // Generator functions

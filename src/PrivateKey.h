@@ -12,13 +12,13 @@ class PrivateKeyDCRTPoly final
 {
     std::shared_ptr<PrivateKeyImpl> m_privateKey;
 public:
-    explicit PrivateKeyDCRTPoly(const std::shared_ptr<PrivateKeyImpl>& privateKey);
+    PrivateKeyDCRTPoly(const std::shared_ptr<PrivateKeyImpl>& privateKey) noexcept;
     PrivateKeyDCRTPoly(const PrivateKeyDCRTPoly&) = delete;
     PrivateKeyDCRTPoly(PrivateKeyDCRTPoly&&) = delete;
     PrivateKeyDCRTPoly& operator=(const PrivateKeyDCRTPoly&) = delete;
     PrivateKeyDCRTPoly& operator=(PrivateKeyDCRTPoly&&) = delete;
 
-    [[nodiscard]] std::shared_ptr<PrivateKeyImpl> GetInternal() const;
+    [[nodiscard]] std::shared_ptr<PrivateKeyImpl> GetInternal() const noexcept;
 };
 
 } // openfhe

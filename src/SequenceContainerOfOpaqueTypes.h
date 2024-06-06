@@ -17,18 +17,19 @@ class VectorOfCiphertexts final
 {
     std::vector<std::shared_ptr<CiphertextImpl>> m_ciphertexts;
 public:
-    explicit VectorOfCiphertexts(std::vector<std::shared_ptr<CiphertextImpl>> ciphertexts);
-    [[nodiscard]] const std::vector<std::shared_ptr<CiphertextImpl>>& GetInternal() const;
-    [[nodiscard]] std::vector<std::shared_ptr<CiphertextImpl>>& GetInternal();
+    VectorOfCiphertexts(std::vector<std::shared_ptr<CiphertextImpl>>&& ciphertexts) noexcept;
+    [[nodiscard]] const std::vector<std::shared_ptr<CiphertextImpl>>& GetInternal() const noexcept;
+    [[nodiscard]] std::vector<std::shared_ptr<CiphertextImpl>>& GetInternal() noexcept;
 };
 
 class VectorOfVectorOfCiphertexts final
 {
     std::vector<std::vector<std::shared_ptr<CiphertextImpl>>> m_ciphertexts;
 public:
-    explicit VectorOfVectorOfCiphertexts(
-        std::vector<std::vector<std::shared_ptr<CiphertextImpl>>> ciphertexts);
-    [[nodiscard]] std::vector<std::vector<std::shared_ptr<CiphertextImpl>>>& GetInternal();
+    VectorOfVectorOfCiphertexts(
+        std::vector<std::vector<std::shared_ptr<CiphertextImpl>>>&& ciphertexts) noexcept;
+    [[nodiscard]] std::vector<std::vector<std::shared_ptr<CiphertextImpl>>>&
+        GetInternal() noexcept;
 };
 
 using PrivateKeyImpl = lbcrypto::PrivateKeyImpl<lbcrypto::DCRTPoly>;
@@ -37,16 +38,16 @@ class VectorOfPrivateKeys final
 {
     std::vector<std::shared_ptr<PrivateKeyImpl>> m_privateKeys;
 public:
-    explicit VectorOfPrivateKeys(std::vector<std::shared_ptr<PrivateKeyImpl>> ciphertexts);
-    [[nodiscard]] const std::vector<std::shared_ptr<PrivateKeyImpl>>& GetInternal() const;
+    VectorOfPrivateKeys(std::vector<std::shared_ptr<PrivateKeyImpl>>&& ciphertexts) noexcept;
+    [[nodiscard]] const std::vector<std::shared_ptr<PrivateKeyImpl>>& GetInternal() const noexcept;
 };
 
 class VectorOfDCRTPolys final
 {
     std::shared_ptr<std::vector<lbcrypto::DCRTPoly>> m_elements;
 public:
-    explicit VectorOfDCRTPolys(const std::shared_ptr<std::vector<lbcrypto::DCRTPoly>> elements);
-    [[nodiscard]] std::shared_ptr<std::vector<lbcrypto::DCRTPoly>> GetInternal() const;
+    VectorOfDCRTPolys(std::shared_ptr<std::vector<lbcrypto::DCRTPoly>>&& elements) noexcept;
+    [[nodiscard]] std::shared_ptr<std::vector<lbcrypto::DCRTPoly>> GetInternal() const noexcept;
 };
 
 using EvalKeyImpl = lbcrypto::EvalKeyImpl<lbcrypto::DCRTPoly>;
@@ -55,8 +56,8 @@ class VectorOfEvalKeys final
 {
     std::vector<std::shared_ptr<EvalKeyImpl>> m_evalKeys;
 public:
-    explicit VectorOfEvalKeys(std::vector<std::shared_ptr<EvalKeyImpl>> evalKeys);
-    [[nodiscard]] const std::vector<std::shared_ptr<EvalKeyImpl>>& GetInternal() const;
+    VectorOfEvalKeys(std::vector<std::shared_ptr<EvalKeyImpl>> evalKeys);
+    [[nodiscard]] const std::vector<std::shared_ptr<EvalKeyImpl>>& GetInternal() const noexcept;
 };
 
 using LWECiphertextImpl = lbcrypto::LWECiphertextImpl;
@@ -65,9 +66,9 @@ class VectorOfLWECiphertexts final
 {
     std::vector<std::shared_ptr<LWECiphertextImpl>> m_lweCiphertexts;
 public:
-    explicit VectorOfLWECiphertexts(
-        std::vector<std::shared_ptr<LWECiphertextImpl>> lweCiphertexts);
-    [[nodiscard]] std::vector<std::shared_ptr<LWECiphertextImpl>>& GetInternal();
+    VectorOfLWECiphertexts(
+        std::vector<std::shared_ptr<LWECiphertextImpl>>&& lweCiphertexts) noexcept;
+    [[nodiscard]] std::vector<std::shared_ptr<LWECiphertextImpl>>& GetInternal() noexcept;
 };
 
 } // openfhe

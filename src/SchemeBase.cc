@@ -5,7 +5,7 @@
 namespace openfhe
 {
 
-SchemeBaseDCRTPoly::SchemeBaseDCRTPoly(const std::shared_ptr<SchemeBase>& schemeBase)
+SchemeBaseDCRTPoly::SchemeBaseDCRTPoly(const std::shared_ptr<SchemeBase>& schemeBase) noexcept
     : m_schemeBase(schemeBase)
 { }
 

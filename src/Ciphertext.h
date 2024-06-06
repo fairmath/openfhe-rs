@@ -20,13 +20,13 @@ public:
         CiphertextDCRTPoly& ciphertext, const SerialMode serialMode);
 
     CiphertextDCRTPoly() = default;
-    explicit CiphertextDCRTPoly(const std::shared_ptr<CiphertextImpl>& ciphertext);
+    CiphertextDCRTPoly(std::shared_ptr<CiphertextImpl>&& ciphertext) noexcept;
     CiphertextDCRTPoly(const CiphertextDCRTPoly&) = delete;
     CiphertextDCRTPoly(CiphertextDCRTPoly&&) = delete;
     CiphertextDCRTPoly& operator=(const CiphertextDCRTPoly&) = delete;
     CiphertextDCRTPoly& operator=(CiphertextDCRTPoly&&) = delete;
 
-    [[nodiscard]] std::shared_ptr<CiphertextImpl> GetInternal() const;
+    [[nodiscard]] std::shared_ptr<CiphertextImpl> GetInternal() const noexcept;
 };
 
 // Generator functions

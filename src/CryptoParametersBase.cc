@@ -6,7 +6,7 @@ namespace openfhe
 {
 
 CryptoParametersBaseDCRTPoly::CryptoParametersBaseDCRTPoly(
-    const std::shared_ptr<CryptoParametersBase>& cryptoParametersBase)
+    const std::shared_ptr<CryptoParametersBase>& cryptoParametersBase) noexcept
     : m_cryptoParametersBase(cryptoParametersBase)
 { }
 

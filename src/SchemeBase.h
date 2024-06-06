@@ -20,7 +20,7 @@ class SchemeBaseDCRTPoly final
     std::shared_ptr<SchemeBase> m_schemeBase;
 public:
     SchemeBaseDCRTPoly() = default;
-    explicit SchemeBaseDCRTPoly(const std::shared_ptr<SchemeBase>& schemeBase);
+    SchemeBaseDCRTPoly(const std::shared_ptr<SchemeBase>& schemeBase) noexcept;
     SchemeBaseDCRTPoly(const SchemeBaseDCRTPoly&) = delete;
     SchemeBaseDCRTPoly(SchemeBaseDCRTPoly&&) = delete;
     SchemeBaseDCRTPoly& operator=(const SchemeBaseDCRTPoly&) = delete;

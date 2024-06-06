@@ -8,9 +8,9 @@
 namespace openfhe
 {
 
-KeyPairDCRTPoly::KeyPairDCRTPoly(const KeyPair& keyPair)
-    : m_publicKey(keyPair.publicKey)
-    , m_privateKey(keyPair.secretKey)
+KeyPairDCRTPoly::KeyPairDCRTPoly(KeyPair&& keyPair) noexcept
+    : m_publicKey(std::move(keyPair.publicKey))
+    , m_privateKey(std::move(keyPair.secretKey))
 { }
 std::unique_ptr<PublicKeyDCRTPoly> KeyPairDCRTPoly::GetPublicKey() const
 {

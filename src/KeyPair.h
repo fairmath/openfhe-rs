@@ -27,7 +27,7 @@ class KeyPairDCRTPoly final
     std::shared_ptr<PublicKeyImpl> m_publicKey;
     std::shared_ptr<PrivateKeyImpl> m_privateKey;
 public:
-    explicit KeyPairDCRTPoly(const KeyPair& keyPair);
+    KeyPairDCRTPoly(KeyPair&& keyPair) noexcept;
     KeyPairDCRTPoly(const KeyPairDCRTPoly&) = delete;
     KeyPairDCRTPoly(KeyPairDCRTPoly&&) = delete;
     KeyPairDCRTPoly& operator=(const KeyPairDCRTPoly&) = delete;

@@ -4,26 +4,27 @@ namespace openfhe
 {
 
 UnorderedMapFromIndexToDCRTPoly::UnorderedMapFromIndexToDCRTPoly(
-    std::unordered_map<uint32_t, lbcrypto::DCRTPoly> indexToDCRTPolyUnorderedMap)
+    std::unordered_map<uint32_t, lbcrypto::DCRTPoly>&& indexToDCRTPolyUnorderedMap) noexcept
     : m_indexToDCRTPolyUnorderedMap(std::move(indexToDCRTPolyUnorderedMap))
 { }
-std::unordered_map<uint32_t, lbcrypto::DCRTPoly>& UnorderedMapFromIndexToDCRTPoly::GetInternal()
+std::unordered_map<uint32_t, lbcrypto::DCRTPoly>&
+    UnorderedMapFromIndexToDCRTPoly::GetInternal() noexcept
 {
     return m_indexToDCRTPolyUnorderedMap;
 }
 
 MapFromIndexToEvalKey::MapFromIndexToEvalKey(
-    const std::shared_ptr<std::map<uint32_t, std::shared_ptr<EvalKeyImpl>>>
-    sharedPtrToindexToEvalKeyDCRTPolyMap)
-    : m_sharedPtrToindexToEvalKeyDCRTPolyMap(sharedPtrToindexToEvalKeyDCRTPolyMap)
+    std::shared_ptr<std::map<uint32_t, std::shared_ptr<EvalKeyImpl>>>&&
+    sharedPtrToindexToEvalKeyDCRTPolyMap) noexcept
+    : m_sharedPtrToindexToEvalKeyDCRTPolyMap(std::move(sharedPtrToindexToEvalKeyDCRTPolyMap))
 { }
 const std::map<uint32_t, std::shared_ptr<EvalKeyImpl>>&
-    MapFromIndexToEvalKey::GetInternalMap() const
+    MapFromIndexToEvalKey::GetInternalMap() const noexcept
 {
     return *m_sharedPtrToindexToEvalKeyDCRTPolyMap;
 }
 std::shared_ptr<std::map<uint32_t, std::shared_ptr<EvalKeyImpl>>>
-    MapFromIndexToEvalKey::GetInternal() const
+    MapFromIndexToEvalKey::GetInternal() const noexcept
 {
     return m_sharedPtrToindexToEvalKeyDCRTPolyMap;
 }

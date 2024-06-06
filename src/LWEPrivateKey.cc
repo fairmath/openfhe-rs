@@ -5,10 +5,10 @@
 namespace openfhe
 {
 
-LWEPrivateKey::LWEPrivateKey(const std::shared_ptr<LWEPrivateKeyImpl>& lwePrivateKey)
-    : m_lwePrivateKey(lwePrivateKey)
+LWEPrivateKey::LWEPrivateKey(std::shared_ptr<LWEPrivateKeyImpl>&& lwePrivateKey) noexcept
+    : m_lwePrivateKey(std::move(lwePrivateKey))
 { }
-std::shared_ptr<LWEPrivateKeyImpl> LWEPrivateKey::GetInternal() const
+std::shared_ptr<LWEPrivateKeyImpl> LWEPrivateKey::GetInternal() const noexcept
 {
     return m_lwePrivateKey;
 }

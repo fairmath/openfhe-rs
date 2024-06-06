@@ -9,7 +9,7 @@ class DecryptResult final
 {
 	lbcrypto::DecryptResult m_decryptResult;
 public:
-    explicit DecryptResult(const lbcrypto::DecryptResult decryptResult);
+    DecryptResult(lbcrypto::DecryptResult&& decryptResult) noexcept;
     DecryptResult(const DecryptResult&) = delete;
     DecryptResult(DecryptResult&&) = delete;
     DecryptResult& operator=(const DecryptResult&) = delete;

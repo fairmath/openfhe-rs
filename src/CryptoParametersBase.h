@@ -20,8 +20,8 @@ class CryptoParametersBaseDCRTPoly final
     std::shared_ptr<CryptoParametersBase> m_cryptoParametersBase;
 public:
     CryptoParametersBaseDCRTPoly() = default;
-    explicit CryptoParametersBaseDCRTPoly(
-        const std::shared_ptr<CryptoParametersBase>& cryptoParametersBase);
+    CryptoParametersBaseDCRTPoly(
+        const std::shared_ptr<CryptoParametersBase>& cryptoParametersBase) noexcept;
     CryptoParametersBaseDCRTPoly(const CryptoParametersBaseDCRTPoly&) = delete;
     CryptoParametersBaseDCRTPoly(CryptoParametersBaseDCRTPoly&&) = delete;
     CryptoParametersBaseDCRTPoly& operator=(const CryptoParametersBaseDCRTPoly&) = delete;

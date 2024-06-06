@@ -5,10 +5,10 @@
 namespace openfhe
 {
 
-EvalKeyDCRTPoly::EvalKeyDCRTPoly(const std::shared_ptr<EvalKeyImpl>& evalKey)
-    : m_evalKey(evalKey)
+EvalKeyDCRTPoly::EvalKeyDCRTPoly(std::shared_ptr<EvalKeyImpl>&& evalKey) noexcept
+    : m_evalKey(std::move(evalKey))
 { }
-std::shared_ptr<EvalKeyImpl> EvalKeyDCRTPoly::GetInternal() const
+std::shared_ptr<EvalKeyImpl> EvalKeyDCRTPoly::GetInternal() const noexcept
 {
     return m_evalKey;
 }

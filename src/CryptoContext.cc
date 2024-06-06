@@ -549,7 +549,7 @@ std::unique_ptr<DecryptResult> CryptoContextDCRTPoly::DecryptByPrivateKeyAndCiph
     std::shared_ptr<PlaintextImpl> p;
     std::unique_ptr<DecryptResult> res = std::make_unique<DecryptResult>(
     m_cryptoContextImplSharedPtr->Decrypt(privateKey.GetInternal(), ciphertext.GetInternal(), &p));
-    plaintext = p;
+    plaintext = std::move(p);
     return res;
 }
 std::unique_ptr<DecryptResult> CryptoContextDCRTPoly::DecryptByCiphertextAndPrivateKey(
@@ -559,7 +559,7 @@ std::unique_ptr<DecryptResult> CryptoContextDCRTPoly::DecryptByCiphertextAndPriv
     std::shared_ptr<PlaintextImpl> p;
     std::unique_ptr<DecryptResult> res = std::make_unique<DecryptResult>(
     m_cryptoContextImplSharedPtr->Decrypt(ciphertext.GetInternal(), privateKey.GetInternal(), &p));
-    plaintext = p;
+    plaintext = std::move(p);
     return res;
 }
 std::unique_ptr<DecryptResult> CryptoContextDCRTPoly::MultipartyDecryptFusion(
@@ -568,7 +568,7 @@ std::unique_ptr<DecryptResult> CryptoContextDCRTPoly::MultipartyDecryptFusion(
     std::shared_ptr<PlaintextImpl> p;
     std::unique_ptr<DecryptResult> res = std::make_unique<DecryptResult>(
     m_cryptoContextImplSharedPtr->MultipartyDecryptFusion(partialCiphertextVec.GetInternal(), &p));
-    plaintext = p;
+    plaintext = std::move(p);
     return res;
 }
 uint32_t CryptoContextDCRTPoly::GetRingDimension() const

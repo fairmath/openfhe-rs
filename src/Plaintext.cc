@@ -2,20 +2,20 @@
 
 #include "openfhe/pke/encoding/plaintext.h"
 
-#include "openfhe/src/lib.rs.h" // ComplexPair
+#include "openfhe/src/lib.rs.h"
 
 namespace openfhe
 {
 
-Plaintext::Plaintext(const std::shared_ptr<PlaintextImpl>& plaintext)
-    : m_plaintext(plaintext)
+Plaintext::Plaintext(std::shared_ptr<PlaintextImpl>&& plaintext) noexcept
+    : m_plaintext(std::move(plaintext))
 { }
-Plaintext& Plaintext::operator=(const std::shared_ptr<PlaintextImpl>& plaintext)
+Plaintext& Plaintext::operator=(std::shared_ptr<PlaintextImpl>&& plaintext) noexcept
 {
-    m_plaintext = plaintext;
+    m_plaintext = std::move(plaintext);
     return *this;
 }
-std::shared_ptr<PlaintextImpl> Plaintext::GetInternal() const
+std::shared_ptr<PlaintextImpl> Plaintext::GetInternal() const noexcept
 {
     return m_plaintext;
 }
@@ -23,19 +23,19 @@ void Plaintext::SetLength(const size_t newSize) const
 {
     m_plaintext->SetLength(newSize);
 }
-void Plaintext::SetLevel(const size_t l) const
+void Plaintext::SetLevel(const size_t l) const noexcept
 {
     m_plaintext->SetLevel(l);
 }
-bool Plaintext::IsEncoded() const
+bool Plaintext::IsEncoded() const noexcept
 {
     return m_plaintext->IsEncoded();
 }
-int64_t Plaintext::HighBound() const
+int64_t Plaintext::HighBound() const noexcept
 {
     return m_plaintext->HighBound();
 }
-int64_t Plaintext::LowBound() const
+int64_t Plaintext::LowBound() const noexcept
 {
     return m_plaintext->LowBound();
 }
@@ -49,11 +49,11 @@ rust::String Plaintext::GetString() const
     stream << *m_plaintext;
     return rust::String(stream.str());
 }
-size_t Plaintext::GetLength() const
+size_t Plaintext::GetLength() const noexcept
 {
     return m_plaintext->GetLength();
 }
-size_t Plaintext::GetLevel() const
+size_t Plaintext::GetLevel() const noexcept
 {
     return m_plaintext->GetLevel();
 }
@@ -61,19 +61,19 @@ double Plaintext::GetLogError() const
 {
     return m_plaintext->GetLogError();
 }
-size_t Plaintext::GetNoiseScaleDeg() const
+size_t Plaintext::GetNoiseScaleDeg() const noexcept
 {
     return m_plaintext->GetNoiseScaleDeg();
 }
-double Plaintext::GetScalingFactor() const
+double Plaintext::GetScalingFactor() const noexcept
 {
     return m_plaintext->GetScalingFactor();
 }
-SCHEME Plaintext::GetSchemeID() const
+SCHEME Plaintext::GetSchemeID() const noexcept
 {
     return m_plaintext->GetSchemeID();
 }
-uint32_t Plaintext::GetSlots() const
+uint32_t Plaintext::GetSlots() const noexcept
 {
     return m_plaintext->GetSlots();
 }
@@ -93,15 +93,15 @@ void Plaintext::SetIntVectorValue(const std::vector<int64_t>& val) const
 {
     m_plaintext->SetIntVectorValue(val);
 }
-void Plaintext::SetNoiseScaleDeg(const size_t nsd) const
+void Plaintext::SetNoiseScaleDeg(const size_t nsd) const noexcept
 {
     m_plaintext->SetNoiseScaleDeg(nsd);
 }
-void Plaintext::SetScalingFactor(const double sf) const
+void Plaintext::SetScalingFactor(const double sf) const noexcept
 {
     m_plaintext->SetScalingFactor(sf);
 }
-void Plaintext::SetSlots(const uint32_t s) const
+void Plaintext::SetSlots(const uint32_t s) const noexcept
 {
     m_plaintext->SetSlots(s);
 }

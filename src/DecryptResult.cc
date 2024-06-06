@@ -3,8 +3,8 @@
 namespace openfhe
 {
 
-DecryptResult::DecryptResult(const lbcrypto::DecryptResult decryptResult)
-    : m_decryptResult(decryptResult)
+DecryptResult::DecryptResult(lbcrypto::DecryptResult&& decryptResult) noexcept
+    : m_decryptResult(std::move(decryptResult))
 { }
 
 } // openfhe
