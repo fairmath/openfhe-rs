@@ -2,7 +2,7 @@
 
 For license information, refer to the [License file](../../LICENSE).
 
-## About
+## Overview
 
 This document describes how to call polynomial evaluation on a ciphertext in CKKS.
 Polynomial evaluation refers to the computation of the value of a polynomial when its indeterminates are substituted for some values, see more [on Wiki](https://en.wikipedia.org/wiki/Polynomial_evaluation).
@@ -23,3 +23,15 @@ In this example, we run the evaluation upon two sets of coefficients:
     2. {1, 2, 3, 4, 5, -1, -2, -3, -4, -5, 0.1, 0.2, 0.3, 0.4, 0.5, -0.1, -0.2, -0.3, -0.4, -0.5, 0.1, 0.2, 0.3, 0.4, 0.5, -0.1, -0.2, -0.3, -0.4, -0.5}.
 
 For this example, we set the multiplicative depth at 6 and the scaling mod size at 50.
+
+## Running the example
+
+1. Ensure the `openfhe-rs` library is installed and properly configured, see the [Installation guide](../getting-started/installation.md)
+2. Go to the `examples` directory and make sure that the needed example is there - `polynomial_evaluation.rs`.
+3. Compile and run the Rust file:
+    ```sh
+    rustc polynomial_evaluation.rs -o polynomial_evaluation
+    ./polynomial_evaluation
+    ```
+
+This should output the results of the homomorphic computations to the console.

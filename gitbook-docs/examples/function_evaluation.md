@@ -2,7 +2,7 @@
 
 For license information, refer to the [License file](../../LICENSE).
 
-## About
+## Overview
 
 This document describes how to evaluate an arbitrary smooth function on a ciphertext in CKKS using [Chebyshev approximation](https://www.gnu.org/software/gsl/doc/html/cheb.html).
 The Chebyshev approximation is a method of approximating a smooth function using polynomials, see more [on Wiki](https://en.wikipedia.org/wiki/Chebyshev_polynomials).
@@ -22,6 +22,18 @@ Our Rust wrapper is based on the original OpenFHE interface; `EvalLogistic` func
 - `b`: the upper bound of underlying plaintext values we could have.
 - `degree`: the desired polynomial degree of the Chebyshev approximation.
 A higher degree gives a more precise estimate but takes longer to run.
+
+## Running the example
+
+1. Ensure the `openfhe-rs` library is installed and properly configured, see the [Installation guide](../getting-started/installation.md)
+2. Go to the `examples` directory and make sure that the needed example is there - `function_evaluation.rs`.
+3. Compile and run the Rust file:
+    ```sh
+    rustc function_evaluation.rs -o function_evaluation
+    ./function_evaluation
+    ```
+
+This should output the results of the homomorphic computations to the console.
 
 ## How to choose a multiplicative depth
 
