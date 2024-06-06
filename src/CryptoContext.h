@@ -1,7 +1,7 @@
 #pragma once
 
 #include "openfhe/core/lattice/hal/lat-backend.h"
-#include "openfhe/pke/constants-fwd.h"
+#include "openfhe/pke/constants.h"
 #include "openfhe/pke/cryptocontext-fwd.h"
 #include "openfhe/pke/scheme/scheme-id.h"
 
