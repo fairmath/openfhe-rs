@@ -3,9 +3,6 @@
 #include "openfhe/core/lattice/hal/lat-backend.h"
 #include "openfhe/pke/key/evalkey-fwd.h"
 
-#include "EvalKey.h"
-
-#include <cstdint>
 #include <map>
 #include <unordered_map>
 
