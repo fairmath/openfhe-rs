@@ -1,5 +1,5 @@
-#![allow(non_snake_case)]
 #![allow(dead_code)]
+#![allow(non_snake_case)]
 #![allow(unused_imports)]
 
 use cxx::{CxxVector, let_cxx_string};
@@ -8,6 +8,110 @@ pub use cxx;
 #[cxx::bridge(namespace = "openfhe")]
 pub mod ffi
 {
+    #[repr(i32)]
+    enum COMPRESSION_LEVEL
+    {
+        COMPACT = 2,
+        SLACK   = 3,
+    }
+
+    #[repr(i32)]
+    enum DecryptionNoiseMode
+    {
+        FIXED_NOISE_DECRYPT = 0,
+        NOISE_FLOODING_DECRYPT,
+    }
+
+    #[repr(i32)]
+    enum EncryptionTechnique
+    {
+        STANDARD = 0,
+        EXTENDED,
+    }
+
+    #[repr(i32)]
+    enum ExecutionMode
+    {
+        EXEC_EVALUATION = 0,
+        EXEC_NOISE_ESTIMATION,
+    }
+
+    #[repr(i32)]
+    enum Format
+    {
+        EVALUATION = 0,
+        COEFFICIENT = 1
+    }
+
+    #[repr(i32)]    
+    enum KeySwitchTechnique
+    {
+        INVALID_KS_TECH = 0,
+        BV,
+        HYBRID,
+    }
+
+    #[repr(i32)]
+    enum MultipartyMode
+    {
+        INVALID_MULTIPARTY_MODE = 0,
+        FIXED_NOISE_MULTIPARTY,
+        NOISE_FLOODING_MULTIPARTY,
+    }
+
+    #[repr(i32)]
+    enum MultiplicationTechnique
+    {
+        BEHZ = 0,
+        HPS,
+        HPSPOVERQ,
+        HPSPOVERQLEVELED,
+    }
+
+    #[repr(i32)]
+    enum PKESchemeFeature
+    {
+        PKE          = 0x01,
+        KEYSWITCH    = 0x02,
+        PRE          = 0x04,
+        LEVELEDSHE   = 0x08,
+        ADVANCEDSHE  = 0x10,
+        MULTIPARTY   = 0x20,
+        FHE          = 0x40,
+        SCHEMESWITCH = 0x80,
+    }
+
+    #[repr(i32)]
+    enum PlaintextEncodings
+    {
+        INVALID_ENCODING = 0,
+        COEF_PACKED_ENCODING,
+        PACKED_ENCODING,
+        STRING_ENCODING,
+        CKKS_PACKED_ENCODING,
+    }
+
+    #[repr(i32)]
+    enum ProxyReEncryptionMode
+    {
+        NOT_SET = 0,
+        INDCPA,
+        FIXED_NOISE_HRA,
+        NOISE_FLOODING_HRA,
+        DIVIDE_AND_ROUND_HRA,
+    }
+
+    #[repr(i32)]
+    enum ScalingTechnique
+    {
+        FIXEDMANUAL = 0,
+        FIXEDAUTO,
+        FLEXIBLEAUTO,
+        FLEXIBLEAUTOEXT,
+        NORESCALE,
+        INVALID_RS_TECHNIQUE,
+    }
+
     #[repr(i32)]
     enum SCHEME
     {
@@ -26,57 +130,6 @@ pub mod ffi
     }
 
     #[repr(i32)]
-    enum ProxyReEncryptionMode
-    {
-        NOT_SET = 0,
-        INDCPA,
-        FIXED_NOISE_HRA,
-        NOISE_FLOODING_HRA,
-        DIVIDE_AND_ROUND_HRA,
-    }
-
-    #[repr(i32)]
-    enum MultipartyMode
-    {
-        INVALID_MULTIPARTY_MODE = 0,
-        FIXED_NOISE_MULTIPARTY,
-        NOISE_FLOODING_MULTIPARTY,
-    }
-
-    #[repr(i32)]
-    enum ExecutionMode
-    {
-        EXEC_EVALUATION = 0,
-        EXEC_NOISE_ESTIMATION,
-    }
-
-    #[repr(i32)]
-    enum DecryptionNoiseMode
-    {
-        FIXED_NOISE_DECRYPT = 0,
-        NOISE_FLOODING_DECRYPT,
-    }
-
-    #[repr(i32)]    
-    enum KeySwitchTechnique
-    {
-        INVALID_KS_TECH = 0,
-        BV,
-        HYBRID,
-    }
-
-    #[repr(i32)]
-    enum ScalingTechnique
-    {
-        FIXEDMANUAL = 0,
-        FIXEDAUTO,
-        FLEXIBLEAUTO,
-        FLEXIBLEAUTOEXT,
-        NORESCALE,
-        INVALID_RS_TECHNIQUE,
-    }
-
-    #[repr(i32)]
     enum SecurityLevel
     {
         HEStd_128_classic,
@@ -89,63 +142,10 @@ pub mod ffi
     }
 
     #[repr(i32)]
-    enum EncryptionTechnique
-    {
-        STANDARD = 0,
-        EXTENDED,
-    }
-
-    #[repr(i32)]
-    enum MultiplicationTechnique
-    {
-        BEHZ = 0,
-        HPS,
-        HPSPOVERQ,
-        HPSPOVERQLEVELED,
-    }
-
-    #[repr(i32)]
-    enum COMPRESSION_LEVEL
-    {
-        COMPACT = 2,
-        SLACK   = 3,
-    }
-
-    #[repr(i32)]
-    enum PKESchemeFeature
-    {
-        PKE          = 0x01,
-        KEYSWITCH    = 0x02,
-        PRE          = 0x04,
-        LEVELEDSHE   = 0x08,
-        ADVANCEDSHE  = 0x10,
-        MULTIPARTY   = 0x20,
-        FHE          = 0x40,
-        SCHEMESWITCH = 0x80,
-    }
-
-    #[repr(i32)]
     enum SerialMode
     {
         BINARY = 0,
         JSON = 1,
-    }
-
-    #[repr(i32)]
-    enum Format
-    {
-        EVALUATION = 0,
-        COEFFICIENT = 1
-    }
-
-    #[repr(i32)]
-    enum PlaintextEncodings
-    {
-        INVALID_ENCODING = 0,
-        COEF_PACKED_ENCODING,
-        PACKED_ENCODING,
-        STRING_ENCODING,
-        CKKS_PACKED_ENCODING,
     }
 
     struct ComplexPair
@@ -156,6 +156,7 @@ pub mod ffi
 
     unsafe extern "C++"
     {
+        // includes
         include!("openfhe/src/AssociativeContainerOfOpaqueTypes.h");
         include!("openfhe/src/Ciphertext.h");
         include!("openfhe/src/CryptoContext.h");
@@ -174,6 +175,7 @@ pub mod ffi
         include!("openfhe/src/SequenceContainerOfOpaqueTypes.h");
         include!("openfhe/src/SerialDeserial.h");
 
+        // enums
         type COMPRESSION_LEVEL;
         type DecryptionNoiseMode;
         type EncryptionTechnique;
@@ -191,6 +193,7 @@ pub mod ffi
         type SecurityLevel;
         type SerialMode;
 
+        // types
         type CiphertextDCRTPoly;
         type CryptoContextDCRTPoly;
         type CryptoParametersBaseDCRTPoly;
@@ -221,306 +224,470 @@ pub mod ffi
         type VectorOfVectorOfCiphertexts;
     }
 
-    // Params
+    // CiphertextDCRTPoly
     unsafe extern "C++"
     {
-        fn GenParamsByScheme(scheme: SCHEME) -> UniquePtr<Params>;
-        fn GenParamsByVectorOfString(vals: &CxxVector<CxxString>) -> UniquePtr<Params>;
-
-        // getters
-        fn GetScheme(self: &Params) -> SCHEME;
-        fn GetPlaintextModulus(self: &Params) -> u64;
-        fn GetDigitSize(self: &Params) -> u32;
-        fn GetStandardDeviation(self: &Params) -> f32;
-        fn GetSecretKeyDist(self: &Params) -> SecretKeyDist;
-        fn GetMaxRelinSkDeg(self: &Params) -> u32;
-        fn GetPREMode(self: &Params) -> ProxyReEncryptionMode;
-        fn GetMultipartyMode(self: &Params) -> MultipartyMode;
-        fn GetExecutionMode(self: &Params) -> ExecutionMode;
-        fn GetDecryptionNoiseMode(self: &Params) -> DecryptionNoiseMode;
-        fn GetNoiseEstimate(self: &Params) -> f64;
-        fn GetDesiredPrecision(self: &Params) -> f64;
-        fn GetStatisticalSecurity(self: &Params) -> f64;
-        fn GetNumAdversarialQueries(self: &Params) -> f64;
-        fn GetThresholdNumOfParties(self: &Params) -> u32;
-        fn GetKeySwitchTechnique(self: &Params) -> KeySwitchTechnique;
-        fn GetScalingTechnique(self: &Params) -> ScalingTechnique;
-        fn GetBatchSize(self: &Params) -> u32;
-        fn GetFirstModSize(self: &Params) -> u32;
-        fn GetNumLargeDigits(self: &Params) -> u32;
-        fn GetMultiplicativeDepth(self: &Params) -> u32;
-        fn GetScalingModSize(self: &Params) -> u32;
-        fn GetSecurityLevel(self: &Params) -> SecurityLevel;
-        fn GetRingDim(self: &Params) -> u32;
-        fn GetEvalAddCount(self: &Params) -> u32;
-        fn GetKeySwitchCount(self: &Params) -> u32;
-        fn GetEncryptionTechnique(self: &Params) -> EncryptionTechnique;
-        fn GetMultiplicationTechnique(self: &Params) -> MultiplicationTechnique;
-        fn GetMultiHopModSize(self: &Params) -> u32;
-        fn GetInteractiveBootCompressionLevel(self: &Params) -> COMPRESSION_LEVEL;
-        // setters
-        fn SetPlaintextModulus(self: Pin<&mut Params>, ptModulus0: u64);
-        fn SetDigitSize(self: Pin<&mut Params>, digitSize0: u32);
-        fn SetStandardDeviation(self: Pin<&mut Params>, standardDeviation0: f32);
-        fn SetSecretKeyDist(self: Pin<&mut Params>, secretKeyDist0: SecretKeyDist);
-        fn SetMaxRelinSkDeg(self: Pin<&mut Params>, maxRelinSkDeg0: u32);
-        fn SetPREMode(self: Pin<&mut Params>, PREMode0: ProxyReEncryptionMode);
-        fn SetMultipartyMode(self: Pin<&mut Params>, multipartyMode0: MultipartyMode);
-        fn SetExecutionMode(self: Pin<&mut Params>, executionMode0: ExecutionMode);
-        fn SetDecryptionNoiseMode(self: Pin<&mut Params>,
-                                  decryptionNoiseMode0: DecryptionNoiseMode);
-        fn SetNoiseEstimate(self: Pin<&mut Params>, noiseEstimate0: f64);
-        fn SetDesiredPrecision(self: Pin<&mut Params>, desiredPrecision0: f64);
-        fn SetStatisticalSecurity(self: Pin<&mut Params>, statisticalSecurity0: u32);
-        fn SetNumAdversarialQueries(self: Pin<&mut Params>, numAdversarialQueries0: u32);
-        fn SetThresholdNumOfParties(self: Pin<&mut Params>, thresholdNumOfParties0: u32);
-        fn SetKeySwitchTechnique(self: Pin<&mut Params>, ksTech0: KeySwitchTechnique);
-        fn SetScalingTechnique(self: Pin<&mut Params>, scalTech0: ScalingTechnique);
-        fn SetBatchSize(self: Pin<&mut Params>, batchSize0: u32);
-        fn SetFirstModSize(self: Pin<&mut Params>, firstModSize0: u32);
-        fn SetNumLargeDigits(self: Pin<&mut Params>, numLargeDigits0: u32);
-        fn SetMultiplicativeDepth(self: Pin<&mut Params>, multiplicativeDepth0: u32);
-        fn SetScalingModSize(self: Pin<&mut Params>, scalingModSize0: u32);
-        fn SetSecurityLevel(self: Pin<&mut Params>, securityLevel0: SecurityLevel);
-        fn SetRingDim(self: Pin<&mut Params>, ringDim0: u32);
-        fn SetEvalAddCount(self: Pin<&mut Params>, evalAddCount0: u32);
-        fn SetKeySwitchCount(self: Pin<&mut Params>, keySwitchCount0: u32);
-        fn SetEncryptionTechnique(self: Pin<&mut Params>,
-                                  encryptionTechnique0: EncryptionTechnique);
-        fn SetMultiplicationTechnique(self: Pin<&mut Params>,
-                                      multiplicationTechnique0: MultiplicationTechnique);
-        fn SetMultiHopModSize(self: Pin<&mut Params>, multiHopModSize0: u32);
-        fn SetInteractiveBootCompressionLevel(self: Pin<&mut Params>,
-                                              interactiveBootCompressionLevel0: COMPRESSION_LEVEL);
+        // Generator functions
+        fn GenNullCiphertext() -> UniquePtr<CiphertextDCRTPoly>;
     }
 
-    // ParamsBFVRNS
+    // CryptoContextDCRTPoly
     unsafe extern "C++"
     {
-        fn GenParamsBFVRNS() -> UniquePtr<ParamsBFVRNS>;
-        fn GenParamsBFVRNSbyVectorOfString(vals: &CxxVector<CxxString>) -> UniquePtr<ParamsBFVRNS>;
-        // getters
-        fn GetScheme(self: &ParamsBFVRNS) -> SCHEME;
-        fn GetPlaintextModulus(self: &ParamsBFVRNS) -> u64;
-        fn GetDigitSize(self: &ParamsBFVRNS) -> u32;
-        fn GetStandardDeviation(self: &ParamsBFVRNS) -> f32;
-        fn GetSecretKeyDist(self: &ParamsBFVRNS) -> SecretKeyDist;
-        fn GetMaxRelinSkDeg(self: &ParamsBFVRNS) -> u32;
-        fn GetPREMode(self: &ParamsBFVRNS) -> ProxyReEncryptionMode;
-        fn GetMultipartyMode(self: &ParamsBFVRNS) -> MultipartyMode;
-        fn GetExecutionMode(self: &ParamsBFVRNS) -> ExecutionMode;
-        fn GetDecryptionNoiseMode(self: &ParamsBFVRNS) -> DecryptionNoiseMode;
-        fn GetNoiseEstimate(self: &ParamsBFVRNS) -> f64;
-        fn GetDesiredPrecision(self: &ParamsBFVRNS) -> f64;
-        fn GetStatisticalSecurity(self: &ParamsBFVRNS) -> f64;
-        fn GetNumAdversarialQueries(self: &ParamsBFVRNS) -> f64;
-        fn GetThresholdNumOfParties(self: &ParamsBFVRNS) -> u32;
-        fn GetKeySwitchTechnique(self: &ParamsBFVRNS) -> KeySwitchTechnique;
-        fn GetScalingTechnique(self: &ParamsBFVRNS) -> ScalingTechnique;
-        fn GetBatchSize(self: &ParamsBFVRNS) -> u32;
-        fn GetFirstModSize(self: &ParamsBFVRNS) -> u32;
-        fn GetNumLargeDigits(self: &ParamsBFVRNS) -> u32;
-        fn GetMultiplicativeDepth(self: &ParamsBFVRNS) -> u32;
-        fn GetScalingModSize(self: &ParamsBFVRNS) -> u32;
-        fn GetSecurityLevel(self: &ParamsBFVRNS) -> SecurityLevel;
-        fn GetRingDim(self: &ParamsBFVRNS) -> u32;
-        fn GetEvalAddCount(self: &ParamsBFVRNS) -> u32;
-        fn GetKeySwitchCount(self: &ParamsBFVRNS) -> u32;
-        fn GetEncryptionTechnique(self: &ParamsBFVRNS) -> EncryptionTechnique;
-        fn GetMultiplicationTechnique(self: &ParamsBFVRNS) -> MultiplicationTechnique;
-        fn GetMultiHopModSize(self: &ParamsBFVRNS) -> u32;
-        fn GetInteractiveBootCompressionLevel(self: &ParamsBFVRNS) -> COMPRESSION_LEVEL;
-        // setters
-        fn SetPlaintextModulus(self: Pin<&mut ParamsBFVRNS>, ptModulus0: u64);
-        fn SetDigitSize(self: Pin<&mut ParamsBFVRNS>, digitSize0: u32);
-        fn SetStandardDeviation(self: Pin<&mut ParamsBFVRNS>, standardDeviation0: f32);
-        fn SetSecretKeyDist(self: Pin<&mut ParamsBFVRNS>, secretKeyDist0: SecretKeyDist);
-        fn SetMaxRelinSkDeg(self: Pin<&mut ParamsBFVRNS>, maxRelinSkDeg0: u32);
-        fn SetPREMode(self: Pin<&mut ParamsBFVRNS>, PREMode0: ProxyReEncryptionMode);
-        fn SetMultipartyMode(self: Pin<&mut ParamsBFVRNS>, multipartyMode0: MultipartyMode);
-        fn SetExecutionMode(self: Pin<&mut ParamsBFVRNS>, executionMode0: ExecutionMode);
-        fn SetDecryptionNoiseMode(self: Pin<&mut ParamsBFVRNS>,
-                                  decryptionNoiseMode0: DecryptionNoiseMode);
-        fn SetNoiseEstimate(self: Pin<&mut ParamsBFVRNS>, noiseEstimate0: f64);
-        fn SetDesiredPrecision(self: Pin<&mut ParamsBFVRNS>, desiredPrecision0: f64);
-        fn SetStatisticalSecurity(self: Pin<&mut ParamsBFVRNS>, statisticalSecurity0: u32);
-        fn SetNumAdversarialQueries(self: Pin<&mut ParamsBFVRNS>, numAdversarialQueries0: u32);
-        fn SetThresholdNumOfParties(self: Pin<&mut ParamsBFVRNS>, thresholdNumOfParties0: u32);
-        fn SetKeySwitchTechnique(self: Pin<&mut ParamsBFVRNS>, ksTech0: KeySwitchTechnique);
-        fn SetScalingTechnique(self: Pin<&mut ParamsBFVRNS>, scalTech0: ScalingTechnique);
-        fn SetBatchSize(self: Pin<&mut ParamsBFVRNS>, batchSize0: u32);
-        fn SetFirstModSize(self: Pin<&mut ParamsBFVRNS>, firstModSize0: u32);
-        fn SetNumLargeDigits(self: Pin<&mut ParamsBFVRNS>, numLargeDigits0: u32);
-        fn SetMultiplicativeDepth(self: Pin<&mut ParamsBFVRNS>, multiplicativeDepth0: u32);
-        fn SetScalingModSize(self: Pin<&mut ParamsBFVRNS>, scalingModSize0: u32);
-        fn SetSecurityLevel(self: Pin<&mut ParamsBFVRNS>, securityLevel0: SecurityLevel);
-        fn SetRingDim(self: Pin<&mut ParamsBFVRNS>, ringDim0: u32);
-        fn SetEvalAddCount(self: Pin<&mut ParamsBFVRNS>, evalAddCount0: u32);
-        fn SetKeySwitchCount(self: Pin<&mut ParamsBFVRNS>, keySwitchCount0: u32);
-        fn SetEncryptionTechnique(self: Pin<&mut ParamsBFVRNS>,
-                                  encryptionTechnique0: EncryptionTechnique);
-        fn SetMultiplicationTechnique(self: Pin<&mut ParamsBFVRNS>,
-                                      multiplicationTechnique0: MultiplicationTechnique);
-        fn SetMultiHopModSize(self: Pin<&mut ParamsBFVRNS>, multiHopModSize0: u32);
-        fn SetInteractiveBootCompressionLevel(self: Pin<&mut ParamsBFVRNS>,
-                                              interactiveBootCompressionLevel0: COMPRESSION_LEVEL);
-    }
+        fn ComposedEvalMult(self: &CryptoContextDCRTPoly, ciphertext1: &CiphertextDCRTPoly,
+                            ciphertext2: &CiphertextDCRTPoly) -> UniquePtr<CiphertextDCRTPoly>;
+        fn Compress(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
+                    towersLeft: /* 1 */ u32) -> UniquePtr<CiphertextDCRTPoly>;
+        fn DecryptByCiphertextAndPrivateKey(self: &CryptoContextDCRTPoly,
+                                            ciphertext: &CiphertextDCRTPoly,
+                                            privateKey: &PrivateKeyDCRTPoly,
+                                            plaintext: Pin<&mut Plaintext>)
+                                            -> UniquePtr<DecryptResult>;
+        fn DecryptByPrivateKeyAndCiphertext(self: &CryptoContextDCRTPoly,
+                                            privateKey: &PrivateKeyDCRTPoly,
+                                            ciphertext: &CiphertextDCRTPoly,
+                                            plaintext: Pin<&mut Plaintext>)
+                                            -> UniquePtr<DecryptResult>;
+        fn Enable(self: &CryptoContextDCRTPoly, feature: PKESchemeFeature);
+        fn EnableByMask(self: &CryptoContextDCRTPoly, featureMask: u32);
+        fn EncryptByPrivateKey(self: &CryptoContextDCRTPoly, privateKey: &PrivateKeyDCRTPoly,
+                               plaintext: &Plaintext) -> UniquePtr<CiphertextDCRTPoly>;
+        fn EncryptByPublicKey(self: &CryptoContextDCRTPoly, publicKey: &PublicKeyDCRTPoly,
+                              plaintext: &Plaintext) -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalAddByCiphertextAndConst(self: &CryptoContextDCRTPoly,
+                                       ciphertext: &CiphertextDCRTPoly, constant: f64)
+                                       -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalAddByCiphertextAndPlaintext(self: &CryptoContextDCRTPoly,
+                                           ciphertext: &CiphertextDCRTPoly, plaintext: &Plaintext)
+                                           -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalAddByCiphertexts(self: &CryptoContextDCRTPoly,
+                                ciphertext1: &CiphertextDCRTPoly,ciphertext2: &CiphertextDCRTPoly)
+                                -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalAddByConstAndCiphertext(self: &CryptoContextDCRTPoly,
+                                       constant: f64, ciphertext: &CiphertextDCRTPoly)
+                                       -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalAddByPlaintextAndCiphertext(self: &CryptoContextDCRTPoly,
+                                           plaintext: &Plaintext, ciphertext: &CiphertextDCRTPoly)
+                                           -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalAddInPlaceByCiphertextAndConst(self: &CryptoContextDCRTPoly,
+                                              ciphertext: &CiphertextDCRTPoly, constant: f64);
+        fn EvalAddInPlaceByCiphertextAndPlaintext(self: &CryptoContextDCRTPoly,
+                                                  ciphertext: &CiphertextDCRTPoly,
+                                                  plaintext: &Plaintext);
+        fn EvalAddInPlaceByCiphertexts(self: &CryptoContextDCRTPoly,
+                                       ciphertext1: &CiphertextDCRTPoly,
+                                       ciphertext2: &CiphertextDCRTPoly);
+        fn EvalAddInPlaceByConstAndCiphertext(self: &CryptoContextDCRTPoly, constant: f64,
+                                              ciphertext: &CiphertextDCRTPoly);
+        fn EvalAddInPlaceByPlaintextAndCiphertext(self: &CryptoContextDCRTPoly,
+                                                  plaintext: &Plaintext,
+                                                  ciphertext: &CiphertextDCRTPoly);
+        fn EvalAddMany(self: &CryptoContextDCRTPoly, ciphertextVec: &VectorOfCiphertexts)
+                       -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalAddMutableByCiphertextAndPlaintext(self: &CryptoContextDCRTPoly,
+                                                  ciphertext: &CiphertextDCRTPoly,
+                                                  plaintext: &Plaintext)
+                                                  -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalAddMutableByCiphertexts(self: &CryptoContextDCRTPoly,
+                                       ciphertext1: &CiphertextDCRTPoly,
+                                       ciphertext2: &CiphertextDCRTPoly)
+                                       -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalAddMutableByPlaintextAndCiphertext(self: &CryptoContextDCRTPoly,
+                                                  plaintext: &Plaintext,
+                                                  ciphertext: &CiphertextDCRTPoly)
+                                                  -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalAddMutableInPlace(self: &CryptoContextDCRTPoly, ciphertext1: &CiphertextDCRTPoly,
+                                 ciphertext2: &CiphertextDCRTPoly);
+        fn EvalAtIndex(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly, index: u32)
+                       -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalAtIndexKeyGen(self: &CryptoContextDCRTPoly, privateKey: &PrivateKeyDCRTPoly,
+                             indexList: &CxxVector<i32>,
+                             publicKey: /* GenNullPublicKey() */ &PublicKeyDCRTPoly);
+        fn EvalAutomorphism(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly, i: u32,
+                            evalKeyMap: &MapFromIndexToEvalKey) -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalAutomorphismKeyGen(self: &CryptoContextDCRTPoly, privateKey: &PrivateKeyDCRTPoly,
+                                  indexList: &CxxVector<u32>) -> UniquePtr<MapFromIndexToEvalKey>;
+        fn EvalBootstrap(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
+                         numIterations: /* 1 */ u32, precision: /* 0 */ u32)
+                         -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalBootstrapKeyGen(self: &CryptoContextDCRTPoly, privateKey: &PrivateKeyDCRTPoly,
+                               slots: u32);
+        fn EvalBootstrapPrecompute(self: &CryptoContextDCRTPoly, slots: /* 0 */ u32);
+        fn EvalBootstrapSetup(self: &CryptoContextDCRTPoly,
+                              levelBudget: /* {5, 4} */ &CxxVector<u32>,
+                              dim1: /* {0, 0} */ &CxxVector<u32>, slots: /* 0 */ u32,
+                              correctionFactor: /* 0 */ u32, precompute: /* true */ bool);
+        fn EvalCKKStoFHEW(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
+                          numCtxts: /* 0 */ u32) -> UniquePtr<VectorOfLWECiphertexts>;
+        fn EvalCKKStoFHEWKeyGen(self: &CryptoContextDCRTPoly, keyPair: &KeyPairDCRTPoly,
+                                lwesk: &LWEPrivateKey);
+        fn EvalCKKStoFHEWPrecompute(self: &CryptoContextDCRTPoly, scale: /* 1.0 */ f64);
+        fn EvalChebyshevFunction(self: &CryptoContextDCRTPoly, func: fn(f64, ret: &mut f64),
+                                 ciphertext: &CiphertextDCRTPoly, a: f64, b: f64, degree: u32)
+                                 -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalChebyshevSeries(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
+                               coefficients: &CxxVector<f64>, a: f64, b: f64)
+                               -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalChebyshevSeriesLinear(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
+                                     coefficients: &CxxVector<f64>, a: f64, b: f64)
+                                     -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalChebyshevSeriesPS(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
+                                 coefficients: &CxxVector<f64>, a: f64, b: f64)
+                                 -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalCompareSchemeSwitching(self: &CryptoContextDCRTPoly,
+                                      ciphertext1: &CiphertextDCRTPoly,
+                                      ciphertext2: &CiphertextDCRTPoly, numCtxts: /* 0 */ u32,
+                                      numSlots: /* 0 */ u32, pLWE: /* 0 */ u32,
+                                      scaleSign: /* 1.0 */ f64, unit: /* false */ bool)
+                                      -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalCompareSwitchPrecompute(self: &CryptoContextDCRTPoly, pLWE: u32, scaleSign: f64,
+                                       unit: bool);
+        fn EvalCos(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly, a: f64, b: f64,
+                   degree: u32) -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalDivide(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly, a: f64,
+                      b: f64, degree: u32) -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalFHEWtoCKKS(self: &CryptoContextDCRTPoly,
+                          LWECiphertexts: Pin<&mut VectorOfLWECiphertexts>, numCtxts: /* 0 */ u32,
+                          numSlots: /* 0 */ u32, p: /* 4 */ u32, pmin: /* 0.0 */ f64,
+                          pmax: /* 2.0 */ f64, dim1: /* 0 */ u32) -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalFHEWtoCKKSKeyGen(self: &CryptoContextDCRTPoly, keyPair: &KeyPairDCRTPoly,
+                                lwesk: &LWEPrivateKey, numSlots: /* 0 */ u32,
+                                numCtxts: /* 0 */ u32, dim1: /* 0 */ u32, L: /* 0 */ u32);
+        fn EvalFastRotation(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
+                            index: u32, m: u32, digits: &VectorOfDCRTPolys)
+                            -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalFastRotationExt(self: &CryptoContextDCRTPoly,
+                               ciphertext: &CiphertextDCRTPoly, index: u32,
+                               digits: &VectorOfDCRTPolys, addFirst: bool)
+                               -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalFastRotationPrecompute(self: &CryptoContextDCRTPoly,
+                                      ciphertext: &CiphertextDCRTPoly)
+                                      -> UniquePtr<VectorOfDCRTPolys>;
+        fn EvalInnerProductByCiphertexts(self: &CryptoContextDCRTPoly,
+                                         ciphertext1: &CiphertextDCRTPoly,
+                                         ciphertext2: &CiphertextDCRTPoly, batchSize: u32)
+                                         -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalInnerProductByPlaintext(self: &CryptoContextDCRTPoly,
+                                       ciphertext: &CiphertextDCRTPoly, plaintext: &Plaintext,
+                                       batchSize: u32) -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalLogistic(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly, a: f64,
+                        b: f64, degree: u32) -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalMaxSchemeSwitching(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
+                                  publicKey: &PublicKeyDCRTPoly, numValues: /* 0 */ u32,
+                                  numSlots: /* 0 */ u32, pLWE: /* 0 */ u32,
+                                  scaleSign: /* 1.0 */ f64) -> UniquePtr<VectorOfCiphertexts>;
+        fn EvalMaxSchemeSwitchingAlt(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
+                                     publicKey: &PublicKeyDCRTPoly, numValues: /* 0 */ u32,
+                                     numSlots: /* 0 */ u32, pLWE: /* 0 */ u32,
+                                     scaleSign: /* 1.0 */ f64) -> UniquePtr<VectorOfCiphertexts>;
+        fn EvalMerge(self: &CryptoContextDCRTPoly, ciphertextVec: &VectorOfCiphertexts)
+                     -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalMinSchemeSwitching(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
+                                  publicKey: &PublicKeyDCRTPoly, numValues: /* 0 */ u32,
+                                  numSlots: /* 0 */ u32, pLWE: /* 0 */ u32,
+                                  scaleSign: /* 1.0 */ f64) -> UniquePtr<VectorOfCiphertexts>;
+        fn EvalMinSchemeSwitchingAlt(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
+                                     publicKey: &PublicKeyDCRTPoly, numValues: /* 0 */ u32,
+                                     numSlots: /* 0 */ u32, pLWE: /* 0 */ u32,
+                                     scaleSign: /* 1.0 */ f64) -> UniquePtr<VectorOfCiphertexts>;
+        fn EvalMultAndRelinearize(self: &CryptoContextDCRTPoly, ciphertext1: &CiphertextDCRTPoly,
+                                  ciphertext2: &CiphertextDCRTPoly)
+                                  -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalMultByCiphertextAndConst(self: &CryptoContextDCRTPoly,
+                                        ciphertext: &CiphertextDCRTPoly, constant: f64)
+                                        -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalMultByCiphertextAndPlaintext(self: &CryptoContextDCRTPoly,
+                                            ciphertext: &CiphertextDCRTPoly, plaintext: &Plaintext)
+                                            -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalMultByCiphertexts(self: &CryptoContextDCRTPoly, ciphertext1: &CiphertextDCRTPoly,
+                                 ciphertext2: &CiphertextDCRTPoly)
+                                 -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalMultByConstAndCiphertext(self: &CryptoContextDCRTPoly, constant: f64,
+                                        ciphertext: &CiphertextDCRTPoly)
+                                        -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalMultByPlaintextAndCiphertext(self: &CryptoContextDCRTPoly, plaintext: &Plaintext,
+                                            ciphertext: &CiphertextDCRTPoly)
+                                            -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalMultInPlaceByCiphertextAndConst(self: &CryptoContextDCRTPoly,
+                                               ciphertext: &CiphertextDCRTPoly, constant: f64);
+        fn EvalMultInPlaceByConstAndCiphertext(self: &CryptoContextDCRTPoly, constant: f64,
+                                               ciphertext: &CiphertextDCRTPoly);
+        fn EvalMultKeyGen(self: &CryptoContextDCRTPoly, key: &PrivateKeyDCRTPoly);
+        fn EvalMultKeysGen(self: &CryptoContextDCRTPoly, key: &PrivateKeyDCRTPoly);
+        fn EvalMultMany(self: &CryptoContextDCRTPoly, ciphertextVec: &VectorOfCiphertexts)
+                        -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalMultMutableByCiphertextAndPlaintext(self: &CryptoContextDCRTPoly,
+                                                   ciphertext: &CiphertextDCRTPoly,
+                                                   plaintext: &Plaintext)
+                                                   -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalMultMutableByCiphertexts(self: &CryptoContextDCRTPoly,
+                                        ciphertext1: &CiphertextDCRTPoly,
+                                        ciphertext2: &CiphertextDCRTPoly)
+                                        -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalMultMutableByPlaintextAndCiphertext(self: &CryptoContextDCRTPoly,
+                                                   plaintext: &Plaintext,
+                                                   ciphertext: &CiphertextDCRTPoly)
+                                                   -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalMultMutableInPlace(self: &CryptoContextDCRTPoly, ciphertext1: &CiphertextDCRTPoly,
+                                  ciphertext2: &CiphertextDCRTPoly);
+        fn EvalMultNoRelin(self: &CryptoContextDCRTPoly, ciphertext1: &CiphertextDCRTPoly,
+                           ciphertext2: &CiphertextDCRTPoly) -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalNegate(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly)
+                      -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalNegateInPlace(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly);
+        fn EvalPoly(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
+                    coefficients: &CxxVector<f64>) -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalPolyLinear(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
+                          coefficients: &CxxVector<f64>)-> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalPolyPS(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
+                      coefficients: &CxxVector<f64>) -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalRotate(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly, index: i32)
+                      -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalRotateKeyGen(self: &CryptoContextDCRTPoly, privateKey: &PrivateKeyDCRTPoly,
+                            indexList: &CxxVector<i32>,
+                            publicKey: /* GenNullPublicKey() */ &PublicKeyDCRTPoly);
+        fn EvalSchemeSwitchingKeyGen(self: &CryptoContextDCRTPoly, keyPair: &KeyPairDCRTPoly,
+                                     lwesk: &LWEPrivateKey);
+        fn EvalSin(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly, a: f64, b: f64,
+                   degree: u32) -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalSquare(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly)
+                      -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalSquareInPlace(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly);
+        fn EvalSquareMutable(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly)
+                             -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalSubByCiphertextAndConst(self: &CryptoContextDCRTPoly,
+                                       ciphertext: &CiphertextDCRTPoly, constant: f64)
+                                       -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalSubByCiphertextAndPlaintext(self: &CryptoContextDCRTPoly,
+                                           ciphertext: &CiphertextDCRTPoly, plaintext: &Plaintext)
+                                           -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalSubByCiphertexts(self: &CryptoContextDCRTPoly, ciphertext1: &CiphertextDCRTPoly,
+                                ciphertext2: &CiphertextDCRTPoly) -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalSubByConstAndCiphertext(self: &CryptoContextDCRTPoly, constant: f64,
+                                       ciphertext: &CiphertextDCRTPoly)
+                                       -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalSubByPlaintextAndCiphertext(self: &CryptoContextDCRTPoly,
+                                           plaintext: &Plaintext, ciphertext: &CiphertextDCRTPoly)
+                                           -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalSubInPlaceByCiphertextAndConst(self: &CryptoContextDCRTPoly,
+                                              ciphertext: &CiphertextDCRTPoly, constant: f64);
+        fn EvalSubInPlaceByCiphertexts(self: &CryptoContextDCRTPoly,
+                                       ciphertext1: &CiphertextDCRTPoly,
+                                       ciphertext2: &CiphertextDCRTPoly);
+        fn EvalSubInPlaceByConstAndCiphertext(self: &CryptoContextDCRTPoly, constant: f64,
+                                              ciphertext: &CiphertextDCRTPoly);
+        fn EvalSubMutableByCiphertextAndPlaintext(self: &CryptoContextDCRTPoly,
+                                                  ciphertext: &CiphertextDCRTPoly,
+                                                  plaintext: &Plaintext)
+                                                  -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalSubMutableByCiphertexts(self: &CryptoContextDCRTPoly,
+                                       ciphertext1: &CiphertextDCRTPoly,
+                                       ciphertext2: &CiphertextDCRTPoly)
+                                       -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalSubMutableByPlaintextAndCiphertext(self: &CryptoContextDCRTPoly,
+                                                  plaintext: &Plaintext,
+                                                  ciphertext: &CiphertextDCRTPoly)
+                                                  -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalSubMutableInPlace(self: &CryptoContextDCRTPoly, ciphertext1: &CiphertextDCRTPoly,
+                                 ciphertext2: &CiphertextDCRTPoly);
+        fn EvalSum(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly, batchSize: u32)
+                   -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalSumCols(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly, rowSize: u32,
+                       evalSumKeyMap: &MapFromIndexToEvalKey) -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalSumColsKeyGen(self: &CryptoContextDCRTPoly, privateKey: &PrivateKeyDCRTPoly,
+                             publicKey: /* GenNullPublicKey() */ &PublicKeyDCRTPoly)
+                             -> UniquePtr<MapFromIndexToEvalKey>;
+        fn EvalSumKeyGen(self: &CryptoContextDCRTPoly, privateKey: &PrivateKeyDCRTPoly,
+                         publicKey: /* GenNullPublicKey() */ &PublicKeyDCRTPoly);
+        fn EvalSumRows(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly, rowSize: u32,
+                       evalSumKeyMap: &MapFromIndexToEvalKey, subringDim: /* 0 */ u32)
+                       -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalSumRowsKeyGen(self: &CryptoContextDCRTPoly, privateKey: &PrivateKeyDCRTPoly,
+                             publicKey: /* GenNullPublicKey() */ &PublicKeyDCRTPoly,
+                             rowSize: /* 0 */ u32, subringDim: /* 0 */ u32)
+                             -> UniquePtr<MapFromIndexToEvalKey>;
+        fn FindAutomorphismIndex(self: &CryptoContextDCRTPoly, idx: u32) -> u32;
+        fn FindAutomorphismIndices(self: &CryptoContextDCRTPoly, idxList: &CxxVector<u32>)
+                                   -> UniquePtr<CxxVector<u32>>;
+        fn GetCryptoParameters(self: &CryptoContextDCRTPoly)
+                               -> UniquePtr<CryptoParametersBaseDCRTPoly>;
+        fn GetCyclotomicOrder(self: &CryptoContextDCRTPoly) -> u32;
+        fn GetElementParams(self: &CryptoContextDCRTPoly) -> UniquePtr<DCRTPolyParams>;
+        fn GetEncodingParams(self: &CryptoContextDCRTPoly) -> UniquePtr<EncodingParams>;
+        fn GetKeyGenLevel(self: &CryptoContextDCRTPoly) -> usize;
+        fn GetModulus(self: &CryptoContextDCRTPoly) -> u64;
+        fn GetRingDimension(self: &CryptoContextDCRTPoly) -> u32;
+        fn GetRootOfUnity(self: &CryptoContextDCRTPoly) -> u64;
+        fn GetScheme(self: &CryptoContextDCRTPoly) -> UniquePtr<SchemeBaseDCRTPoly>;
+        fn GetSchemeId(self: &CryptoContextDCRTPoly) -> SCHEME;
+        fn GetSwkFC(self: &CryptoContextDCRTPoly) -> UniquePtr<CiphertextDCRTPoly>;
+        fn IntMPBootAdd(self: &CryptoContextDCRTPoly,
+                        sharesPairVec: Pin<&mut VectorOfVectorOfCiphertexts>)
+                        -> UniquePtr<VectorOfCiphertexts>;
+        fn IntMPBootAdjustScale(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly)
+                                -> UniquePtr<CiphertextDCRTPoly>;
+        fn IntMPBootDecrypt(self: &CryptoContextDCRTPoly, privateKey: &PrivateKeyDCRTPoly,
+                            ciphertext: &CiphertextDCRTPoly, a: &CiphertextDCRTPoly)
+                            -> UniquePtr<VectorOfCiphertexts>;
+        fn IntMPBootEncrypt(self: &CryptoContextDCRTPoly, publicKey: &PublicKeyDCRTPoly,
+                            sharesPair: &VectorOfCiphertexts, a: &CiphertextDCRTPoly,
+                            ciphertext: &CiphertextDCRTPoly) -> UniquePtr<CiphertextDCRTPoly>;
+        fn IntMPBootRandomElementGen(self: &CryptoContextDCRTPoly, publicKey: &PublicKeyDCRTPoly)
+                                     -> UniquePtr<CiphertextDCRTPoly>;
+        fn KeyGen(self: &CryptoContextDCRTPoly) -> UniquePtr<KeyPairDCRTPoly>;
+        fn KeySwitch(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
+                     evalKey: &EvalKeyDCRTPoly) -> UniquePtr<CiphertextDCRTPoly>;
+        fn KeySwitchDown(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly)
+                         -> UniquePtr<CiphertextDCRTPoly>;
+        fn KeySwitchDownFirstElement(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly)
+                                     -> UniquePtr<DCRTPoly>;
+        fn KeySwitchExt(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
+                        addFirst: bool) -> UniquePtr<CiphertextDCRTPoly>;
+        fn KeySwitchGen(self: &CryptoContextDCRTPoly, oldPrivateKey: &PrivateKeyDCRTPoly,
+                        newPrivateKey: &PrivateKeyDCRTPoly) -> UniquePtr<EvalKeyDCRTPoly>;
+        fn KeySwitchInPlace(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
+                            evalKey: &EvalKeyDCRTPoly);
+        fn LevelReduce(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
+                       evalKey: &EvalKeyDCRTPoly, levels: /* 1 */ usize)
+                       -> UniquePtr<CiphertextDCRTPoly>;
+        fn LevelReduceInPlace(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
+                              evalKey: &EvalKeyDCRTPoly, levels: /* 1 */ usize);
+        fn MakeCKKSPackedPlaintext(self: &CryptoContextDCRTPoly, value: &CxxVector<f64>,
+                                   scaleDeg: /* 1 */ usize, level: /* 0 */ u32,
+                                   params: /* GenNullDCRTPolyParams() */ &DCRTPolyParams,
+                                   slots: /* 0 */ u32) -> UniquePtr<Plaintext>;
+        fn MakeCKKSPackedPlaintextByVectorOfComplex(self: &CryptoContextDCRTPoly,
+                                                    value: &CxxVector<ComplexPair>,
+                                                    scaleDeg: /* 1 */ usize, level: /* 0 */ u32,
+                                                    params:
+                                                    /* GenNullDCRTPolyParams() */ &DCRTPolyParams,
+                                                    slots: /* 0 */ u32) -> UniquePtr<Plaintext>;
+        fn MakeCoefPackedPlaintext(self: &CryptoContextDCRTPoly, value: &CxxVector<i64>,
+                                   noiseScaleDeg: /* 1 */ usize, level: /* 0 */ u32)
+                                   -> UniquePtr<Plaintext>;
+        fn MakePackedPlaintext(self: &CryptoContextDCRTPoly, value: &CxxVector<i64>,
+                               noiseScaleDeg: /* 1 */ usize, level: /* 0 */ u32)
+                               -> UniquePtr<Plaintext>;
+        fn MakeStringPlaintext(self: &CryptoContextDCRTPoly, s: &CxxString)
+                               -> UniquePtr<Plaintext>;
+        fn ModReduce(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly)
+                     -> UniquePtr<CiphertextDCRTPoly>;
+        fn ModReduceInPlace(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly);
+        fn MultiAddEvalAutomorphismKeys(self: &CryptoContextDCRTPoly,
+                                        evalKeyMap1: &MapFromIndexToEvalKey,
+                                        evalKeyMap2: &MapFromIndexToEvalKey,
+                                        keyId: /* "" */ &CxxString)
+                                        -> UniquePtr<MapFromIndexToEvalKey>;
+        fn MultiAddEvalKeys(self: &CryptoContextDCRTPoly, evalKey1: &EvalKeyDCRTPoly,
+                            evalKey2: &EvalKeyDCRTPoly, keyId: /* "" */ &CxxString)
+                            -> UniquePtr<EvalKeyDCRTPoly>;
+        fn MultiAddEvalMultKeys(self: &CryptoContextDCRTPoly, evalKey1: &EvalKeyDCRTPoly,
+                                evalKey2: &EvalKeyDCRTPoly, keyId: /* "" */ &CxxString)
+                                -> UniquePtr<EvalKeyDCRTPoly>;
+        fn MultiAddEvalSumKeys(self: &CryptoContextDCRTPoly, evalKeyMap1: &MapFromIndexToEvalKey,
+                               evalKeyMap2: &MapFromIndexToEvalKey, keyId: /* "" */ &CxxString)
+                               -> UniquePtr<MapFromIndexToEvalKey>;
+        fn MultiAddPubKeys(self: &CryptoContextDCRTPoly, publicKey1: &PublicKeyDCRTPoly,
+                           publicKey2: &PublicKeyDCRTPoly, keyId: /* "" */ &CxxString)
+                           -> UniquePtr<PublicKeyDCRTPoly>;
+        fn MultiEvalAtIndexKeyGen(self: &CryptoContextDCRTPoly, privateKey: &PrivateKeyDCRTPoly,
+                                  evalKeyMap: &MapFromIndexToEvalKey, indexList: &CxxVector<i32>,
+                                  keyId: /* "" */ &CxxString) -> UniquePtr<MapFromIndexToEvalKey>;
+        fn MultiEvalAutomorphismKeyGen(self: &CryptoContextDCRTPoly,
+                                       privateKey: &PrivateKeyDCRTPoly,
+                                       evalKeyMap: &MapFromIndexToEvalKey,
+                                       indexList: &CxxVector<u32>, keyId: /* "" */ &CxxString)
+                                       -> UniquePtr<MapFromIndexToEvalKey>;
+        fn MultiEvalSumKeyGen(self: &CryptoContextDCRTPoly, privateKey: &PrivateKeyDCRTPoly,
+                              evalKeyMap: &MapFromIndexToEvalKey, keyId: /* "" */ &CxxString)
+                              -> UniquePtr<MapFromIndexToEvalKey>;
+        fn MultiKeySwitchGen(self: &CryptoContextDCRTPoly,
+                             originalPrivateKey: &PrivateKeyDCRTPoly,
+                             newPrivateKey: &PrivateKeyDCRTPoly, evalKey: &EvalKeyDCRTPoly)
+                             -> UniquePtr<EvalKeyDCRTPoly>;
+        fn MultiMultEvalKey(self: &CryptoContextDCRTPoly, privateKey: &PrivateKeyDCRTPoly,
+                            evalKey: &EvalKeyDCRTPoly, keyId: /* "" */ &CxxString)
+                            -> UniquePtr<EvalKeyDCRTPoly>;
+        fn MultipartyDecryptFusion(self: &CryptoContextDCRTPoly,
+                                   partialCiphertextVec: &VectorOfCiphertexts,
+                                   plaintext: Pin<&mut Plaintext>) -> UniquePtr<DecryptResult>;
+        fn MultipartyDecryptLead(self: &CryptoContextDCRTPoly, ciphertextVec: &VectorOfCiphertexts,
+                                 privateKey: &PrivateKeyDCRTPoly)
+                                 -> UniquePtr<VectorOfCiphertexts>;
+        fn MultipartyDecryptMain(self: &CryptoContextDCRTPoly, ciphertextVec: &VectorOfCiphertexts,
+                                 privateKey: &PrivateKeyDCRTPoly)
+                                 -> UniquePtr<VectorOfCiphertexts>;
+        fn MultipartyKeyGenByPublicKey(self: &CryptoContextDCRTPoly, publicKey: &PublicKeyDCRTPoly,
+                                       makeSparse: /* false */ bool, fresh: /* false */ bool)
+                                       -> UniquePtr<KeyPairDCRTPoly>;
+        fn MultipartyKeyGenByVectorOfPrivateKeys(self: &CryptoContextDCRTPoly,
+                                                 privateKeyVec: &VectorOfPrivateKeys)
+                                                 -> UniquePtr<KeyPairDCRTPoly>;
+        fn ReEncrypt(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
+                     evalKey: &EvalKeyDCRTPoly,
+                     publicKey: /* GenNullPublicKey() */ &PublicKeyDCRTPoly)
+                     -> UniquePtr<CiphertextDCRTPoly>;
+        fn ReKeyGen(self: &CryptoContextDCRTPoly, oldPrivateKey: &PrivateKeyDCRTPoly,
+                    newPublicKey: &PublicKeyDCRTPoly) -> UniquePtr<EvalKeyDCRTPoly>;
+        fn RecoverSharedKey(self: &CryptoContextDCRTPoly, sk: Pin<&mut PrivateKeyDCRTPoly>,
+                            sk_shares: Pin<&mut UnorderedMapFromIndexToDCRTPoly>, N: u32,
+                            threshold: u32, shareType: &CxxString);
+        fn Relinearize(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly)
+                       -> UniquePtr<CiphertextDCRTPoly>;
+        fn RelinearizeInPlace(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly);
+        fn Rescale(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly)
+                   -> UniquePtr<CiphertextDCRTPoly>;
+        fn RescaleInPlace(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly);
+        fn SetKeyGenLevel(self: &CryptoContextDCRTPoly, level: usize);
+        fn SetSchemeId(self: &CryptoContextDCRTPoly, schemeTag: SCHEME);
+        fn SetSwkFC(self: &CryptoContextDCRTPoly, FHEWtoCKKSswk: &CiphertextDCRTPoly);
+        fn ShareKeys(self: &CryptoContextDCRTPoly, sk: &PrivateKeyDCRTPoly, N: u32, threshold: u32,
+                     index: u32, shareType: &CxxString)
+                     -> UniquePtr<UnorderedMapFromIndexToDCRTPoly>;
+        fn SparseKeyGen(self: &CryptoContextDCRTPoly) -> UniquePtr<KeyPairDCRTPoly>;
 
-    // ParamsBGVRNS
-    unsafe extern "C++"
-    {
-        fn GenParamsBGVRNS() -> UniquePtr<ParamsBGVRNS>;
-        fn GenParamsBGVRNSbyVectorOfString(vals: &CxxVector<CxxString>) -> UniquePtr<ParamsBGVRNS>;
-        // getters
-        fn GetScheme(self: &ParamsBGVRNS) -> SCHEME;
-        fn GetPlaintextModulus(self: &ParamsBGVRNS) -> u64;
-        fn GetDigitSize(self: &ParamsBGVRNS) -> u32;
-        fn GetStandardDeviation(self: &ParamsBGVRNS) -> f32;
-        fn GetSecretKeyDist(self: &ParamsBGVRNS) -> SecretKeyDist;
-        fn GetMaxRelinSkDeg(self: &ParamsBGVRNS) -> u32;
-        fn GetPREMode(self: &ParamsBGVRNS) -> ProxyReEncryptionMode;
-        fn GetMultipartyMode(self: &ParamsBGVRNS) -> MultipartyMode;
-        fn GetExecutionMode(self: &ParamsBGVRNS) -> ExecutionMode;
-        fn GetDecryptionNoiseMode(self: &ParamsBGVRNS) -> DecryptionNoiseMode;
-        fn GetNoiseEstimate(self: &ParamsBGVRNS) -> f64;
-        fn GetDesiredPrecision(self: &ParamsBGVRNS) -> f64;
-        fn GetStatisticalSecurity(self: &ParamsBGVRNS) -> f64;
-        fn GetNumAdversarialQueries(self: &ParamsBGVRNS) -> f64;
-        fn GetThresholdNumOfParties(self: &ParamsBGVRNS) -> u32;
-        fn GetKeySwitchTechnique(self: &ParamsBGVRNS) -> KeySwitchTechnique;
-        fn GetScalingTechnique(self: &ParamsBGVRNS) -> ScalingTechnique;
-        fn GetBatchSize(self: &ParamsBGVRNS) -> u32;
-        fn GetFirstModSize(self: &ParamsBGVRNS) -> u32;
-        fn GetNumLargeDigits(self: &ParamsBGVRNS) -> u32;
-        fn GetMultiplicativeDepth(self: &ParamsBGVRNS) -> u32;
-        fn GetScalingModSize(self: &ParamsBGVRNS) -> u32;
-        fn GetSecurityLevel(self: &ParamsBGVRNS) -> SecurityLevel;
-        fn GetRingDim(self: &ParamsBGVRNS) -> u32;
-        fn GetEvalAddCount(self: &ParamsBGVRNS) -> u32;
-        fn GetKeySwitchCount(self: &ParamsBGVRNS) -> u32;
-        fn GetEncryptionTechnique(self: &ParamsBGVRNS) -> EncryptionTechnique;
-        fn GetMultiplicationTechnique(self: &ParamsBGVRNS) -> MultiplicationTechnique;
-        fn GetMultiHopModSize(self: &ParamsBGVRNS) -> u32;
-        fn GetInteractiveBootCompressionLevel(self: &ParamsBGVRNS) -> COMPRESSION_LEVEL;
-        // setters
-        fn SetPlaintextModulus(self: Pin<&mut ParamsBGVRNS>, ptModulus0: u64);
-        fn SetDigitSize(self: Pin<&mut ParamsBGVRNS>, digitSize0: u32);
-        fn SetStandardDeviation(self: Pin<&mut ParamsBGVRNS>, standardDeviation0: f32);
-        fn SetSecretKeyDist(self: Pin<&mut ParamsBGVRNS>, secretKeyDist0: SecretKeyDist);
-        fn SetMaxRelinSkDeg(self: Pin<&mut ParamsBGVRNS>, maxRelinSkDeg0: u32);
-        fn SetPREMode(self: Pin<&mut ParamsBGVRNS>, PREMode0: ProxyReEncryptionMode);
-        fn SetMultipartyMode(self: Pin<&mut ParamsBGVRNS>, multipartyMode0: MultipartyMode);
-        fn SetExecutionMode(self: Pin<&mut ParamsBGVRNS>, executionMode0: ExecutionMode);
-        fn SetDecryptionNoiseMode(self: Pin<&mut ParamsBGVRNS>,
-                                  decryptionNoiseMode0: DecryptionNoiseMode);
-        fn SetNoiseEstimate(self: Pin<&mut ParamsBGVRNS>, noiseEstimate0: f64);
-        fn SetDesiredPrecision(self: Pin<&mut ParamsBGVRNS>, desiredPrecision0: f64);
-        fn SetStatisticalSecurity(self: Pin<&mut ParamsBGVRNS>, statisticalSecurity0: u32);
-        fn SetNumAdversarialQueries(self: Pin<&mut ParamsBGVRNS>, numAdversarialQueries0: u32);
-        fn SetThresholdNumOfParties(self: Pin<&mut ParamsBGVRNS>, thresholdNumOfParties0: u32);
-        fn SetKeySwitchTechnique(self: Pin<&mut ParamsBGVRNS>, ksTech0: KeySwitchTechnique);
-        fn SetScalingTechnique(self: Pin<&mut ParamsBGVRNS>, scalTech0: ScalingTechnique);
-        fn SetBatchSize(self: Pin<&mut ParamsBGVRNS>, batchSize0: u32);
-        fn SetFirstModSize(self: Pin<&mut ParamsBGVRNS>, firstModSize0: u32);
-        fn SetNumLargeDigits(self: Pin<&mut ParamsBGVRNS>, numLargeDigits0: u32);
-        fn SetMultiplicativeDepth(self: Pin<&mut ParamsBGVRNS>, multiplicativeDepth0: u32);
-        fn SetScalingModSize(self: Pin<&mut ParamsBGVRNS>, scalingModSize0: u32);
-        fn SetSecurityLevel(self: Pin<&mut ParamsBGVRNS>, securityLevel0: SecurityLevel);
-        fn SetRingDim(self: Pin<&mut ParamsBGVRNS>, ringDim0: u32);
-        fn SetEvalAddCount(self: Pin<&mut ParamsBGVRNS>, evalAddCount0: u32);
-        fn SetKeySwitchCount(self: Pin<&mut ParamsBGVRNS>, keySwitchCount0: u32);
-        fn SetEncryptionTechnique(self: Pin<&mut ParamsBGVRNS>,
-                                  encryptionTechnique0: EncryptionTechnique);
-        fn SetMultiplicationTechnique(self: Pin<&mut ParamsBGVRNS>,
-                                      multiplicationTechnique0: MultiplicationTechnique);
-        fn SetMultiHopModSize(self: Pin<&mut ParamsBGVRNS>, multiHopModSize0: u32);
-        fn SetInteractiveBootCompressionLevel(self: Pin<&mut ParamsBGVRNS>,
-                                              interactiveBootCompressionLevel0: COMPRESSION_LEVEL);
-    }
+        // cxx currently does not support static class methods
+        fn ClearEvalAutomorphismKeys();
+        fn ClearEvalAutomorphismKeysByCryptoContext(cryptoContext: &CryptoContextDCRTPoly);
+        fn ClearEvalAutomorphismKeysById(id: &CxxString);
+        fn ClearEvalMultKeys();
+        fn ClearEvalMultKeysByCryptoContext(cryptoContext: &CryptoContextDCRTPoly);
+        fn ClearEvalMultKeysById(id: &CxxString);
+        fn ClearEvalSumKeys();
+        fn ClearEvalSumKeysByCryptoContext(cryptoContext: &CryptoContextDCRTPoly);
+        fn ClearEvalSumKeysById(id: &CxxString);
+        fn GetCopyOfAllEvalAutomorphismKeys() -> UniquePtr<MapFromStringToMapFromIndexToEvalKey>;
+        fn GetCopyOfAllEvalMultKeys() -> UniquePtr<MapFromStringToVectorOfEvalKeys>;
+        fn GetCopyOfAllEvalSumKeys() -> UniquePtr<MapFromStringToMapFromIndexToEvalKey>;
+        fn GetCopyOfEvalMultKeyVector(keyID: &CxxString) -> UniquePtr<VectorOfEvalKeys>;
+        fn GetCopyOfEvalSumKeyMap(id: &CxxString) -> UniquePtr<MapFromIndexToEvalKey>;
+        fn GetEvalAutomorphismKeyMap(keyID: &CxxString) -> UniquePtr<MapFromIndexToEvalKey>;
+        fn GetEvalAutomorphismKeyMapPtr(keyID: &CxxString) -> UniquePtr<MapFromIndexToEvalKey>;
+        fn GetExistingEvalAutomorphismKeyIndices(keyTag: &CxxString) -> UniquePtr<CxxVector<u32>>;
+        fn GetPlaintextForDecrypt(pte: PlaintextEncodings, evp: &DCRTPolyParams,
+                                  ep: &EncodingParams) -> UniquePtr<Plaintext>;
+        fn GetUniqueValues(oldValues: &CxxVector<u32>, newValues: &CxxVector<u32>)
+                           -> UniquePtr<CxxVector<u32>>;
+        fn InsertEvalAutomorphismKey(evalKeyMap: &MapFromIndexToEvalKey,
+                                     keyTag: /* "" */ &CxxString);
+        fn InsertEvalMultKey(evalKeyVec: &VectorOfEvalKeys);
+        fn InsertEvalSumKey(mapToInsert: &MapFromIndexToEvalKey, keyTag: /* "" */ &CxxString);
 
-    // ParamsCKKSRNS
-    unsafe extern "C++"
-    {
-        fn GenParamsCKKSRNS() -> UniquePtr<ParamsCKKSRNS>;
-        fn GenParamsCKKSRNSbyVectorOfString(vals: &CxxVector<CxxString>)
-                                            -> UniquePtr<ParamsCKKSRNS>;
-        // getters
-        fn GetScheme(self: &ParamsCKKSRNS) -> SCHEME;
-        fn GetPlaintextModulus(self: &ParamsCKKSRNS) -> u64;
-        fn GetDigitSize(self: &ParamsCKKSRNS) -> u32;
-        fn GetStandardDeviation(self: &ParamsCKKSRNS) -> f32;
-        fn GetSecretKeyDist(self: &ParamsCKKSRNS) -> SecretKeyDist;
-        fn GetMaxRelinSkDeg(self: &ParamsCKKSRNS) -> u32;
-        fn GetPREMode(self: &ParamsCKKSRNS) -> ProxyReEncryptionMode;
-        fn GetMultipartyMode(self: &ParamsCKKSRNS) -> MultipartyMode;
-        fn GetExecutionMode(self: &ParamsCKKSRNS) -> ExecutionMode;
-        fn GetDecryptionNoiseMode(self: &ParamsCKKSRNS) -> DecryptionNoiseMode;
-        fn GetNoiseEstimate(self: &ParamsCKKSRNS) -> f64;
-        fn GetDesiredPrecision(self: &ParamsCKKSRNS) -> f64;
-        fn GetStatisticalSecurity(self: &ParamsCKKSRNS) -> f64;
-        fn GetNumAdversarialQueries(self: &ParamsCKKSRNS) -> f64;
-        fn GetThresholdNumOfParties(self: &ParamsCKKSRNS) -> u32;
-        fn GetKeySwitchTechnique(self: &ParamsCKKSRNS) -> KeySwitchTechnique;
-        fn GetScalingTechnique(self: &ParamsCKKSRNS) -> ScalingTechnique;
-        fn GetBatchSize(self: &ParamsCKKSRNS) -> u32;
-        fn GetFirstModSize(self: &ParamsCKKSRNS) -> u32;
-        fn GetNumLargeDigits(self: &ParamsCKKSRNS) -> u32;
-        fn GetMultiplicativeDepth(self: &ParamsCKKSRNS) -> u32;
-        fn GetScalingModSize(self: &ParamsCKKSRNS) -> u32;
-        fn GetSecurityLevel(self: &ParamsCKKSRNS) -> SecurityLevel;
-        fn GetRingDim(self: &ParamsCKKSRNS) -> u32;
-        fn GetEvalAddCount(self: &ParamsCKKSRNS) -> u32;
-        fn GetKeySwitchCount(self: &ParamsCKKSRNS) -> u32;
-        fn GetEncryptionTechnique(self: &ParamsCKKSRNS) -> EncryptionTechnique;
-        fn GetMultiplicationTechnique(self: &ParamsCKKSRNS) -> MultiplicationTechnique;
-        fn GetMultiHopModSize(self: &ParamsCKKSRNS) -> u32;
-        fn GetInteractiveBootCompressionLevel(self: &ParamsCKKSRNS) -> COMPRESSION_LEVEL;
-        // setters
-        fn SetPlaintextModulus(self: Pin<&mut ParamsCKKSRNS>, ptModulus0: u64);
-        fn SetDigitSize(self: Pin<&mut ParamsCKKSRNS>, digitSize0: u32);
-        fn SetStandardDeviation(self: Pin<&mut ParamsCKKSRNS>, standardDeviation0: f32);
-        fn SetSecretKeyDist(self: Pin<&mut ParamsCKKSRNS>, secretKeyDist0: SecretKeyDist);
-        fn SetMaxRelinSkDeg(self: Pin<&mut ParamsCKKSRNS>, maxRelinSkDeg0: u32);
-        fn SetPREMode(self: Pin<&mut ParamsCKKSRNS>, PREMode0: ProxyReEncryptionMode);
-        fn SetMultipartyMode(self: Pin<&mut ParamsCKKSRNS>, multipartyMode0: MultipartyMode);
-        fn SetExecutionMode(self: Pin<&mut ParamsCKKSRNS>, executionMode0: ExecutionMode);
-        fn SetDecryptionNoiseMode(self: Pin<&mut ParamsCKKSRNS>,
-                                  decryptionNoiseMode0: DecryptionNoiseMode);
-        fn SetNoiseEstimate(self: Pin<&mut ParamsCKKSRNS>, noiseEstimate0: f64);
-        fn SetDesiredPrecision(self: Pin<&mut ParamsCKKSRNS>, desiredPrecision0: f64);
-        fn SetStatisticalSecurity(self: Pin<&mut ParamsCKKSRNS>, statisticalSecurity0: u32);
-        fn SetNumAdversarialQueries(self: Pin<&mut ParamsCKKSRNS>, numAdversarialQueries0: u32);
-        fn SetThresholdNumOfParties(self: Pin<&mut ParamsCKKSRNS>, thresholdNumOfParties0: u32);
-        fn SetKeySwitchTechnique(self: Pin<&mut ParamsCKKSRNS>, ksTech0: KeySwitchTechnique);
-        fn SetScalingTechnique(self: Pin<&mut ParamsCKKSRNS>, scalTech0: ScalingTechnique);
-        fn SetBatchSize(self: Pin<&mut ParamsCKKSRNS>, batchSize0: u32);
-        fn SetFirstModSize(self: Pin<&mut ParamsCKKSRNS>, firstModSize0: u32);
-        fn SetNumLargeDigits(self: Pin<&mut ParamsCKKSRNS>, numLargeDigits0: u32);
-        fn SetMultiplicativeDepth(self: Pin<&mut ParamsCKKSRNS>, multiplicativeDepth0: u32);
-        fn SetScalingModSize(self: Pin<&mut ParamsCKKSRNS>, scalingModSize0: u32);
-        fn SetSecurityLevel(self: Pin<&mut ParamsCKKSRNS>, securityLevel0: SecurityLevel);
-        fn SetRingDim(self: Pin<&mut ParamsCKKSRNS>, ringDim0: u32);
-        fn SetEvalAddCount(self: Pin<&mut ParamsCKKSRNS>, evalAddCount0: u32);
-        fn SetKeySwitchCount(self: Pin<&mut ParamsCKKSRNS>, keySwitchCount0: u32);
-        fn SetEncryptionTechnique(self: Pin<&mut ParamsCKKSRNS>,
-                                  encryptionTechnique0: EncryptionTechnique);
-        fn SetMultiplicationTechnique(self: Pin<&mut ParamsCKKSRNS>,
-                                      multiplicationTechnique0: MultiplicationTechnique);
-        fn SetMultiHopModSize(self: Pin<&mut ParamsCKKSRNS>, multiHopModSize0: u32);
-        fn SetInteractiveBootCompressionLevel(self: Pin<&mut ParamsCKKSRNS>,
-                                              interactiveBootCompressionLevel0: COMPRESSION_LEVEL);
+        // Generator functions
+        fn GenCryptoContextByParamsCKKSRNS(params: &ParamsCKKSRNS)
+                                           -> UniquePtr<CryptoContextDCRTPoly>;
+        fn GenCryptoContextByParamsBFVRNS(params: &ParamsBFVRNS)
+                                          -> UniquePtr<CryptoContextDCRTPoly>;
+        fn GenCryptoContextByParamsBGVRNS(params: &ParamsBGVRNS)
+                                          -> UniquePtr<CryptoContextDCRTPoly>;
+        fn GenNullCryptoContext() -> UniquePtr<CryptoContextDCRTPoly>;
     }
 
     // DCRTPolyParams
     unsafe extern "C++"
     {
+        // Generator functions
         fn GenNullDCRTPolyParams() -> UniquePtr<DCRTPolyParams>;
-    }
-
-    // PublicKeyDCRTPoly
-    unsafe extern "C++"
-    {
-        fn GenNullPublicKey() -> UniquePtr<PublicKeyDCRTPoly>;
     }
 
     // KeyPairDCRTPoly
@@ -530,536 +697,389 @@ pub mod ffi
         fn GetPublicKey(self: &KeyPairDCRTPoly) -> UniquePtr<PublicKeyDCRTPoly>;
     }
 
+    // Params
+    unsafe extern "C++"
+    {
+        fn GetBatchSize(self: &Params) -> u32;
+        fn GetDecryptionNoiseMode(self: &Params) -> DecryptionNoiseMode;
+        fn GetDesiredPrecision(self: &Params) -> f64;
+        fn GetDigitSize(self: &Params) -> u32;
+        fn GetEncryptionTechnique(self: &Params) -> EncryptionTechnique;
+        fn GetEvalAddCount(self: &Params) -> u32;
+        fn GetExecutionMode(self: &Params) -> ExecutionMode;
+        fn GetFirstModSize(self: &Params) -> u32;
+        fn GetInteractiveBootCompressionLevel(self: &Params) -> COMPRESSION_LEVEL;
+        fn GetKeySwitchCount(self: &Params) -> u32;
+        fn GetKeySwitchTechnique(self: &Params) -> KeySwitchTechnique;
+        fn GetMaxRelinSkDeg(self: &Params) -> u32;
+        fn GetMultiHopModSize(self: &Params) -> u32;
+        fn GetMultipartyMode(self: &Params) -> MultipartyMode;
+        fn GetMultiplicationTechnique(self: &Params) -> MultiplicationTechnique;
+        fn GetMultiplicativeDepth(self: &Params) -> u32;
+        fn GetNoiseEstimate(self: &Params) -> f64;
+        fn GetNumAdversarialQueries(self: &Params) -> f64;
+        fn GetNumLargeDigits(self: &Params) -> u32;
+        fn GetPREMode(self: &Params) -> ProxyReEncryptionMode;
+        fn GetPlaintextModulus(self: &Params) -> u64;
+        fn GetRingDim(self: &Params) -> u32;
+        fn GetScalingModSize(self: &Params) -> u32;
+        fn GetScalingTechnique(self: &Params) -> ScalingTechnique;
+        fn GetScheme(self: &Params) -> SCHEME;
+        fn GetSecretKeyDist(self: &Params) -> SecretKeyDist;
+        fn GetSecurityLevel(self: &Params) -> SecurityLevel;
+        fn GetStandardDeviation(self: &Params) -> f32;
+        fn GetStatisticalSecurity(self: &Params) -> f64;
+        fn GetThresholdNumOfParties(self: &Params) -> u32;
+        fn SetBatchSize(self: Pin<&mut Params>, batchSize0: u32);
+        fn SetDecryptionNoiseMode(self: Pin<&mut Params>,
+                                  decryptionNoiseMode0: DecryptionNoiseMode);
+        fn SetDesiredPrecision(self: Pin<&mut Params>, desiredPrecision0: f64);
+        fn SetDigitSize(self: Pin<&mut Params>, digitSize0: u32);
+        fn SetEncryptionTechnique(self: Pin<&mut Params>,
+                                  encryptionTechnique0: EncryptionTechnique);
+        fn SetEvalAddCount(self: Pin<&mut Params>, evalAddCount0: u32);
+        fn SetExecutionMode(self: Pin<&mut Params>, executionMode0: ExecutionMode);
+        fn SetFirstModSize(self: Pin<&mut Params>, firstModSize0: u32);
+        fn SetInteractiveBootCompressionLevel(self: Pin<&mut Params>,
+                                              interactiveBootCompressionLevel0: COMPRESSION_LEVEL);
+        fn SetKeySwitchCount(self: Pin<&mut Params>, keySwitchCount0: u32);
+        fn SetKeySwitchTechnique(self: Pin<&mut Params>, ksTech0: KeySwitchTechnique);
+        fn SetMaxRelinSkDeg(self: Pin<&mut Params>, maxRelinSkDeg0: u32);
+        fn SetMultiHopModSize(self: Pin<&mut Params>, multiHopModSize0: u32);
+        fn SetMultipartyMode(self: Pin<&mut Params>, multipartyMode0: MultipartyMode);
+        fn SetMultiplicationTechnique(self: Pin<&mut Params>,
+                                      multiplicationTechnique0: MultiplicationTechnique);
+        fn SetMultiplicativeDepth(self: Pin<&mut Params>, multiplicativeDepth0: u32);
+        fn SetNoiseEstimate(self: Pin<&mut Params>, noiseEstimate0: f64);
+        fn SetNumAdversarialQueries(self: Pin<&mut Params>, numAdversarialQueries0: u32);
+        fn SetNumLargeDigits(self: Pin<&mut Params>, numLargeDigits0: u32);
+        fn SetPREMode(self: Pin<&mut Params>, PREMode0: ProxyReEncryptionMode);
+        fn SetPlaintextModulus(self: Pin<&mut Params>, ptModulus0: u64);
+        fn SetRingDim(self: Pin<&mut Params>, ringDim0: u32);
+        fn SetScalingModSize(self: Pin<&mut Params>, scalingModSize0: u32);
+        fn SetScalingTechnique(self: Pin<&mut Params>, scalTech0: ScalingTechnique);
+        fn SetSecretKeyDist(self: Pin<&mut Params>, secretKeyDist0: SecretKeyDist);
+        fn SetSecurityLevel(self: Pin<&mut Params>, securityLevel0: SecurityLevel);
+        fn SetStandardDeviation(self: Pin<&mut Params>, standardDeviation0: f32);
+        fn SetStatisticalSecurity(self: Pin<&mut Params>, statisticalSecurity0: u32);
+        fn SetThresholdNumOfParties(self: Pin<&mut Params>, thresholdNumOfParties0: u32);
+
+        // Generator functions
+        fn GenParamsByScheme(scheme: SCHEME) -> UniquePtr<Params>;
+        fn GenParamsByVectorOfString(vals: &CxxVector<CxxString>) -> UniquePtr<Params>;
+    }
+
+    // ParamsBFVRNS
+    unsafe extern "C++"
+    {
+        fn GetBatchSize(self: &ParamsBFVRNS) -> u32;
+        fn GetDecryptionNoiseMode(self: &ParamsBFVRNS) -> DecryptionNoiseMode;
+        fn GetDesiredPrecision(self: &ParamsBFVRNS) -> f64;
+        fn GetDigitSize(self: &ParamsBFVRNS) -> u32;
+        fn GetEncryptionTechnique(self: &ParamsBFVRNS) -> EncryptionTechnique;
+        fn GetEvalAddCount(self: &ParamsBFVRNS) -> u32;
+        fn GetExecutionMode(self: &ParamsBFVRNS) -> ExecutionMode;
+        fn GetFirstModSize(self: &ParamsBFVRNS) -> u32;
+        fn GetInteractiveBootCompressionLevel(self: &ParamsBFVRNS) -> COMPRESSION_LEVEL;
+        fn GetKeySwitchCount(self: &ParamsBFVRNS) -> u32;
+        fn GetKeySwitchTechnique(self: &ParamsBFVRNS) -> KeySwitchTechnique;
+        fn GetMaxRelinSkDeg(self: &ParamsBFVRNS) -> u32;
+        fn GetMultiHopModSize(self: &ParamsBFVRNS) -> u32;
+        fn GetMultipartyMode(self: &ParamsBFVRNS) -> MultipartyMode;
+        fn GetMultiplicationTechnique(self: &ParamsBFVRNS) -> MultiplicationTechnique;
+        fn GetMultiplicativeDepth(self: &ParamsBFVRNS) -> u32;
+        fn GetNoiseEstimate(self: &ParamsBFVRNS) -> f64;
+        fn GetNumAdversarialQueries(self: &ParamsBFVRNS) -> f64;
+        fn GetNumLargeDigits(self: &ParamsBFVRNS) -> u32;
+        fn GetPREMode(self: &ParamsBFVRNS) -> ProxyReEncryptionMode;
+        fn GetPlaintextModulus(self: &ParamsBFVRNS) -> u64;
+        fn GetRingDim(self: &ParamsBFVRNS) -> u32;
+        fn GetScalingModSize(self: &ParamsBFVRNS) -> u32;
+        fn GetScalingTechnique(self: &ParamsBFVRNS) -> ScalingTechnique;
+        fn GetScheme(self: &ParamsBFVRNS) -> SCHEME;
+        fn GetSecretKeyDist(self: &ParamsBFVRNS) -> SecretKeyDist;
+        fn GetSecurityLevel(self: &ParamsBFVRNS) -> SecurityLevel;
+        fn GetStandardDeviation(self: &ParamsBFVRNS) -> f32;
+        fn GetStatisticalSecurity(self: &ParamsBFVRNS) -> f64;
+        fn GetThresholdNumOfParties(self: &ParamsBFVRNS) -> u32;
+        fn SetBatchSize(self: Pin<&mut ParamsBFVRNS>, batchSize0: u32);
+        fn SetDecryptionNoiseMode(self: Pin<&mut ParamsBFVRNS>,
+                                  decryptionNoiseMode0: DecryptionNoiseMode);
+        fn SetDesiredPrecision(self: Pin<&mut ParamsBFVRNS>, desiredPrecision0: f64);
+        fn SetDigitSize(self: Pin<&mut ParamsBFVRNS>, digitSize0: u32);
+        fn SetEncryptionTechnique(self: Pin<&mut ParamsBFVRNS>,
+                                  encryptionTechnique0: EncryptionTechnique);
+        fn SetEvalAddCount(self: Pin<&mut ParamsBFVRNS>, evalAddCount0: u32);
+        fn SetExecutionMode(self: Pin<&mut ParamsBFVRNS>, executionMode0: ExecutionMode);
+        fn SetFirstModSize(self: Pin<&mut ParamsBFVRNS>, firstModSize0: u32);
+        fn SetInteractiveBootCompressionLevel(self: Pin<&mut ParamsBFVRNS>,
+                                              interactiveBootCompressionLevel0: COMPRESSION_LEVEL);
+        fn SetKeySwitchCount(self: Pin<&mut ParamsBFVRNS>, keySwitchCount0: u32);
+        fn SetKeySwitchTechnique(self: Pin<&mut ParamsBFVRNS>, ksTech0: KeySwitchTechnique);
+        fn SetMaxRelinSkDeg(self: Pin<&mut ParamsBFVRNS>, maxRelinSkDeg0: u32);
+        fn SetMultiHopModSize(self: Pin<&mut ParamsBFVRNS>, multiHopModSize0: u32);
+        fn SetMultipartyMode(self: Pin<&mut ParamsBFVRNS>, multipartyMode0: MultipartyMode);
+        fn SetMultiplicationTechnique(self: Pin<&mut ParamsBFVRNS>,
+                                      multiplicationTechnique0: MultiplicationTechnique);
+        fn SetMultiplicativeDepth(self: Pin<&mut ParamsBFVRNS>, multiplicativeDepth0: u32);
+        fn SetNoiseEstimate(self: Pin<&mut ParamsBFVRNS>, noiseEstimate0: f64);
+        fn SetNumAdversarialQueries(self: Pin<&mut ParamsBFVRNS>, numAdversarialQueries0: u32);
+        fn SetNumLargeDigits(self: Pin<&mut ParamsBFVRNS>, numLargeDigits0: u32);
+        fn SetPREMode(self: Pin<&mut ParamsBFVRNS>, PREMode0: ProxyReEncryptionMode);
+        fn SetPlaintextModulus(self: Pin<&mut ParamsBFVRNS>, ptModulus0: u64);
+        fn SetRingDim(self: Pin<&mut ParamsBFVRNS>, ringDim0: u32);
+        fn SetScalingModSize(self: Pin<&mut ParamsBFVRNS>, scalingModSize0: u32);
+        fn SetScalingTechnique(self: Pin<&mut ParamsBFVRNS>, scalTech0: ScalingTechnique);
+        fn SetSecretKeyDist(self: Pin<&mut ParamsBFVRNS>, secretKeyDist0: SecretKeyDist);
+        fn SetSecurityLevel(self: Pin<&mut ParamsBFVRNS>, securityLevel0: SecurityLevel);
+        fn SetStandardDeviation(self: Pin<&mut ParamsBFVRNS>, standardDeviation0: f32);
+        fn SetStatisticalSecurity(self: Pin<&mut ParamsBFVRNS>, statisticalSecurity0: u32);
+        fn SetThresholdNumOfParties(self: Pin<&mut ParamsBFVRNS>, thresholdNumOfParties0: u32);
+
+        // Generator functions
+        fn GenParamsBFVRNS() -> UniquePtr<ParamsBFVRNS>;
+        fn GenParamsBFVRNSbyVectorOfString(vals: &CxxVector<CxxString>) -> UniquePtr<ParamsBFVRNS>;
+    }
+
+    // ParamsBGVRNS
+    unsafe extern "C++"
+    {
+        fn GetBatchSize(self: &ParamsBGVRNS) -> u32;
+        fn GetDecryptionNoiseMode(self: &ParamsBGVRNS) -> DecryptionNoiseMode;
+        fn GetDesiredPrecision(self: &ParamsBGVRNS) -> f64;
+        fn GetDigitSize(self: &ParamsBGVRNS) -> u32;
+        fn GetEncryptionTechnique(self: &ParamsBGVRNS) -> EncryptionTechnique;
+        fn GetEvalAddCount(self: &ParamsBGVRNS) -> u32;
+        fn GetExecutionMode(self: &ParamsBGVRNS) -> ExecutionMode;
+        fn GetFirstModSize(self: &ParamsBGVRNS) -> u32;
+        fn GetInteractiveBootCompressionLevel(self: &ParamsBGVRNS) -> COMPRESSION_LEVEL;
+        fn GetKeySwitchCount(self: &ParamsBGVRNS) -> u32;
+        fn GetKeySwitchTechnique(self: &ParamsBGVRNS) -> KeySwitchTechnique;
+        fn GetMaxRelinSkDeg(self: &ParamsBGVRNS) -> u32;
+        fn GetMultiHopModSize(self: &ParamsBGVRNS) -> u32;
+        fn GetMultipartyMode(self: &ParamsBGVRNS) -> MultipartyMode;
+        fn GetMultiplicationTechnique(self: &ParamsBGVRNS) -> MultiplicationTechnique;
+        fn GetMultiplicativeDepth(self: &ParamsBGVRNS) -> u32;
+        fn GetNoiseEstimate(self: &ParamsBGVRNS) -> f64;
+        fn GetNumAdversarialQueries(self: &ParamsBGVRNS) -> f64;
+        fn GetNumLargeDigits(self: &ParamsBGVRNS) -> u32;
+        fn GetPREMode(self: &ParamsBGVRNS) -> ProxyReEncryptionMode;
+        fn GetPlaintextModulus(self: &ParamsBGVRNS) -> u64;
+        fn GetRingDim(self: &ParamsBGVRNS) -> u32;
+        fn GetScalingModSize(self: &ParamsBGVRNS) -> u32;
+        fn GetScalingTechnique(self: &ParamsBGVRNS) -> ScalingTechnique;
+        fn GetScheme(self: &ParamsBGVRNS) -> SCHEME;
+        fn GetSecretKeyDist(self: &ParamsBGVRNS) -> SecretKeyDist;
+        fn GetSecurityLevel(self: &ParamsBGVRNS) -> SecurityLevel;
+        fn GetStandardDeviation(self: &ParamsBGVRNS) -> f32;
+        fn GetStatisticalSecurity(self: &ParamsBGVRNS) -> f64;
+        fn GetThresholdNumOfParties(self: &ParamsBGVRNS) -> u32;
+        fn SetBatchSize(self: Pin<&mut ParamsBGVRNS>, batchSize0: u32);
+        fn SetDecryptionNoiseMode(self: Pin<&mut ParamsBGVRNS>,
+                                  decryptionNoiseMode0: DecryptionNoiseMode);
+        fn SetDesiredPrecision(self: Pin<&mut ParamsBGVRNS>, desiredPrecision0: f64);
+        fn SetDigitSize(self: Pin<&mut ParamsBGVRNS>, digitSize0: u32);
+        fn SetEncryptionTechnique(self: Pin<&mut ParamsBGVRNS>,
+                                  encryptionTechnique0: EncryptionTechnique);
+        fn SetEvalAddCount(self: Pin<&mut ParamsBGVRNS>, evalAddCount0: u32);
+        fn SetExecutionMode(self: Pin<&mut ParamsBGVRNS>, executionMode0: ExecutionMode);
+        fn SetFirstModSize(self: Pin<&mut ParamsBGVRNS>, firstModSize0: u32);
+        fn SetInteractiveBootCompressionLevel(self: Pin<&mut ParamsBGVRNS>,
+                                              interactiveBootCompressionLevel0: COMPRESSION_LEVEL);
+        fn SetKeySwitchCount(self: Pin<&mut ParamsBGVRNS>, keySwitchCount0: u32);
+        fn SetKeySwitchTechnique(self: Pin<&mut ParamsBGVRNS>, ksTech0: KeySwitchTechnique);
+        fn SetMaxRelinSkDeg(self: Pin<&mut ParamsBGVRNS>, maxRelinSkDeg0: u32);
+        fn SetMultiHopModSize(self: Pin<&mut ParamsBGVRNS>, multiHopModSize0: u32);
+        fn SetMultipartyMode(self: Pin<&mut ParamsBGVRNS>, multipartyMode0: MultipartyMode);
+        fn SetMultiplicationTechnique(self: Pin<&mut ParamsBGVRNS>,
+                                      multiplicationTechnique0: MultiplicationTechnique);
+        fn SetMultiplicativeDepth(self: Pin<&mut ParamsBGVRNS>, multiplicativeDepth0: u32);
+        fn SetNoiseEstimate(self: Pin<&mut ParamsBGVRNS>, noiseEstimate0: f64);
+        fn SetNumAdversarialQueries(self: Pin<&mut ParamsBGVRNS>, numAdversarialQueries0: u32);
+        fn SetNumLargeDigits(self: Pin<&mut ParamsBGVRNS>, numLargeDigits0: u32);
+        fn SetPREMode(self: Pin<&mut ParamsBGVRNS>, PREMode0: ProxyReEncryptionMode);
+        fn SetPlaintextModulus(self: Pin<&mut ParamsBGVRNS>, ptModulus0: u64);
+        fn SetRingDim(self: Pin<&mut ParamsBGVRNS>, ringDim0: u32);
+        fn SetScalingModSize(self: Pin<&mut ParamsBGVRNS>, scalingModSize0: u32);
+        fn SetScalingTechnique(self: Pin<&mut ParamsBGVRNS>, scalTech0: ScalingTechnique);
+        fn SetSecretKeyDist(self: Pin<&mut ParamsBGVRNS>, secretKeyDist0: SecretKeyDist);
+        fn SetSecurityLevel(self: Pin<&mut ParamsBGVRNS>, securityLevel0: SecurityLevel);
+        fn SetStandardDeviation(self: Pin<&mut ParamsBGVRNS>, standardDeviation0: f32);
+        fn SetStatisticalSecurity(self: Pin<&mut ParamsBGVRNS>, statisticalSecurity0: u32);
+        fn SetThresholdNumOfParties(self: Pin<&mut ParamsBGVRNS>, thresholdNumOfParties0: u32);
+
+        // Generator functions
+        fn GenParamsBGVRNS() -> UniquePtr<ParamsBGVRNS>;
+        fn GenParamsBGVRNSbyVectorOfString(vals: &CxxVector<CxxString>) -> UniquePtr<ParamsBGVRNS>;
+    }
+
+    // ParamsCKKSRNS
+    unsafe extern "C++"
+    {
+        fn GetBatchSize(self: &ParamsCKKSRNS) -> u32;
+        fn GetDecryptionNoiseMode(self: &ParamsCKKSRNS) -> DecryptionNoiseMode;
+        fn GetDesiredPrecision(self: &ParamsCKKSRNS) -> f64;
+        fn GetDigitSize(self: &ParamsCKKSRNS) -> u32;
+        fn GetEncryptionTechnique(self: &ParamsCKKSRNS) -> EncryptionTechnique;
+        fn GetEvalAddCount(self: &ParamsCKKSRNS) -> u32;
+        fn GetExecutionMode(self: &ParamsCKKSRNS) -> ExecutionMode;
+        fn GetFirstModSize(self: &ParamsCKKSRNS) -> u32;
+        fn GetInteractiveBootCompressionLevel(self: &ParamsCKKSRNS) -> COMPRESSION_LEVEL;
+        fn GetKeySwitchCount(self: &ParamsCKKSRNS) -> u32;
+        fn GetKeySwitchTechnique(self: &ParamsCKKSRNS) -> KeySwitchTechnique;
+        fn GetMaxRelinSkDeg(self: &ParamsCKKSRNS) -> u32;
+        fn GetMultiHopModSize(self: &ParamsCKKSRNS) -> u32;
+        fn GetMultipartyMode(self: &ParamsCKKSRNS) -> MultipartyMode;
+        fn GetMultiplicationTechnique(self: &ParamsCKKSRNS) -> MultiplicationTechnique;
+        fn GetMultiplicativeDepth(self: &ParamsCKKSRNS) -> u32;
+        fn GetNoiseEstimate(self: &ParamsCKKSRNS) -> f64;
+        fn GetNumAdversarialQueries(self: &ParamsCKKSRNS) -> f64;
+        fn GetNumLargeDigits(self: &ParamsCKKSRNS) -> u32;
+        fn GetPREMode(self: &ParamsCKKSRNS) -> ProxyReEncryptionMode;
+        fn GetPlaintextModulus(self: &ParamsCKKSRNS) -> u64;
+        fn GetRingDim(self: &ParamsCKKSRNS) -> u32;
+        fn GetScalingModSize(self: &ParamsCKKSRNS) -> u32;
+        fn GetScalingTechnique(self: &ParamsCKKSRNS) -> ScalingTechnique;
+        fn GetScheme(self: &ParamsCKKSRNS) -> SCHEME;
+        fn GetSecretKeyDist(self: &ParamsCKKSRNS) -> SecretKeyDist;
+        fn GetSecurityLevel(self: &ParamsCKKSRNS) -> SecurityLevel;
+        fn GetStandardDeviation(self: &ParamsCKKSRNS) -> f32;
+        fn GetStatisticalSecurity(self: &ParamsCKKSRNS) -> f64;
+        fn GetThresholdNumOfParties(self: &ParamsCKKSRNS) -> u32;
+        fn SetBatchSize(self: Pin<&mut ParamsCKKSRNS>, batchSize0: u32);
+        fn SetDecryptionNoiseMode(self: Pin<&mut ParamsCKKSRNS>,
+                                  decryptionNoiseMode0: DecryptionNoiseMode);
+        fn SetDesiredPrecision(self: Pin<&mut ParamsCKKSRNS>, desiredPrecision0: f64);
+        fn SetDigitSize(self: Pin<&mut ParamsCKKSRNS>, digitSize0: u32);
+        fn SetEncryptionTechnique(self: Pin<&mut ParamsCKKSRNS>,
+                                  encryptionTechnique0: EncryptionTechnique);
+        fn SetEvalAddCount(self: Pin<&mut ParamsCKKSRNS>, evalAddCount0: u32);
+        fn SetExecutionMode(self: Pin<&mut ParamsCKKSRNS>, executionMode0: ExecutionMode);
+        fn SetFirstModSize(self: Pin<&mut ParamsCKKSRNS>, firstModSize0: u32);
+        fn SetInteractiveBootCompressionLevel(self: Pin<&mut ParamsCKKSRNS>,
+                                              interactiveBootCompressionLevel0: COMPRESSION_LEVEL);
+        fn SetKeySwitchCount(self: Pin<&mut ParamsCKKSRNS>, keySwitchCount0: u32);
+        fn SetKeySwitchTechnique(self: Pin<&mut ParamsCKKSRNS>, ksTech0: KeySwitchTechnique);
+        fn SetMaxRelinSkDeg(self: Pin<&mut ParamsCKKSRNS>, maxRelinSkDeg0: u32);
+        fn SetMultiHopModSize(self: Pin<&mut ParamsCKKSRNS>, multiHopModSize0: u32);
+        fn SetMultipartyMode(self: Pin<&mut ParamsCKKSRNS>, multipartyMode0: MultipartyMode);
+        fn SetMultiplicationTechnique(self: Pin<&mut ParamsCKKSRNS>,
+                                      multiplicationTechnique0: MultiplicationTechnique);
+        fn SetMultiplicativeDepth(self: Pin<&mut ParamsCKKSRNS>, multiplicativeDepth0: u32);
+        fn SetNoiseEstimate(self: Pin<&mut ParamsCKKSRNS>, noiseEstimate0: f64);
+        fn SetNumAdversarialQueries(self: Pin<&mut ParamsCKKSRNS>, numAdversarialQueries0: u32);
+        fn SetNumLargeDigits(self: Pin<&mut ParamsCKKSRNS>, numLargeDigits0: u32);
+        fn SetPREMode(self: Pin<&mut ParamsCKKSRNS>, PREMode0: ProxyReEncryptionMode);
+        fn SetPlaintextModulus(self: Pin<&mut ParamsCKKSRNS>, ptModulus0: u64);
+        fn SetRingDim(self: Pin<&mut ParamsCKKSRNS>, ringDim0: u32);
+        fn SetScalingModSize(self: Pin<&mut ParamsCKKSRNS>, scalingModSize0: u32);
+        fn SetScalingTechnique(self: Pin<&mut ParamsCKKSRNS>, scalTech0: ScalingTechnique);
+        fn SetSecretKeyDist(self: Pin<&mut ParamsCKKSRNS>, secretKeyDist0: SecretKeyDist);
+        fn SetSecurityLevel(self: Pin<&mut ParamsCKKSRNS>, securityLevel0: SecurityLevel);
+        fn SetStandardDeviation(self: Pin<&mut ParamsCKKSRNS>, standardDeviation0: f32);
+        fn SetStatisticalSecurity(self: Pin<&mut ParamsCKKSRNS>, statisticalSecurity0: u32);
+        fn SetThresholdNumOfParties(self: Pin<&mut ParamsCKKSRNS>, thresholdNumOfParties0: u32);
+
+        // Generator functions
+        fn GenParamsCKKSRNS() -> UniquePtr<ParamsCKKSRNS>;
+        fn GenParamsCKKSRNSbyVectorOfString(vals: &CxxVector<CxxString>)
+                                            -> UniquePtr<ParamsCKKSRNS>;
+    }
+
     // Plaintext
     unsafe extern "C++"
     {
-        fn GenNullPlainText() -> UniquePtr<Plaintext>;
-        fn SetLength(self: &Plaintext, newSize: usize);
-        fn GetString(self: &Plaintext) -> String;
-        fn GetLogPrecision(self: &Plaintext) -> f64;
-        fn SetLevel(self: &Plaintext, l: usize);
-        fn IsEncoded(self: &Plaintext) -> bool;
-        fn HighBound(self: &Plaintext) -> i64;
-        fn LowBound(self: &Plaintext) -> i64;
+        fn Decode(self: &Plaintext) -> bool;
+        fn Encode(self: &Plaintext) -> bool;
+        fn GetCoefPackedValue(self: &Plaintext) -> &CxxVector<i64>;
+        fn GetCopyOfCKKSPackedValue(self: &Plaintext) -> UniquePtr<CxxVector<ComplexPair>>;
         fn GetLength(self: &Plaintext) -> usize;
         fn GetLevel(self: &Plaintext) -> usize;
         fn GetLogError(self: &Plaintext) -> f64;
+        fn GetLogPrecision(self: &Plaintext) -> f64;
         fn GetNoiseScaleDeg(self: &Plaintext) -> usize;
+        fn GetPackedValue(self: &Plaintext) -> &CxxVector<i64>;
+        fn GetRealPackedValue(self: &Plaintext) -> UniquePtr<CxxVector<f64>>;
         fn GetScalingFactor(self: &Plaintext) -> f64;
         fn GetSchemeID(self: &Plaintext) -> SCHEME;
         fn GetSlots(self: &Plaintext) -> u32;
-        fn Encode(self: &Plaintext) -> bool;
-        fn Decode(self: &Plaintext) -> bool;
+        fn GetString(self: &Plaintext) -> String;
+        fn GetStringValue(self: &Plaintext) -> &CxxString;
+        fn HighBound(self: &Plaintext) -> i64;
+        fn IsEncoded(self: &Plaintext) -> bool;
+        fn LowBound(self: &Plaintext) -> i64;
         fn SetFormat(self: &Plaintext, fmt: Format);
         fn SetIntVectorValue(self: &Plaintext, val: &CxxVector<i64>);
+        fn SetLength(self: &Plaintext, newSize: usize);
+        fn SetLevel(self: &Plaintext, l: usize);
         fn SetNoiseScaleDeg(self: &Plaintext, nsd: usize);
         fn SetScalingFactor(self: &Plaintext, sf: f64);
         fn SetSlots(self: &Plaintext, s: u32);
         fn SetStringValue(self: &Plaintext, value: &CxxString);
-        fn GetPackedValue(self: &Plaintext) -> &CxxVector<i64>;
-        fn GetRealPackedValue(self: &Plaintext) -> UniquePtr<CxxVector<f64>>;
-        fn GetCoefPackedValue(self: &Plaintext) -> &CxxVector<i64>;
-        fn GetStringValue(self: &Plaintext) -> &CxxString;
-        fn GetCopyOfCKKSPackedValue(self: &Plaintext) -> UniquePtr<CxxVector<ComplexPair>>;
+
+        // Generator functions
+        fn GenNullPlainText() -> UniquePtr<Plaintext>;
     }
 
-    // CiphertextDCRTPoly
+    // PublicKeyDCRTPoly
     unsafe extern "C++"
     {
-        fn GenNullCiphertext() -> UniquePtr<CiphertextDCRTPoly>;
-    }
-
-    // CryptoContextDCRTPoly
-    unsafe extern "C++"
-    {
-        fn GenNullCryptoContext() -> UniquePtr<CryptoContextDCRTPoly>;
-        fn GenCryptoContextByParamsBFVRNS(params: &ParamsBFVRNS)
-                                          -> UniquePtr<CryptoContextDCRTPoly>;
-        fn GenCryptoContextByParamsBGVRNS(params: &ParamsBGVRNS)
-                                          -> UniquePtr<CryptoContextDCRTPoly>;
-        fn GenCryptoContextByParamsCKKSRNS(params: &ParamsCKKSRNS)
-                                           -> UniquePtr<CryptoContextDCRTPoly>;
-
-        fn Enable(self: &CryptoContextDCRTPoly, feature: PKESchemeFeature);
-        fn KeyGen(self: &CryptoContextDCRTPoly) -> UniquePtr<KeyPairDCRTPoly>;
-        fn MultipartyKeyGenByPublicKey(self: &CryptoContextDCRTPoly, publicKey: &PublicKeyDCRTPoly,
-                                       makeSparse: /* false */ bool, fresh: /* false */ bool)
-                                       -> UniquePtr<KeyPairDCRTPoly>;
-        fn MultiAddPubKeys(self: &CryptoContextDCRTPoly, publicKey1: &PublicKeyDCRTPoly,
-                           publicKey2: &PublicKeyDCRTPoly, keyId: /* "" */ &CxxString)
-                           -> UniquePtr<PublicKeyDCRTPoly>;
-        fn EvalMultKeyGen(self: &CryptoContextDCRTPoly, key: &PrivateKeyDCRTPoly);
-        fn EvalMultKeysGen(self: &CryptoContextDCRTPoly, key: &PrivateKeyDCRTPoly);
-        fn EvalRotateKeyGen(self: &CryptoContextDCRTPoly, privateKey: &PrivateKeyDCRTPoly,
-                            indexList: &CxxVector<i32>,
-                            publicKey: /* GenNullPublicKey() */ &PublicKeyDCRTPoly);
-        fn EvalAtIndexKeyGen(self: &CryptoContextDCRTPoly, privateKey: &PrivateKeyDCRTPoly,
-                             indexList: &CxxVector<i32>,
-                             publicKey: /* GenNullPublicKey() */ &PublicKeyDCRTPoly);
-        fn EvalCKKStoFHEWPrecompute(self: &CryptoContextDCRTPoly, scale: /* 1.0 */ f64);
-        fn MakePackedPlaintext(self: &CryptoContextDCRTPoly, value: &CxxVector<i64>,
-                               noiseScaleDeg: /* 1 */ usize, level: /* 0 */ u32)
-                               -> UniquePtr<Plaintext>;
-        fn EncryptByPublicKey(self: &CryptoContextDCRTPoly, publicKey: &PublicKeyDCRTPoly,
-                              plaintext: &Plaintext) -> UniquePtr<CiphertextDCRTPoly>;
-        fn EncryptByPrivateKey(self: &CryptoContextDCRTPoly, privateKey: &PrivateKeyDCRTPoly,
-                               plaintext: &Plaintext) -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalAddByCiphertexts(self: &CryptoContextDCRTPoly, ciphertext1: &CiphertextDCRTPoly,
-                                ciphertext2: &CiphertextDCRTPoly) -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalAddByCiphertextAndPlaintext(self: &CryptoContextDCRTPoly,
-                                           ciphertext: &CiphertextDCRTPoly, plaintext: &Plaintext)
-                                           -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalAddByPlaintextAndCiphertext(self: &CryptoContextDCRTPoly,
-                                           plaintext: &Plaintext, ciphertext: &CiphertextDCRTPoly)
-                                           -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalAddByConstAndCiphertext(self: &CryptoContextDCRTPoly,
-                                       constant: f64, ciphertext: &CiphertextDCRTPoly)
-                                       -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalAddByCiphertextAndConst(self: &CryptoContextDCRTPoly,
-                                       ciphertext: &CiphertextDCRTPoly, constant: f64)
-                                       -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalAddMutableByCiphertexts(self: &CryptoContextDCRTPoly,
-                                       ciphertext1: &CiphertextDCRTPoly,
-                                       ciphertext2: &CiphertextDCRTPoly)
-                                       -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalAddMutableByCiphertextAndPlaintext(self: &CryptoContextDCRTPoly,
-                                                  ciphertext: &CiphertextDCRTPoly,
-                                                  plaintext: &Plaintext)
-                                                  -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalAddMutableByPlaintextAndCiphertext(self: &CryptoContextDCRTPoly,
-                                                  plaintext: &Plaintext,
-                                                  ciphertext: &CiphertextDCRTPoly)
-                                                  -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalAddInPlaceByCiphertexts(self: &CryptoContextDCRTPoly,
-                                       ciphertext1: &CiphertextDCRTPoly,
-                                       ciphertext2: &CiphertextDCRTPoly);
-        fn EvalAddInPlaceByCiphertextAndPlaintext(self: &CryptoContextDCRTPoly,
-                                                  ciphertext: &CiphertextDCRTPoly,
-                                                  plaintext: &Plaintext);
-        fn EvalAddInPlaceByPlaintextAndCiphertext(self: &CryptoContextDCRTPoly,
-                                                  plaintext: &Plaintext,
-                                                  ciphertext: &CiphertextDCRTPoly);
-        fn EvalAddInPlaceByCiphertextAndConst(self: &CryptoContextDCRTPoly,
-                                              ciphertext: &CiphertextDCRTPoly, constant: f64);
-        fn EvalAddInPlaceByConstAndCiphertext(self: &CryptoContextDCRTPoly, constant: f64,
-                                              ciphertext: &CiphertextDCRTPoly);
-        fn EvalAddMutableInPlace(self: &CryptoContextDCRTPoly, ciphertext1: &CiphertextDCRTPoly,
-                                 ciphertext2: &CiphertextDCRTPoly);
-        fn EvalSubByCiphertexts(self: &CryptoContextDCRTPoly, ciphertext1: &CiphertextDCRTPoly,
-                                ciphertext2: &CiphertextDCRTPoly) -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalSubByCiphertextAndPlaintext(self: &CryptoContextDCRTPoly,
-                                           ciphertext: &CiphertextDCRTPoly, plaintext: &Plaintext)
-                                           -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalSubByPlaintextAndCiphertext(self: &CryptoContextDCRTPoly,
-                                           plaintext: &Plaintext, ciphertext: &CiphertextDCRTPoly)
-                                           -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalSubByConstAndCiphertext(self: &CryptoContextDCRTPoly, constant: f64,
-                                       ciphertext: &CiphertextDCRTPoly)
-                                       -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalSubByCiphertextAndConst(self: &CryptoContextDCRTPoly,
-                                       ciphertext: &CiphertextDCRTPoly, constant: f64)
-                                       -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalSubMutableByCiphertexts(self: &CryptoContextDCRTPoly,
-                                       ciphertext1: &CiphertextDCRTPoly,
-                                       ciphertext2: &CiphertextDCRTPoly)
-                                       -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalSubMutableByCiphertextAndPlaintext(self: &CryptoContextDCRTPoly,
-                                                  ciphertext: &CiphertextDCRTPoly,
-                                                  plaintext: &Plaintext)
-                                                  -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalSubMutableByPlaintextAndCiphertext(self: &CryptoContextDCRTPoly,
-                                                  plaintext: &Plaintext,
-                                                  ciphertext: &CiphertextDCRTPoly)
-                                                  -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalSubInPlaceByCiphertexts(self: &CryptoContextDCRTPoly,
-                                       ciphertext1: &CiphertextDCRTPoly,
-                                       ciphertext2: &CiphertextDCRTPoly);
-        fn EvalSubInPlaceByCiphertextAndConst(self: &CryptoContextDCRTPoly,
-                                              ciphertext: &CiphertextDCRTPoly, constant: f64);
-        fn EvalSubInPlaceByConstAndCiphertext(self: &CryptoContextDCRTPoly, constant: f64,
-                                              ciphertext: &CiphertextDCRTPoly);
-        fn EvalSubMutableInPlace(self: &CryptoContextDCRTPoly, ciphertext1: &CiphertextDCRTPoly,
-                                 ciphertext2: &CiphertextDCRTPoly);
-        fn EvalMultByCiphertexts(self: &CryptoContextDCRTPoly, ciphertext1: &CiphertextDCRTPoly,
-                                 ciphertext2: &CiphertextDCRTPoly)
-                                 -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalMultByCiphertextAndPlaintext(self: &CryptoContextDCRTPoly,
-                                            ciphertext: &CiphertextDCRTPoly, plaintext: &Plaintext)
-                                            -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalMultByPlaintextAndCiphertext(self: &CryptoContextDCRTPoly, plaintext: &Plaintext,
-                                            ciphertext: &CiphertextDCRTPoly)
-                                            -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalMultByConstAndCiphertext(self: &CryptoContextDCRTPoly, constant: f64,
-                                        ciphertext: &CiphertextDCRTPoly)
-                                        -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalMultByCiphertextAndConst(self: &CryptoContextDCRTPoly,
-                                        ciphertext: &CiphertextDCRTPoly, constant: f64)
-                                        -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalMultMutableByCiphertexts(self: &CryptoContextDCRTPoly,
-                                       ciphertext1: &CiphertextDCRTPoly,
-                                       ciphertext2: &CiphertextDCRTPoly)
-                                       -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalMultMutableByCiphertextAndPlaintext(self: &CryptoContextDCRTPoly,
-                                                  ciphertext: &CiphertextDCRTPoly,
-                                                  plaintext: &Plaintext)
-                                                  -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalMultMutableByPlaintextAndCiphertext(self: &CryptoContextDCRTPoly,
-                                                  plaintext: &Plaintext,
-                                                  ciphertext: &CiphertextDCRTPoly)
-                                                  -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalMultInPlaceByCiphertextAndConst(self: &CryptoContextDCRTPoly,
-                                               ciphertext: &CiphertextDCRTPoly, constant: f64);
-        fn EvalMultInPlaceByConstAndCiphertext(self: &CryptoContextDCRTPoly, constant: f64,
-                                               ciphertext: &CiphertextDCRTPoly);
-        fn EvalMultMutableInPlace(self: &CryptoContextDCRTPoly, ciphertext1: &CiphertextDCRTPoly,
-                                 ciphertext2: &CiphertextDCRTPoly);
-        fn EvalMultNoRelin(self: &CryptoContextDCRTPoly, ciphertext1: &CiphertextDCRTPoly,
-                           ciphertext2: &CiphertextDCRTPoly) -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalMultAndRelinearize(self: &CryptoContextDCRTPoly, ciphertext1: &CiphertextDCRTPoly,
-                                  ciphertext2: &CiphertextDCRTPoly)
-                                  -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalRotate(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly, index: i32)
-                      -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalChebyshevSeries(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
-                               coefficients: &CxxVector<f64>, a: f64, b: f64)
-                               -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalChebyshevFunction(self: &CryptoContextDCRTPoly, func: fn(f64, ret: &mut f64),
-                                 ciphertext: &CiphertextDCRTPoly, a: f64, b: f64, degree: u32)
-                                 -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalBootstrap(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
-                         numIterations: /* 1 */ u32, precision: /* 0 */ u32)
-                         -> UniquePtr<CiphertextDCRTPoly>;
-        fn Rescale(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly)
-                   -> UniquePtr<CiphertextDCRTPoly>;
-        fn RescaleInPlace(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly);
-        fn ModReduce(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly)
-                     -> UniquePtr<CiphertextDCRTPoly>;
-        fn ModReduceInPlace(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly);
-        fn EvalSum(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly, batchSize: u32)
-                   -> UniquePtr<CiphertextDCRTPoly>;
-        fn IntMPBootAdjustScale(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly)
-                                -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalLogistic(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly, a: f64,
-                        b: f64, degree: u32) -> UniquePtr<CiphertextDCRTPoly>;
-        fn IntMPBootRandomElementGen(self: &CryptoContextDCRTPoly, publicKey: &PublicKeyDCRTPoly)
-                                     -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalBootstrapSetup(self: &CryptoContextDCRTPoly,
-                              levelBudget: /* {5, 4} */ &CxxVector<u32>,
-                              dim1: /* {0, 0} */ &CxxVector<u32>, slots: /* 0 */ u32,
-                              correctionFactor: /* 0 */ u32, precompute: /* true */ bool);
-        fn EvalBootstrapKeyGen(self: &CryptoContextDCRTPoly, privateKey: &PrivateKeyDCRTPoly,
-                               slots: u32);
-        fn DecryptByPrivateKeyAndCiphertext(self: &CryptoContextDCRTPoly,
-                                            privateKey: &PrivateKeyDCRTPoly,
-                                            ciphertext: &CiphertextDCRTPoly,
-                                            plaintext: Pin<&mut Plaintext>)
-                                            -> UniquePtr<DecryptResult>;
-        fn DecryptByCiphertextAndPrivateKey(self: &CryptoContextDCRTPoly,
-                                            ciphertext: &CiphertextDCRTPoly,
-                                            privateKey: &PrivateKeyDCRTPoly,
-                                            plaintext: Pin<&mut Plaintext>)
-                                            -> UniquePtr<DecryptResult>;
-        fn MultipartyDecryptFusion(self: &CryptoContextDCRTPoly,
-                                   partialCiphertextVec: &VectorOfCiphertexts,
-                                   plaintext: Pin<&mut Plaintext>) -> UniquePtr<DecryptResult>;
-        fn GetRingDimension(self: &CryptoContextDCRTPoly) -> u32;
-        fn GetCyclotomicOrder(self: &CryptoContextDCRTPoly) -> u32;
-        fn MakeStringPlaintext(self: &CryptoContextDCRTPoly, s: &CxxString)
-                               -> UniquePtr<Plaintext>;
-        fn MakeCoefPackedPlaintext(self: &CryptoContextDCRTPoly, value: &CxxVector<i64>,
-                                   noiseScaleDeg: /* 1 */ usize, level: /* 0 */ u32)
-                                   -> UniquePtr<Plaintext>;
-        fn MakeCKKSPackedPlaintext(self: &CryptoContextDCRTPoly, value: &CxxVector<f64>,
-                                   scaleDeg: /* 1 */ usize, level: /* 0 */ u32,
-                                   params: /* GenNullDCRTPolyParams */ &DCRTPolyParams,
-                                   slots: /* 0 */ u32) -> UniquePtr<Plaintext>;
-        fn MakeCKKSPackedPlaintextByVectorOfComplex(self: &CryptoContextDCRTPoly,
-                                                    value: &CxxVector<ComplexPair>,
-                                                    scaleDeg: /* 1 */ usize, level: /* 0 */ u32,
-                                                    params:
-                                                    /* GenNullDCRTPolyParams */ &DCRTPolyParams,
-                                                    slots: /* 0 */ u32) -> UniquePtr<Plaintext>;
-        fn EvalPoly(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
-                    coefficients: &CxxVector<f64>) -> UniquePtr<CiphertextDCRTPoly>;
-        fn SetSchemeId(self: &CryptoContextDCRTPoly, schemeTag: SCHEME);
-        fn GetSchemeId(self: &CryptoContextDCRTPoly) -> SCHEME;
-        fn GetKeyGenLevel(self: &CryptoContextDCRTPoly) -> usize;
-        fn SetKeyGenLevel(self: &CryptoContextDCRTPoly, level: usize);
-        fn SetSwkFC(self: &CryptoContextDCRTPoly, FHEWtoCKKSswk: &CiphertextDCRTPoly);
-        fn EvalCompareSwitchPrecompute(self: &CryptoContextDCRTPoly, pLWE: u32, scaleSign: f64,
-                                       unit: bool);
-        fn FindAutomorphismIndex(self: &CryptoContextDCRTPoly, idx: u32) -> u32;
-        fn GetSwkFC(self: &CryptoContextDCRTPoly) -> UniquePtr<CiphertextDCRTPoly>;
-        fn EnableByMask(self: &CryptoContextDCRTPoly, featureMask: u32);
-        fn SparseKeyGen(self: &CryptoContextDCRTPoly) -> UniquePtr<KeyPairDCRTPoly>;
-        fn EvalPolyLinear(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
-                          coefficients: &CxxVector<f64>)-> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalPolyPS(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
-                      coefficients: &CxxVector<f64>) -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalChebyshevSeriesLinear(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
-                                     coefficients: &CxxVector<f64>, a: f64, b: f64)
-                                     -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalChebyshevSeriesPS(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
-                                 coefficients: &CxxVector<f64>, a: f64, b: f64)
-                                 -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalDivide(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly, a: f64,
-                      b: f64, degree: u32) -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalSin(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly, a: f64, b: f64,
-                   degree: u32) -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalCos(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly, a: f64, b: f64,
-                   degree: u32) -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalNegate(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly)
-                      -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalNegateInPlace(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly);
-        fn EvalSquare(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly)
-                      -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalSquareMutable(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly)
-                             -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalSquareInPlace(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly);
-        fn EvalAtIndex(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly, index: u32)
-                       -> UniquePtr<CiphertextDCRTPoly>;
-        fn ComposedEvalMult(self: &CryptoContextDCRTPoly, ciphertext1: &CiphertextDCRTPoly,
-                            ciphertext2: &CiphertextDCRTPoly) -> UniquePtr<CiphertextDCRTPoly>;
-        fn Relinearize(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly)
-                       -> UniquePtr<CiphertextDCRTPoly>;
-        fn RelinearizeInPlace(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly);
-        fn KeySwitchDown(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly)
-                         -> UniquePtr<CiphertextDCRTPoly>;
-        fn KeySwitchExt(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
-                        addFirst: bool) -> UniquePtr<CiphertextDCRTPoly>;
-        fn Compress(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
-                    towersLeft: /* 1 */ u32) -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalCompareSchemeSwitching(self: &CryptoContextDCRTPoly,
-                                      ciphertext1: &CiphertextDCRTPoly,
-                                      ciphertext2: &CiphertextDCRTPoly, numCtxts: /* 0 */ u32,
-                                      numSlots: /* 0 */ u32, pLWE: /* 0 */ u32,
-                                      scaleSign: /* 1.0 */ f64, unit: /* false */ bool)
-                                      -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalBootstrapPrecompute(self: &CryptoContextDCRTPoly, slots: /* 0 */ u32);
-        fn FindAutomorphismIndices(self: &CryptoContextDCRTPoly, idxList: &CxxVector<u32>)
-                                   -> UniquePtr<CxxVector<u32>>;
-        fn EvalInnerProductByCiphertexts(self: &CryptoContextDCRTPoly,
-                                         ciphertext1: &CiphertextDCRTPoly,
-                                         ciphertext2: &CiphertextDCRTPoly, batchSize: u32)
-                                         -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalInnerProductByPlaintext(self: &CryptoContextDCRTPoly,
-                                       ciphertext: &CiphertextDCRTPoly, plaintext: &Plaintext,
-                                       batchSize: u32) -> UniquePtr<CiphertextDCRTPoly>;
-        fn KeySwitch(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
-                     evalKey: &EvalKeyDCRTPoly) -> UniquePtr<CiphertextDCRTPoly>;
-        fn KeySwitchInPlace(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
-                            evalKey: &EvalKeyDCRTPoly);
-        fn LevelReduce(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
-                       evalKey: &EvalKeyDCRTPoly, levels: /* 1 */ usize)
-                       -> UniquePtr<CiphertextDCRTPoly>;
-        fn LevelReduceInPlace(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
-                              evalKey: &EvalKeyDCRTPoly, levels: /* 1 */ usize);
-        fn ReEncrypt(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
-                     evalKey: &EvalKeyDCRTPoly,
-                     publicKey: /* GenNullPublicKey() */ &PublicKeyDCRTPoly)
-                     -> UniquePtr<CiphertextDCRTPoly>;
-        fn KeySwitchGen(self: &CryptoContextDCRTPoly, oldPrivateKey: &PrivateKeyDCRTPoly,
-                        newPrivateKey: &PrivateKeyDCRTPoly) -> UniquePtr<EvalKeyDCRTPoly>;
-        fn ReKeyGen(self: &CryptoContextDCRTPoly, oldPrivateKey: &PrivateKeyDCRTPoly,
-                    newPublicKey: &PublicKeyDCRTPoly) -> UniquePtr<EvalKeyDCRTPoly>;
-        fn MultiKeySwitchGen(self: &CryptoContextDCRTPoly,
-                             originalPrivateKey: &PrivateKeyDCRTPoly,
-                             newPrivateKey: &PrivateKeyDCRTPoly, evalKey: &EvalKeyDCRTPoly)
-                             -> UniquePtr<EvalKeyDCRTPoly>;
-        fn MultiAddEvalKeys(self: &CryptoContextDCRTPoly, evalKey1: &EvalKeyDCRTPoly,
-                            evalKey2: &EvalKeyDCRTPoly, keyId: /* "" */ &CxxString)
-                            -> UniquePtr<EvalKeyDCRTPoly>;
-        fn MultiMultEvalKey(self: &CryptoContextDCRTPoly, privateKey: &PrivateKeyDCRTPoly,
-                            evalKey: &EvalKeyDCRTPoly, keyId: /* "" */ &CxxString)
-                            -> UniquePtr<EvalKeyDCRTPoly>;
-        fn MultiAddEvalMultKeys(self: &CryptoContextDCRTPoly, evalKey1: &EvalKeyDCRTPoly,
-                                evalKey2: &EvalKeyDCRTPoly, keyId: /* "" */ &CxxString)
-                                -> UniquePtr<EvalKeyDCRTPoly>;
-        fn EvalSumKeyGen(self: &CryptoContextDCRTPoly, privateKey: &PrivateKeyDCRTPoly,
-                         publicKey: /* GenNullPublicKey() */ &PublicKeyDCRTPoly);
-        fn EvalCKKStoFHEWKeyGen(self: &CryptoContextDCRTPoly, keyPair: &KeyPairDCRTPoly,
-                                lwesk: &LWEPrivateKey);
-        fn EvalFHEWtoCKKSKeyGen(self: &CryptoContextDCRTPoly, keyPair: &KeyPairDCRTPoly,
-                                lwesk: &LWEPrivateKey, numSlots: /* 0 */ u32,
-                                numCtxts: /* 0 */ u32, dim1: /* 0 */ u32, L: /* 0 */ u32);
-        fn EvalSchemeSwitchingKeyGen(self: &CryptoContextDCRTPoly, keyPair: &KeyPairDCRTPoly,
-                                     lwesk: &LWEPrivateKey);
-        fn GetModulus(self: &CryptoContextDCRTPoly) -> u64;
-        fn GetRootOfUnity(self: &CryptoContextDCRTPoly) -> u64;
-        fn MultipartyDecryptLead(self: &CryptoContextDCRTPoly, ciphertextVec: &VectorOfCiphertexts,
-                                 privateKey: &PrivateKeyDCRTPoly)
-                                 -> UniquePtr<VectorOfCiphertexts>;
-        fn MultipartyDecryptMain(self: &CryptoContextDCRTPoly, ciphertextVec: &VectorOfCiphertexts,
-                                 privateKey: &PrivateKeyDCRTPoly)
-                                 -> UniquePtr<VectorOfCiphertexts>;
-        fn IntMPBootDecrypt(self: &CryptoContextDCRTPoly, privateKey: &PrivateKeyDCRTPoly,
-                            ciphertext: &CiphertextDCRTPoly, a: &CiphertextDCRTPoly)
-                            -> UniquePtr<VectorOfCiphertexts>;
-        fn EvalMinSchemeSwitching(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
-                                  publicKey: &PublicKeyDCRTPoly, numValues: /* 0 */ u32,
-                                  numSlots: /* 0 */ u32, pLWE: /* 0 */ u32,
-                                  scaleSign: /* 1.0 */ f64) -> UniquePtr<VectorOfCiphertexts>;
-        fn EvalMinSchemeSwitchingAlt(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
-                                     publicKey: &PublicKeyDCRTPoly, numValues: /* 0 */ u32,
-                                     numSlots: /* 0 */ u32, pLWE: /* 0 */ u32,
-                                     scaleSign: /* 1.0 */ f64) -> UniquePtr<VectorOfCiphertexts>;
-        fn EvalMaxSchemeSwitching(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
-                                  publicKey: &PublicKeyDCRTPoly, numValues: /* 0 */ u32,
-                                  numSlots: /* 0 */ u32, pLWE: /* 0 */ u32,
-                                  scaleSign: /* 1.0 */ f64) -> UniquePtr<VectorOfCiphertexts>;
-        fn EvalMaxSchemeSwitchingAlt(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
-                                     publicKey: &PublicKeyDCRTPoly, numValues: /* 0 */ u32,
-                                     numSlots: /* 0 */ u32, pLWE: /* 0 */ u32,
-                                     scaleSign: /* 1.0 */ f64) -> UniquePtr<VectorOfCiphertexts>;
-        fn EvalAddMany(self: &CryptoContextDCRTPoly, ciphertextVec: &VectorOfCiphertexts)
-                       -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalMultMany(self: &CryptoContextDCRTPoly, ciphertextVec: &VectorOfCiphertexts)
-                        -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalMerge(self: &CryptoContextDCRTPoly, ciphertextVec: &VectorOfCiphertexts)
-                     -> UniquePtr<CiphertextDCRTPoly>;
-        fn IntMPBootEncrypt(self: &CryptoContextDCRTPoly, publicKey: &PublicKeyDCRTPoly,
-                            sharesPair: &VectorOfCiphertexts, a: &CiphertextDCRTPoly,
-                            ciphertext: &CiphertextDCRTPoly) -> UniquePtr<CiphertextDCRTPoly>;
-        fn MultipartyKeyGenByVectorOfPrivateKeys(self: &CryptoContextDCRTPoly,
-                                                 privateKeyVec: &VectorOfPrivateKeys)
-                                                 -> UniquePtr<KeyPairDCRTPoly>;
-        fn ShareKeys(self: &CryptoContextDCRTPoly, sk: &PrivateKeyDCRTPoly, N: u32, threshold: u32,
-                     index: u32, shareType: &CxxString)
-                     -> UniquePtr<UnorderedMapFromIndexToDCRTPoly>;
-        fn RecoverSharedKey(self: &CryptoContextDCRTPoly, sk: Pin<&mut PrivateKeyDCRTPoly>,
-                            sk_shares: Pin<&mut UnorderedMapFromIndexToDCRTPoly>, N: u32,
-                            threshold: u32, shareType: &CxxString);
-        fn EvalAutomorphism(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly, i: u32,
-                            evalKeyMap: &MapFromIndexToEvalKey) -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalSumRows(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly, rowSize: u32,
-                       evalSumKeyMap: &MapFromIndexToEvalKey, subringDim: /* 0 */ u32)
-                       -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalSumCols(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly, rowSize: u32,
-                       evalSumKeyMap: &MapFromIndexToEvalKey) -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalAutomorphismKeyGen(self: &CryptoContextDCRTPoly, privateKey: &PrivateKeyDCRTPoly,
-                                  indexList: &CxxVector<u32>) -> UniquePtr<MapFromIndexToEvalKey>;
-        fn EvalSumRowsKeyGen(self: &CryptoContextDCRTPoly, privateKey: &PrivateKeyDCRTPoly,
-                             publicKey: /* GenNullPublicKey() */ &PublicKeyDCRTPoly,
-                             rowSize: /* 0 */ u32, subringDim: /* 0 */ u32)
-                             -> UniquePtr<MapFromIndexToEvalKey>;
-        fn EvalSumColsKeyGen(self: &CryptoContextDCRTPoly, privateKey: &PrivateKeyDCRTPoly,
-                             publicKey: /* GenNullPublicKey() */ &PublicKeyDCRTPoly)
-                             -> UniquePtr<MapFromIndexToEvalKey>;
-        fn MultiEvalAutomorphismKeyGen(self: &CryptoContextDCRTPoly,
-                                       privateKey: &PrivateKeyDCRTPoly,
-                                       evalKeyMap: &MapFromIndexToEvalKey,
-                                       indexList: &CxxVector<u32>, keyId: /* "" */ &CxxString)
-                                       -> UniquePtr<MapFromIndexToEvalKey>;
-        fn MultiEvalAtIndexKeyGen(self: &CryptoContextDCRTPoly, privateKey: &PrivateKeyDCRTPoly,
-                                  evalKeyMap: &MapFromIndexToEvalKey, indexList: &CxxVector<i32>,
-                                  keyId: /* "" */ &CxxString) -> UniquePtr<MapFromIndexToEvalKey>;
-        fn MultiEvalSumKeyGen(self: &CryptoContextDCRTPoly, privateKey: &PrivateKeyDCRTPoly,
-                              evalKeyMap: &MapFromIndexToEvalKey, keyId: /* "" */ &CxxString)
-                              -> UniquePtr<MapFromIndexToEvalKey>;
-        fn MultiAddEvalSumKeys(self: &CryptoContextDCRTPoly, evalKeyMap1: &MapFromIndexToEvalKey,
-                               evalKeyMap2: &MapFromIndexToEvalKey, keyId: /* "" */ &CxxString)
-                               -> UniquePtr<MapFromIndexToEvalKey>;
-        fn MultiAddEvalAutomorphismKeys(self: &CryptoContextDCRTPoly,
-                                        evalKeyMap1: &MapFromIndexToEvalKey,
-                                        evalKeyMap2: &MapFromIndexToEvalKey,
-                                        keyId: /* "" */ &CxxString)
-                                        -> UniquePtr<MapFromIndexToEvalKey>;
-        fn EvalFastRotationPrecompute(self: &CryptoContextDCRTPoly,
-                                      ciphertext: &CiphertextDCRTPoly)
-                                      -> UniquePtr<VectorOfDCRTPolys>;
-        fn EvalFastRotation(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
-                            index: u32, m: u32, digits: &VectorOfDCRTPolys)
-                            -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalFastRotationExt(self: &CryptoContextDCRTPoly,
-                               ciphertext: &CiphertextDCRTPoly, index: u32,
-                               digits: &VectorOfDCRTPolys, addFirst: bool)
-                               -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalFHEWtoCKKS(self: &CryptoContextDCRTPoly,
-                          LWECiphertexts: Pin<&mut VectorOfLWECiphertexts>, numCtxts: /* 0 */ u32,
-                          numSlots: /* 0 */ u32, p: /* 4 */ u32, pmin: /* 0.0 */ f64,
-                          pmax: /* 2.0 */ f64, dim1: /* 0 */ u32) -> UniquePtr<CiphertextDCRTPoly>;
-        fn EvalCKKStoFHEW(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
-                          numCtxts: /* 0 */ u32) -> UniquePtr<VectorOfLWECiphertexts>;
-        fn IntMPBootAdd(self: &CryptoContextDCRTPoly,
-                        sharesPairVec: Pin<&mut VectorOfVectorOfCiphertexts>)
-                        -> UniquePtr<VectorOfCiphertexts>;
-        fn GetScheme(self: &CryptoContextDCRTPoly) -> UniquePtr<SchemeBaseDCRTPoly>;
-        fn GetCryptoParameters(self: &CryptoContextDCRTPoly)
-                               -> UniquePtr<CryptoParametersBaseDCRTPoly>;
-        fn GetEncodingParams(self: &CryptoContextDCRTPoly) -> UniquePtr<EncodingParams>;
-        fn KeySwitchDownFirstElement(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly)
-                                     -> UniquePtr<DCRTPoly>;
-        fn GetElementParams(self: &CryptoContextDCRTPoly) -> UniquePtr<DCRTPolyParams>;
-
-        // cxx currently does not support static class methods
-        fn ClearEvalMultKeys();
-        fn ClearEvalMultKeysById(id: &CxxString);
-        fn ClearEvalMultKeysByCryptoContext(cryptoContext: &CryptoContextDCRTPoly);
-        fn ClearEvalSumKeys();
-        fn ClearEvalSumKeysById(id: &CxxString);
-        fn ClearEvalSumKeysByCryptoContext(cryptoContext: &CryptoContextDCRTPoly);
-        fn ClearEvalAutomorphismKeys();
-        fn ClearEvalAutomorphismKeysById(id: &CxxString);
-        fn ClearEvalAutomorphismKeysByCryptoContext(cryptoContext: &CryptoContextDCRTPoly);
-        fn GetExistingEvalAutomorphismKeyIndices(keyTag: &CxxString) -> UniquePtr<CxxVector<u32>>;
-        fn GetUniqueValues(oldValues: &CxxVector<u32>, newValues: &CxxVector<u32>)
-                           -> UniquePtr<CxxVector<u32>>;
-        fn GetEvalAutomorphismKeyMap(keyID: &CxxString) -> UniquePtr<MapFromIndexToEvalKey>;
-        fn GetCopyOfEvalSumKeyMap(id: &CxxString) -> UniquePtr<MapFromIndexToEvalKey>;
-        fn GetEvalAutomorphismKeyMapPtr(keyID: &CxxString) -> UniquePtr<MapFromIndexToEvalKey>;
-        fn InsertEvalAutomorphismKey(evalKeyMap: &MapFromIndexToEvalKey,
-                                     keyTag: /* "" */ &CxxString);
-        fn InsertEvalSumKey(mapToInsert: &MapFromIndexToEvalKey, keyTag: /* "" */ &CxxString);
-        fn GetCopyOfEvalMultKeyVector(keyID: &CxxString) -> UniquePtr<VectorOfEvalKeys>;
-        fn InsertEvalMultKey(evalKeyVec: &VectorOfEvalKeys);
-        fn GetCopyOfAllEvalMultKeys() -> UniquePtr<MapFromStringToVectorOfEvalKeys>;
-        fn GetCopyOfAllEvalSumKeys() -> UniquePtr<MapFromStringToMapFromIndexToEvalKey>;
-        fn GetCopyOfAllEvalAutomorphismKeys() -> UniquePtr<MapFromStringToMapFromIndexToEvalKey>;
-        fn GetPlaintextForDecrypt(pte: PlaintextEncodings, evp: &DCRTPolyParams,
-                                  ep: &EncodingParams) -> UniquePtr<Plaintext>;
+        // Generator functions
+        fn GenNullPublicKey() -> UniquePtr<PublicKeyDCRTPoly>;
     }
 
     // Serialize / Deserialize
     unsafe extern "C++"
     {
-        fn SerializeCryptoContextToFile(ccLocation: &CxxString,
-                                        cryptoContext: &CryptoContextDCRTPoly,
-                                        serialMode: SerialMode) -> bool;
-        fn DeserializeCryptoContextFromFile(ccLocation: &CxxString,
-                                            cryptoContext: Pin<&mut CryptoContextDCRTPoly>,
-                                            serialMode: SerialMode) -> bool;
-        fn SerializeEvalMultKeyToFile(multKeyLocation: &CxxString,
-                                      cryptoContext: &CryptoContextDCRTPoly,
-                                      serialMode: SerialMode) -> bool;
-        fn SerializeEvalMultKeyByIdToFile(multKeyLocation: &CxxString, serialMode: SerialMode,
-                                          id: &CxxString) -> bool;
-        fn DeserializeEvalMultKeyFromFile(multKeyLocation: &CxxString, serialMode: SerialMode)
-                                          -> bool;
-        fn SerializeEvalSumKeyToFile(sumKeyLocation: &CxxString,
-                                     cryptoContext: &CryptoContextDCRTPoly, serialMode: SerialMode)
-                                     -> bool;
-        fn SerializeEvalSumKeyByIdToFile(sumKeyLocation: &CxxString, serialMode: SerialMode,
-                                         id: &CxxString) -> bool;
-        fn DeserializeEvalSumKeyFromFile(sumKeyLocation: &CxxString, serialMode: SerialMode)
-                                         -> bool;
-        fn SerializeEvalAutomorphismKeyToFile(automorphismKeyLocation: &CxxString,
-                                              cryptoContext: &CryptoContextDCRTPoly,
-                                              serialMode: SerialMode) -> bool;
-        fn SerializeEvalAutomorphismKeyByIdToFile(automorphismKeyLocation: &CxxString,
-                                                  serialMode: SerialMode, id: &CxxString) -> bool;
-        fn DeserializeEvalAutomorphismKeyFromFile(automorphismKeyLocation: &CxxString,
-                                                  serialMode: SerialMode) -> bool;
-        fn SerializeCiphertextToFile(ciphertextLocation: &CxxString,
-                                     ciphertext: &CiphertextDCRTPoly, serialMode: SerialMode)
-                                     -> bool;
+        // Ciphertext
         fn DeserializeCiphertextFromFile(ciphertextLocation: &CxxString,
                                          ciphertext: Pin<&mut CiphertextDCRTPoly>,
                                          serialMode: SerialMode) -> bool;
-        fn SerializePublicKeyToFile(publicKeyLocation: &CxxString, publicKey: &PublicKeyDCRTPoly,
-                                    serialMode: SerialMode) -> bool;
+        fn SerializeCiphertextToFile(ciphertextLocation: &CxxString,
+                                     ciphertext: &CiphertextDCRTPoly, serialMode: SerialMode)
+                                     -> bool;
+
+        // CryptoContextDCRTPoly
+        fn DeserializeCryptoContextFromFile(ccLocation: &CxxString,
+                                            cryptoContext: Pin<&mut CryptoContextDCRTPoly>,
+                                            serialMode: SerialMode) -> bool;
+        fn SerializeCryptoContextToFile(ccLocation: &CxxString,
+                                        cryptoContext: &CryptoContextDCRTPoly,
+                                        serialMode: SerialMode) -> bool;
+
+        // EvalAutomorphismKey
+        fn DeserializeEvalAutomorphismKeyFromFile(automorphismKeyLocation: &CxxString,
+                                                  serialMode: SerialMode) -> bool;
+        fn SerializeEvalAutomorphismKeyByIdToFile(automorphismKeyLocation: &CxxString,
+                                                  serialMode: SerialMode, id: &CxxString) -> bool;
+        fn SerializeEvalAutomorphismKeyToFile(automorphismKeyLocation: &CxxString,
+                                              cryptoContext: &CryptoContextDCRTPoly,
+                                              serialMode: SerialMode) -> bool;
+
+        // EvalMultKey
+        fn DeserializeEvalMultKeyFromFile(multKeyLocation: &CxxString, serialMode: SerialMode)
+                                          -> bool;
+        fn SerializeEvalMultKeyByIdToFile(multKeyLocation: &CxxString, serialMode: SerialMode,
+                                          id: &CxxString) -> bool;
+        fn SerializeEvalMultKeyToFile(multKeyLocation: &CxxString,
+                                      cryptoContext: &CryptoContextDCRTPoly,
+                                      serialMode: SerialMode) -> bool;
+
+        // EvalSumKey
+        fn DeserializeEvalSumKeyFromFile(sumKeyLocation: &CxxString, serialMode: SerialMode)
+                                         -> bool;
+        fn SerializeEvalSumKeyByIdToFile(sumKeyLocation: &CxxString, serialMode: SerialMode,
+                                         id: &CxxString) -> bool;
+        fn SerializeEvalSumKeyToFile(sumKeyLocation: &CxxString,
+                                     cryptoContext: &CryptoContextDCRTPoly, serialMode: SerialMode)
+                                     -> bool;
+
+        // PublicKey
         fn DeserializePublicKeyFromFile(publicKeyLocation: &CxxString,
                                         publicKey: Pin<&mut PublicKeyDCRTPoly>,
                                         serialMode: SerialMode) -> bool;
+        fn SerializePublicKeyToFile(publicKeyLocation: &CxxString, publicKey: &PublicKeyDCRTPoly,
+                                    serialMode: SerialMode) -> bool;
     }
 }
 
