@@ -7,8 +7,6 @@
 
 #include "rust/cxx.h"
 
-#include "SerialMode.h"
-
 namespace lbcrypto
 {
 
@@ -64,17 +62,6 @@ class CryptoContextDCRTPoly final
 {
     std::shared_ptr<CryptoContextImpl> m_cryptoContextImplSharedPtr;
 public:
-    friend bool SerializeCryptoContextToFile(const std::string& ccLocation,
-        const CryptoContextDCRTPoly& cryptoContext, const SerialMode serialMode);
-    friend bool DeserializeCryptoContextFromFile(const std::string& ccLocation,
-        CryptoContextDCRTPoly& cryptoContext, const SerialMode serialMode);
-    friend bool SerializeEvalMultKeyToFile(const std::string& multKeyLocation,
-        const CryptoContextDCRTPoly& cryptoContext, const SerialMode serialMode);
-    friend bool SerializeEvalSumKeyToFile(const std::string& sumKeyLocation,
-        const CryptoContextDCRTPoly& cryptoContext, const SerialMode serialMode);
-    friend bool SerializeEvalAutomorphismKeyToFile(const std::string& automorphismKeyLocation,
-        const CryptoContextDCRTPoly& cryptoContext, const SerialMode serialMode);
-
     CryptoContextDCRTPoly() = default;
     explicit CryptoContextDCRTPoly(const ParamsBFVRNS& params);
     explicit CryptoContextDCRTPoly(const ParamsBGVRNS& params);
@@ -289,11 +276,11 @@ public:
         const uint32_t level /* 0 */) const;
     [[nodiscard]] std::unique_ptr<Plaintext> MakeCKKSPackedPlaintext(
         const std::vector<double>& value, const size_t scaleDeg /* 1 */,
-        const uint32_t level /* 0 */, const DCRTPolyParams& params /* GenNullDCRTPolyParams */,
+        const uint32_t level /* 0 */, const DCRTPolyParams& params /* GenNullDCRTPolyParams() */,
         const uint32_t slots /* 0 */) const;
     [[nodiscard]] std::unique_ptr<Plaintext> MakeCKKSPackedPlaintextByVectorOfComplex(
         const std::vector<ComplexPair>& value, const size_t scaleDeg /* 1 */,
-        const uint32_t level /* 0 */, const DCRTPolyParams& params /* GenNullDCRTPolyParams */,
+        const uint32_t level /* 0 */, const DCRTPolyParams& params /* GenNullDCRTPolyParams() */,
         const uint32_t slots /* 0 */) const;
     [[nodiscard]] std::unique_ptr<std::vector<uint32_t>> FindAutomorphismIndices(
         const std::vector<uint32_t>& idxList) const;
@@ -442,6 +429,8 @@ public:
         const CiphertextDCRTPoly& ciphertext) const;
     [[nodiscard]] std::unique_ptr<DCRTPolyParams> GetElementParams() const;
     [[nodiscard]] std::shared_ptr<CryptoContextImpl> GetInternal() const;
+    [[nodiscard]] std::shared_ptr<CryptoContextImpl>& GetRef() noexcept;
+    [[nodiscard]] const std::shared_ptr<CryptoContextImpl>& GetRef() const noexcept;
 };
 
 // cxx currently does not support static class methods

@@ -3,8 +3,6 @@
 #include "openfhe/core/lattice/hal/lat-backend.h"
 #include "openfhe/pke/ciphertext-fwd.h"
 
-#include "SerialMode.h"
-
 namespace openfhe
 {
 
@@ -14,11 +12,6 @@ class CiphertextDCRTPoly final
 {
     std::shared_ptr<CiphertextImpl> m_ciphertext;
 public:
-    friend bool SerializeCiphertextToFile(const std::string& ciphertextLocation,
-        const CiphertextDCRTPoly& ciphertext, const SerialMode serialMode);
-    friend bool DeserializeCiphertextFromFile(const std::string& ciphertextLocation,
-        CiphertextDCRTPoly& ciphertext, const SerialMode serialMode);
-
     CiphertextDCRTPoly() = default;
     CiphertextDCRTPoly(std::shared_ptr<CiphertextImpl>&& ciphertext) noexcept;
     CiphertextDCRTPoly(const CiphertextDCRTPoly&) = delete;
@@ -27,6 +20,8 @@ public:
     CiphertextDCRTPoly& operator=(CiphertextDCRTPoly&&) = delete;
 
     [[nodiscard]] std::shared_ptr<CiphertextImpl> GetInternal() const noexcept;
+    [[nodiscard]] std::shared_ptr<CiphertextImpl>& GetRef() noexcept;
+    [[nodiscard]] const std::shared_ptr<CiphertextImpl>& GetRef() const noexcept;
 };
 
 // Generator functions

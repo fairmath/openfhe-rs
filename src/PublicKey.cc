@@ -12,6 +12,14 @@ std::shared_ptr<PublicKeyImpl> PublicKeyDCRTPoly::GetInternal() const noexcept
 {
     return m_publicKey;
 }
+std::shared_ptr<PublicKeyImpl>& PublicKeyDCRTPoly::GetRef() noexcept
+{
+    return m_publicKey;
+}
+const std::shared_ptr<PublicKeyImpl>& PublicKeyDCRTPoly::GetRef() const noexcept
+{
+    return m_publicKey;
+}
 
 // Generator functions
 std::unique_ptr<PublicKeyDCRTPoly> GenNullPublicKey()

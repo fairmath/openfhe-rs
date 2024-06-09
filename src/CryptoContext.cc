@@ -1071,6 +1071,14 @@ std::shared_ptr<CryptoContextImpl> CryptoContextDCRTPoly::GetInternal() const
 {
     return m_cryptoContextImplSharedPtr;
 }
+std::shared_ptr<CryptoContextImpl>& CryptoContextDCRTPoly::GetRef() noexcept
+{
+    return m_cryptoContextImplSharedPtr;
+}
+const std::shared_ptr<CryptoContextImpl>& CryptoContextDCRTPoly::GetRef() const noexcept
+{
+    return m_cryptoContextImplSharedPtr;
+}
 
 // cxx currently does not support static class methods
 void ClearEvalMultKeys()
