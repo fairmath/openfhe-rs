@@ -94,10 +94,10 @@ public:
     void EvalMultKeysGen(const PrivateKeyDCRTPoly& key) const;
     void EvalRotateKeyGen(const PrivateKeyDCRTPoly& privateKey,
         const std::vector<int32_t>& indexList,
-        const PublicKeyDCRTPoly& publicKey /* GenNullPublicKey() */) const;
+        const PublicKeyDCRTPoly& publicKey /* GenNullPublicKeyDCRTPoly() */) const;
     void EvalAtIndexKeyGen(const PrivateKeyDCRTPoly& privateKey,
         const std::vector<int32_t>& indexList,
-        const PublicKeyDCRTPoly& publicKey /* GenNullPublicKey() */) const;
+        const PublicKeyDCRTPoly& publicKey /* GenNullPublicKeyDCRTPoly() */) const;
     void EvalCKKStoFHEWPrecompute(const double scale /* 1.0 */) const;
     [[nodiscard]] uint32_t GetRingDimension() const;
     [[nodiscard]] uint32_t GetCyclotomicOrder() const;
@@ -301,7 +301,7 @@ public:
         const size_t levels /* 1 */) const;
     [[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> ReEncrypt(
         const CiphertextDCRTPoly& ciphertext, const EvalKeyDCRTPoly& evalKey,
-        const PublicKeyDCRTPoly& publicKey /* GenNullPublicKey() */) const;
+        const PublicKeyDCRTPoly& publicKey /* GenNullPublicKeyDCRTPoly() */) const;
     [[nodiscard]] std::unique_ptr<EvalKeyDCRTPoly> KeySwitchGen(
         const PrivateKeyDCRTPoly& oldPrivateKey, const PrivateKeyDCRTPoly& newPrivateKey) const;
     [[nodiscard]] std::unique_ptr<EvalKeyDCRTPoly> ReKeyGen(
@@ -319,7 +319,7 @@ public:
         const EvalKeyDCRTPoly& evalKey1, const EvalKeyDCRTPoly& evalKey2,
         const std::string& keyId /* "" */) const;
     void EvalSumKeyGen(const PrivateKeyDCRTPoly& privateKey,
-        const PublicKeyDCRTPoly& publicKey /* GenNullPublicKey() */) const;
+        const PublicKeyDCRTPoly& publicKey /* GenNullPublicKeyDCRTPoly() */) const;
     void EvalCKKStoFHEWKeyGen(const KeyPairDCRTPoly& keyPair, const LWEPrivateKey& lwesk) const;
     void EvalFHEWtoCKKSKeyGen(const KeyPairDCRTPoly& keyPair, const LWEPrivateKey& lwesk,
         const uint32_t numSlots /* 0 */, const uint32_t numCtxts /* 0 */,
@@ -386,11 +386,11 @@ public:
         const PrivateKeyDCRTPoly& privateKey, const std::vector<uint32_t>& indexList) const;
     [[nodiscard]] std::unique_ptr<MapFromIndexToEvalKey> EvalSumRowsKeyGen(
         const PrivateKeyDCRTPoly& privateKey,
-        const PublicKeyDCRTPoly& publicKey /* GenNullPublicKey() */,
+        const PublicKeyDCRTPoly& publicKey /* GenNullPublicKeyDCRTPoly() */,
         const uint32_t rowSize /* 0 */, const uint32_t subringDim /* 0 */) const;
     [[nodiscard]] std::unique_ptr<MapFromIndexToEvalKey> EvalSumColsKeyGen(
         const PrivateKeyDCRTPoly& privateKey,
-        const PublicKeyDCRTPoly& publicKey /* GenNullPublicKey() */) const;
+        const PublicKeyDCRTPoly& publicKey /* GenNullPublicKeyDCRTPoly() */) const;
     [[nodiscard]] std::unique_ptr<MapFromIndexToEvalKey> MultiEvalAutomorphismKeyGen(
         const PrivateKeyDCRTPoly& privateKey, const MapFromIndexToEvalKey& evalKeyMap,
         const std::vector<uint32_t>& indexList, const std::string& keyId /* "" */) const;
@@ -434,45 +434,47 @@ public:
 };
 
 // cxx currently does not support static class methods
-void ClearEvalMultKeys();
-void ClearEvalMultKeysById(const std::string& id);
-void ClearEvalMultKeysByCryptoContext(const CryptoContextDCRTPoly& cryptoContext);
-void ClearEvalSumKeys();
-void ClearEvalSumKeysById(const std::string& id);
-void ClearEvalSumKeysByCryptoContext(const CryptoContextDCRTPoly& cryptoContext);
-void ClearEvalAutomorphismKeys();
-void ClearEvalAutomorphismKeysById(const std::string& id);
-void ClearEvalAutomorphismKeysByCryptoContext(const CryptoContextDCRTPoly& cryptoContext);
-[[nodiscard]] std::unique_ptr<std::vector<uint32_t>> GetExistingEvalAutomorphismKeyIndices(
+void DCRTPolyClearEvalMultKeys();
+void DCRTPolyClearEvalMultKeysById(const std::string& id);
+void DCRTPolyClearEvalMultKeysByCryptoContext(const CryptoContextDCRTPoly& cryptoContext);
+void DCRTPolyClearEvalSumKeys();
+void DCRTPolyClearEvalSumKeysById(const std::string& id);
+void DCRTPolyClearEvalSumKeysByCryptoContext(const CryptoContextDCRTPoly& cryptoContext);
+void DCRTPolyClearEvalAutomorphismKeys();
+void DCRTPolyClearEvalAutomorphismKeysById(const std::string& id);
+void DCRTPolyClearEvalAutomorphismKeysByCryptoContext(const CryptoContextDCRTPoly& cryptoContext);
+[[nodiscard]] std::unique_ptr<std::vector<uint32_t>> DCRTPolyGetExistingEvalAutomorphismKeyIndices(
     const std::string& keyTag);
-[[nodiscard]] std::unique_ptr<std::vector<uint32_t>> GetUniqueValues(
+[[nodiscard]] std::unique_ptr<std::vector<uint32_t>> DCRTPolyGetUniqueValues(
     const std::vector<uint32_t>& oldValues, const std::vector<uint32_t>& newValues);
-[[nodiscard]] std::unique_ptr<MapFromIndexToEvalKey> GetEvalAutomorphismKeyMap(
+[[nodiscard]] std::unique_ptr<MapFromIndexToEvalKey> DCRTPolyGetEvalAutomorphismKeyMap(
     const std::string& keyID);
-[[nodiscard]] std::unique_ptr<MapFromIndexToEvalKey> GetCopyOfEvalSumKeyMap(const std::string& id);
-[[nodiscard]] std::unique_ptr<MapFromIndexToEvalKey> GetEvalAutomorphismKeyMapPtr(
+[[nodiscard]] std::unique_ptr<MapFromIndexToEvalKey> DCRTPolyGetCopyOfEvalSumKeyMap(
+    const std::string& id);
+[[nodiscard]] std::unique_ptr<MapFromIndexToEvalKey> DCRTPolyGetEvalAutomorphismKeyMapPtr(
     const std::string& keyID);
-void InsertEvalAutomorphismKey(const MapFromIndexToEvalKey& evalKeyMap,
+void DCRTPolyInsertEvalAutomorphismKey(const MapFromIndexToEvalKey& evalKeyMap,
     const std::string& keyTag /* "" */);
-void InsertEvalSumKey(const MapFromIndexToEvalKey& mapToInsert,
+void DCRTPolyInsertEvalSumKey(const MapFromIndexToEvalKey& mapToInsert,
     const std::string& keyTag /* "" */);
-[[nodiscard]] std::unique_ptr<VectorOfEvalKeys> GetCopyOfEvalMultKeyVector(
+[[nodiscard]] std::unique_ptr<VectorOfEvalKeys> DCRTPolyGetCopyOfEvalMultKeyVector(
     const std::string& keyID);
-void InsertEvalMultKey(const VectorOfEvalKeys& evalKeyVec);
-[[nodiscard]] std::unique_ptr<MapFromStringToVectorOfEvalKeys> GetCopyOfAllEvalMultKeys();
-[[nodiscard]] std::unique_ptr<MapFromStringToMapFromIndexToEvalKey> GetCopyOfAllEvalSumKeys();
+void DCRTPolyInsertEvalMultKey(const VectorOfEvalKeys& evalKeyVec);
+[[nodiscard]] std::unique_ptr<MapFromStringToVectorOfEvalKeys> DCRTPolyGetCopyOfAllEvalMultKeys();
 [[nodiscard]] std::unique_ptr<MapFromStringToMapFromIndexToEvalKey>
-    GetCopyOfAllEvalAutomorphismKeys();
-[[nodiscard]] std::unique_ptr<Plaintext> GetPlaintextForDecrypt(const PlaintextEncodings pte,
-    const DCRTPolyParams& evp, const EncodingParams& ep);
+    DCRTPolyGetCopyOfAllEvalSumKeys();
+[[nodiscard]] std::unique_ptr<MapFromStringToMapFromIndexToEvalKey>
+    DCRTPolyGetCopyOfAllEvalAutomorphismKeys();
+[[nodiscard]] std::unique_ptr<Plaintext> DCRTPolyGetPlaintextForDecrypt(
+    const PlaintextEncodings pte, const DCRTPolyParams& evp, const EncodingParams& ep);
 
 // Generator functions
-[[nodiscard]] std::unique_ptr<CryptoContextDCRTPoly> GenNullCryptoContext();
-[[nodiscard]] std::unique_ptr<CryptoContextDCRTPoly> GenCryptoContextByParamsBFVRNS(
+[[nodiscard]] std::unique_ptr<CryptoContextDCRTPoly> DCRTPolyGenNullCryptoContext();
+[[nodiscard]] std::unique_ptr<CryptoContextDCRTPoly> DCRTPolyGenCryptoContextByParamsBFVRNS(
     const ParamsBFVRNS& params);
-[[nodiscard]] std::unique_ptr<CryptoContextDCRTPoly> GenCryptoContextByParamsBGVRNS(
+[[nodiscard]] std::unique_ptr<CryptoContextDCRTPoly> DCRTPolyGenCryptoContextByParamsBGVRNS(
     const ParamsBGVRNS& params);
-[[nodiscard]] std::unique_ptr<CryptoContextDCRTPoly> GenCryptoContextByParamsCKKSRNS(
+[[nodiscard]] std::unique_ptr<CryptoContextDCRTPoly> DCRTPolyGenCryptoContextByParamsCKKSRNS(
     const ParamsCKKSRNS& params);
 
 } // openfhe

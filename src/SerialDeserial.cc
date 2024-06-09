@@ -16,21 +16,6 @@ template <typename ST, typename Object>
     return funcPtr(location, object, ST{});
 }
 template <typename Object>
-[[nodiscard]] bool Serial(const std::string& location, Object& object, const SerialMode serialMode)
-{
-    if (serialMode == SerialMode::BINARY)
-    {
-        return SerialDeserial<lbcrypto::SerType::SERBINARY, decltype(object.GetRef())>(location,
-            lbcrypto::Serial::SerializeToFile, object.GetRef());
-    }
-    if (serialMode == SerialMode::JSON)
-    {
-        return SerialDeserial<lbcrypto::SerType::SERJSON, decltype(object.GetRef())>(location,
-            lbcrypto::Serial::SerializeToFile, object.GetRef());
-    }
-    return false;
-}
-template <typename Object>
 [[nodiscard]] bool Deserial(const std::string& location, Object& object,
     const SerialMode serialMode)
 {
@@ -46,6 +31,21 @@ template <typename Object>
     }
     return false;
 }
+template <typename Object>
+[[nodiscard]] bool Serial(const std::string& location, Object& object, const SerialMode serialMode)
+{
+    if (serialMode == SerialMode::BINARY)
+    {
+        return SerialDeserial<lbcrypto::SerType::SERBINARY, decltype(object.GetRef())>(location,
+            lbcrypto::Serial::SerializeToFile, object.GetRef());
+    }
+    if (serialMode == SerialMode::JSON)
+    {
+        return SerialDeserial<lbcrypto::SerType::SERJSON, decltype(object.GetRef())>(location,
+            lbcrypto::Serial::SerializeToFile, object.GetRef());
+    }
+    return false;
+}
 
 template <typename ST, typename Stream, typename FStream, typename... Types>
 [[nodiscard]] bool SerialDeserial(const std::string& location,
@@ -58,31 +58,31 @@ template <typename ST, typename Stream, typename FStream, typename... Types>
 }
 
 // Ciphertext
-bool DeserializeCiphertextFromFile(const std::string& ciphertextLocation,
+bool DCRTPolyDeserializeCiphertextFromFile(const std::string& ciphertextLocation,
     CiphertextDCRTPoly& ciphertext, const SerialMode serialMode)
 {
     return Deserial(ciphertextLocation, ciphertext, serialMode);
 }
-bool SerializeCiphertextToFile(const std::string& ciphertextLocation,
+bool DCRTPolySerializeCiphertextToFile(const std::string& ciphertextLocation,
     const CiphertextDCRTPoly& ciphertext, const SerialMode serialMode)
 {
     return Serial(ciphertextLocation, ciphertext, serialMode);
 }
 
-// CryptoContextDCRTPoly
-bool DeserializeCryptoContextFromFile(const std::string& ccLocation,
+// CryptoContext
+bool DCRTPolyDeserializeCryptoContextFromFile(const std::string& ccLocation,
     CryptoContextDCRTPoly& cryptoContext, const SerialMode serialMode)
 {
     return Deserial(ccLocation, cryptoContext, serialMode);
 }
-bool SerializeCryptoContextToFile(const std::string& ccLocation,
+bool DCRTPolySerializeCryptoContextToFile(const std::string& ccLocation,
     const CryptoContextDCRTPoly& cryptoContext, const SerialMode serialMode)
 {
     return Serial(ccLocation, cryptoContext, serialMode);
 }
 
 // EvalAutomorphismKey
-bool DeserializeEvalAutomorphismKeyFromFile(const std::string& automorphismKeyLocation,
+bool DCRTPolyDeserializeEvalAutomorphismKeyFromFile(const std::string& automorphismKeyLocation,
     const SerialMode serialMode)
 {
     if (serialMode == SerialMode::BINARY)
@@ -97,7 +97,7 @@ bool DeserializeEvalAutomorphismKeyFromFile(const std::string& automorphismKeyLo
     }
     return false;
 }
-bool SerializeEvalAutomorphismKeyByIdToFile(const std::string& automorphismKeyLocation,
+bool DCRTPolySerializeEvalAutomorphismKeyByIdToFile(const std::string& automorphismKeyLocation,
     const SerialMode serialMode, const std::string& id)
 {
     if (serialMode == SerialMode::BINARY)
@@ -112,7 +112,7 @@ bool SerializeEvalAutomorphismKeyByIdToFile(const std::string& automorphismKeyLo
     }
     return false;
 }
-bool SerializeEvalAutomorphismKeyToFile(const std::string& automorphismKeyLocation,
+bool DCRTPolySerializeEvalAutomorphismKeyToFile(const std::string& automorphismKeyLocation,
     const CryptoContextDCRTPoly& cryptoContext, const SerialMode serialMode)
 {
     if (serialMode == SerialMode::BINARY)
@@ -131,7 +131,7 @@ bool SerializeEvalAutomorphismKeyToFile(const std::string& automorphismKeyLocati
 }
 
 // EvalMultKey
-bool DeserializeEvalMultKeyFromFile(const std::string& multKeyLocation,
+bool DCRTPolyDeserializeEvalMultKeyFromFile(const std::string& multKeyLocation,
     const SerialMode serialMode)
 {
     if (serialMode == SerialMode::BINARY)
@@ -146,7 +146,7 @@ bool DeserializeEvalMultKeyFromFile(const std::string& multKeyLocation,
     }
     return false;
 }
-bool SerializeEvalMultKeyByIdToFile(const std::string& multKeyLocation,
+bool SerializeEvalMultKeyDCRTPolyByIdToFile(const std::string& multKeyLocation,
     const SerialMode serialMode, const std::string& id)
 {
     if (serialMode == SerialMode::BINARY)
@@ -161,7 +161,7 @@ bool SerializeEvalMultKeyByIdToFile(const std::string& multKeyLocation,
     }
     return false;
 }
-bool SerializeEvalMultKeyToFile(const std::string& multKeyLocation,
+bool DCRTPolySerializeEvalMultKeyToFile(const std::string& multKeyLocation,
     const CryptoContextDCRTPoly& cryptoContext, const SerialMode serialMode)
 {
     if (serialMode == SerialMode::BINARY)
@@ -178,7 +178,7 @@ bool SerializeEvalMultKeyToFile(const std::string& multKeyLocation,
 }
 
 // EvalSumKey
-bool DeserializeEvalSumKeyFromFile(const std::string& sumKeyLocation, const SerialMode serialMode)
+bool DCRTPolyDeserializeEvalSumKeyFromFile(const std::string& sumKeyLocation, const SerialMode serialMode)
 {
     if (serialMode == SerialMode::BINARY)
     {
@@ -192,7 +192,7 @@ bool DeserializeEvalSumKeyFromFile(const std::string& sumKeyLocation, const Seri
     }
     return false;
 }
-bool SerializeEvalSumKeyByIdToFile(const std::string& sumKeyLocation,
+bool DCRTPolySerializeEvalSumKeyByIdToFile(const std::string& sumKeyLocation,
     const SerialMode serialMode, const std::string& id)
 {
     if (serialMode == SerialMode::BINARY)
@@ -207,7 +207,7 @@ bool SerializeEvalSumKeyByIdToFile(const std::string& sumKeyLocation,
     }
     return false;
 }
-bool SerializeEvalSumKeyToFile(const std::string& sumKeyLocation,
+bool DCRTPolySerializeEvalSumKeyToFile(const std::string& sumKeyLocation,
     const CryptoContextDCRTPoly& cryptoContext, const SerialMode serialMode)
 {
     if (serialMode == SerialMode::BINARY)
@@ -226,12 +226,12 @@ bool SerializeEvalSumKeyToFile(const std::string& sumKeyLocation,
 }
 
 // PublicKey
-bool DeserializePublicKeyFromFile(const std::string& publicKeyLocation,
+bool DCRTPolyDeserializePublicKeyFromFile(const std::string& publicKeyLocation,
     PublicKeyDCRTPoly& publicKey, const SerialMode serialMode)
 {
     return Deserial(publicKeyLocation, publicKey, serialMode);
 }
-bool SerializePublicKeyToFile(const std::string& publicKeyLocation,
+bool DCRTPolySerializePublicKeyToFile(const std::string& publicKeyLocation,
     const PublicKeyDCRTPoly& publicKey, const SerialMode serialMode)
 {
     return Serial(publicKeyLocation, publicKey, serialMode);

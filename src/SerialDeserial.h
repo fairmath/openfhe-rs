@@ -12,46 +12,47 @@ class CryptoContextDCRTPoly;
 class PublicKeyDCRTPoly;
 
 // Ciphertext
-[[nodiscard]] bool DeserializeCiphertextFromFile(const std::string& ciphertextLocation,
+[[nodiscard]] bool DCRTPolyDeserializeCiphertextFromFile(const std::string& ciphertextLocation,
     CiphertextDCRTPoly& ciphertext, const SerialMode serialMode);
-[[nodiscard]] bool SerializeCiphertextToFile(const std::string& ciphertextLocation,
+[[nodiscard]] bool DCRTPolySerializeCiphertextToFile(const std::string& ciphertextLocation,
     const CiphertextDCRTPoly& ciphertext, const SerialMode serialMode);
 
-// CryptoContextDCRTPoly
-[[nodiscard]] bool DeserializeCryptoContextFromFile(const std::string& ccLocation,
+// CryptoContext
+[[nodiscard]] bool DCRTPolyDeserializeCryptoContextFromFile(const std::string& ccLocation,
     CryptoContextDCRTPoly& cryptoContext, const SerialMode serialMode);
-[[nodiscard]] bool SerializeCryptoContextToFile(const std::string& ccLocation,
+[[nodiscard]] bool DCRTPolySerializeCryptoContextToFile(const std::string& ccLocation,
     const CryptoContextDCRTPoly& cryptoContext, const SerialMode serialMode);
 
 // EvalAutomorphismKey
-[[nodiscard]] bool DeserializeEvalMultKeyFromFile(const std::string& multKeyLocation,
+[[nodiscard]] bool DCRTPolyDeserializeEvalMultKeyFromFile(const std::string& multKeyLocation,
     const SerialMode serialMode);
-[[nodiscard]] bool SerializeEvalMultKeyByIdToFile(const std::string& multKeyLocation,
+[[nodiscard]] bool DCRTPolySerializeEvalMultKeyByIdToFile(const std::string& multKeyLocation,
     const SerialMode serialMode, const std::string& id);
-[[nodiscard]] bool SerializeEvalMultKeyToFile(const std::string& multKeyLocation,
+[[nodiscard]] bool DCRTPolySerializeEvalMultKeyToFile(const std::string& multKeyLocation,
     const CryptoContextDCRTPoly& cryptoContext, const SerialMode serialMode);
 
 // EvalMultKey
-[[nodiscard]] bool DeserializeEvalAutomorphismKeyFromFile(
+[[nodiscard]] bool DCRTPolyDeserializeEvalAutomorphismKeyFromFile(
     const std::string& automorphismKeyLocation, const SerialMode serialMode);
-[[nodiscard]] bool SerializeEvalAutomorphismKeyByIdToFile(
+[[nodiscard]] bool DCRTPolySerializeEvalAutomorphismKeyByIdToFile(
     const std::string& automorphismKeyLocation, const SerialMode serialMode,
     const std::string& id);
-[[nodiscard]] bool SerializeEvalAutomorphismKeyToFile(const std::string& automorphismKeyLocation,
-    const CryptoContextDCRTPoly& cryptoContext, const SerialMode serialMode);
+[[nodiscard]] bool DCRTPolySerializeEvalAutomorphismKeyToFile(
+    const std::string& automorphismKeyLocation, const CryptoContextDCRTPoly& cryptoContext,
+    const SerialMode serialMode);
 
 // EvalSumKey
-[[nodiscard]] bool DeserializeEvalSumKeyFromFile(const std::string& sumKeyLocation,
+[[nodiscard]] bool DCRTPolyDeserializeEvalSumKeyFromFile(const std::string& sumKeyLocation,
     const SerialMode serialMode);
-[[nodiscard]] bool SerializeEvalSumKeyByIdToFile(const std::string& sumKeyLocation,
+[[nodiscard]] bool DCRTPolySerializeEvalSumKeyByIdToFile(const std::string& sumKeyLocation,
     const SerialMode serialMode, const std::string& id);
-[[nodiscard]] bool SerializeEvalSumKeyToFile(const std::string& sumKeyLocation,
+[[nodiscard]] bool DCRTPolySerializeEvalSumKeyToFile(const std::string& sumKeyLocation,
     const CryptoContextDCRTPoly& cryptoContext, const SerialMode serialMode);
 
 // PublicKey
-[[nodiscard]] bool DeserializePublicKeyFromFile(const std::string& publicKeyLocation,
+[[nodiscard]] bool DCRTPolyDeserializePublicKeyFromFile(const std::string& publicKeyLocation,
     PublicKeyDCRTPoly& publicKey, const SerialMode serialMode);
-[[nodiscard]] bool SerializePublicKeyToFile(const std::string& publicKeyLocation,
+[[nodiscard]] bool DCRTPolySerializePublicKeyToFile(const std::string& publicKeyLocation,
     const PublicKeyDCRTPoly& publicKey, const SerialMode serialMode);
 
 } // openfhe

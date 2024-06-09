@@ -25,6 +25,6 @@ public:
 };
 
 // Generator functions
-[[nodiscard]] std::unique_ptr<PublicKeyDCRTPoly> GenNullPublicKey();
+[[nodiscard]] std::unique_ptr<PublicKeyDCRTPoly> DCRTPolyGenNullPublicKey();
 
 } // openfhe

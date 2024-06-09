@@ -31,6 +31,6 @@ public:
 };
 
 // Generator functions
-[[nodiscard]] std::unique_ptr<DCRTPolyParams> GenNullDCRTPolyParams();
+[[nodiscard]] std::unique_ptr<DCRTPolyParams> DCRTPolyGenNullParams();
 
 } // openfhe

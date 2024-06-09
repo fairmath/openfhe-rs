@@ -10,7 +10,7 @@ fn main()
     _cc_params_ckksrns.pin_mut().SetMultiplicativeDepth(6);
     _cc_params_ckksrns.pin_mut().SetScalingModSize(50);
 
-    let _cc = ffi::GenCryptoContextByParamsCKKSRNS(&_cc_params_ckksrns);
+    let _cc = ffi::DCRTPolyGenCryptoContextByParamsCKKSRNS(&_cc_params_ckksrns);
     _cc.Enable(ffi::PKESchemeFeature::PKE);
     _cc.Enable(ffi::PKESchemeFeature::KEYSWITCH);
     _cc.Enable(ffi::PKESchemeFeature::LEVELEDSHE);
@@ -75,7 +75,7 @@ fn main()
     _coefficients_2.pin_mut().push(-0.4);
     _coefficients_2.pin_mut().push(-0.5);
 
-    let _dcrt_poly_params = ffi::GenNullDCRTPolyParams();
+    let _dcrt_poly_params = ffi::DCRTPolyGenNullParams();
     let _plain_text_1 = _cc.MakeCKKSPackedPlaintextByVectorOfComplex(&_input, 1, 0, &_dcrt_poly_params, 0);
     let _key_pair = _cc.KeyGen();
     print!("Generating evaluation key for homomorphic multiplication...");

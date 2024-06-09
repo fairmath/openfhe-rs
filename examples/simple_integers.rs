@@ -7,7 +7,7 @@ fn main()
     _cc_params_bfvrns.pin_mut().SetPlaintextModulus(65537);
     _cc_params_bfvrns.pin_mut().SetMultiplicativeDepth(2);
 
-    let _cc = ffi::GenCryptoContextByParamsBFVRNS(&_cc_params_bfvrns);
+    let _cc = ffi::DCRTPolyGenCryptoContextByParamsBFVRNS(&_cc_params_bfvrns);
     _cc.Enable(ffi::PKESchemeFeature::PKE);
     _cc.Enable(ffi::PKESchemeFeature::KEYSWITCH);
     _cc.Enable(ffi::PKESchemeFeature::LEVELEDSHE);
@@ -20,7 +20,7 @@ fn main()
     _index_list.pin_mut().push(2);
     _index_list.pin_mut().push(-1);
     _index_list.pin_mut().push(-2);
-    _cc.EvalRotateKeyGen(&_key_pair.GetPrivateKey(), &_index_list, &ffi::GenNullPublicKey());
+    _cc.EvalRotateKeyGen(&_key_pair.GetPrivateKey(), &_index_list, &ffi::DCRTPolyGenNullPublicKey());
 
     let mut _vector_of_ints_1 = CxxVector::<i64>::new();
     _vector_of_ints_1.pin_mut().push(1);

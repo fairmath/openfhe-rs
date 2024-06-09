@@ -25,6 +25,6 @@ public:
 };
 
 // Generator functions
-[[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> GenNullCiphertext();
+[[nodiscard]] std::unique_ptr<CiphertextDCRTPoly> DCRTPolyGenNullCiphertext();
 
 } // openfhe

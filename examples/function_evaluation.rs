@@ -19,7 +19,7 @@ fn EvalLogisticExample()
     let _mult_depth: u32 = 6;
     _cc_params_ckksrns.pin_mut().SetMultiplicativeDepth(_mult_depth);
 
-    let _cc = ffi::GenCryptoContextByParamsCKKSRNS(&_cc_params_ckksrns);
+    let _cc = ffi::DCRTPolyGenCryptoContextByParamsCKKSRNS(&_cc_params_ckksrns);
     _cc.Enable(ffi::PKESchemeFeature::PKE);
     _cc.Enable(ffi::PKESchemeFeature::KEYSWITCH);
     _cc.Enable(ffi::PKESchemeFeature::LEVELEDSHE);
@@ -39,7 +39,7 @@ fn EvalLogisticExample()
     _input.pin_mut().push(ffi::ComplexPair{re: 3.0, im: 0.0});
     _input.pin_mut().push(ffi::ComplexPair{re: 4.0, im: 0.0});
     let _encoded_length: usize = _input.len();
-    let _dcrt_poly_params = ffi::GenNullDCRTPolyParams();
+    let _dcrt_poly_params = ffi::DCRTPolyGenNullParams();
     let _plain_text = _cc.MakeCKKSPackedPlaintextByVectorOfComplex(&_input, 1, 0, &_dcrt_poly_params, 0);
     let _cipher_text = _cc.EncryptByPublicKey(&_key_pair.GetPublicKey(), &_plain_text);
     let _lower_bound: f64 = -5.0;
@@ -88,7 +88,7 @@ fn EvalFunctionExample()
     let _mult_depth: u32 = 7;
     _cc_params_ckksrns.pin_mut().SetMultiplicativeDepth(_mult_depth);
 
-    let _cc = ffi::GenCryptoContextByParamsCKKSRNS(&_cc_params_ckksrns);
+    let _cc = ffi::DCRTPolyGenCryptoContextByParamsCKKSRNS(&_cc_params_ckksrns);
     _cc.Enable(ffi::PKESchemeFeature::PKE);
     _cc.Enable(ffi::PKESchemeFeature::KEYSWITCH);
     _cc.Enable(ffi::PKESchemeFeature::LEVELEDSHE);
@@ -108,7 +108,7 @@ fn EvalFunctionExample()
     _input.pin_mut().push(ffi::ComplexPair{re: 9.0, im: 0.0});
 
     let _encoded_length: usize = _input.len();
-    let _dcrt_poly_params = ffi::GenNullDCRTPolyParams();
+    let _dcrt_poly_params = ffi::DCRTPolyGenNullParams();
     let _plain_text = _cc.MakeCKKSPackedPlaintextByVectorOfComplex(&_input, 1, 0, &_dcrt_poly_params, 0);
     let _cipher_text = _cc.EncryptByPublicKey(&_key_pair.GetPublicKey(), &_plain_text);
     let _lower_bound: f64 = 0.0;

@@ -12,7 +12,7 @@ fn main()
     _cc_params_ckksrns.pin_mut().SetScalingModSize(_scale_mod_size);
     _cc_params_ckksrns.pin_mut().SetBatchSize(_batch_size);
 
-    let _cc = ffi::GenCryptoContextByParamsCKKSRNS(&_cc_params_ckksrns);
+    let _cc = ffi::DCRTPolyGenCryptoContextByParamsCKKSRNS(&_cc_params_ckksrns);
     _cc.Enable(ffi::PKESchemeFeature::PKE);
     _cc.Enable(ffi::PKESchemeFeature::KEYSWITCH);
     _cc.Enable(ffi::PKESchemeFeature::LEVELEDSHE);
@@ -24,7 +24,7 @@ fn main()
     let mut _index_list = CxxVector::<i32>::new();
     _index_list.pin_mut().push(1);
     _index_list.pin_mut().push(-2);
-    _cc.EvalRotateKeyGen(&_key_pair.GetPrivateKey(), &_index_list, &ffi::GenNullPublicKey());
+    _cc.EvalRotateKeyGen(&_key_pair.GetPrivateKey(), &_index_list, &ffi::DCRTPolyGenNullPublicKey());
 
     let mut _x_1 = CxxVector::<f64>::new();
     _x_1.pin_mut().push(0.25);
@@ -46,7 +46,7 @@ fn main()
     _x_2.pin_mut().push(0.5);
     _x_2.pin_mut().push(0.25);
 
-    let _dcrt_poly_params = ffi::GenNullDCRTPolyParams();
+    let _dcrt_poly_params = ffi::DCRTPolyGenNullParams();
     let _p_txt_1 = _cc.MakeCKKSPackedPlaintext(&_x_1, 1, 0, &_dcrt_poly_params, 0);
     let _p_txt_2 = _cc.MakeCKKSPackedPlaintext(&_x_2, 1, 0, &_dcrt_poly_params, 0);
 

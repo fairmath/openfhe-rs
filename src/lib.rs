@@ -228,7 +228,7 @@ pub mod ffi
     unsafe extern "C++"
     {
         // Generator functions
-        fn GenNullCiphertext() -> UniquePtr<CiphertextDCRTPoly>;
+        fn DCRTPolyGenNullCiphertext() -> UniquePtr<CiphertextDCRTPoly>;
     }
 
     // CryptoContextDCRTPoly
@@ -302,7 +302,7 @@ pub mod ffi
                        -> UniquePtr<CiphertextDCRTPoly>;
         fn EvalAtIndexKeyGen(self: &CryptoContextDCRTPoly, privateKey: &PrivateKeyDCRTPoly,
                              indexList: &CxxVector<i32>,
-                             publicKey: /* GenNullPublicKey() */ &PublicKeyDCRTPoly);
+                             publicKey: /* DCRTPolyGenNullPublicKey() */ &PublicKeyDCRTPoly);
         fn EvalAutomorphism(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly, i: u32,
                             evalKeyMap: &MapFromIndexToEvalKey) -> UniquePtr<CiphertextDCRTPoly>;
         fn EvalAutomorphismKeyGen(self: &CryptoContextDCRTPoly, privateKey: &PrivateKeyDCRTPoly,
@@ -445,7 +445,7 @@ pub mod ffi
                       -> UniquePtr<CiphertextDCRTPoly>;
         fn EvalRotateKeyGen(self: &CryptoContextDCRTPoly, privateKey: &PrivateKeyDCRTPoly,
                             indexList: &CxxVector<i32>,
-                            publicKey: /* GenNullPublicKey() */ &PublicKeyDCRTPoly);
+                            publicKey: /* DCRTPolyGenNullPublicKey() */ &PublicKeyDCRTPoly);
         fn EvalSchemeSwitchingKeyGen(self: &CryptoContextDCRTPoly, keyPair: &KeyPairDCRTPoly,
                                      lwesk: &LWEPrivateKey);
         fn EvalSin(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly, a: f64, b: f64,
@@ -495,15 +495,15 @@ pub mod ffi
         fn EvalSumCols(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly, rowSize: u32,
                        evalSumKeyMap: &MapFromIndexToEvalKey) -> UniquePtr<CiphertextDCRTPoly>;
         fn EvalSumColsKeyGen(self: &CryptoContextDCRTPoly, privateKey: &PrivateKeyDCRTPoly,
-                             publicKey: /* GenNullPublicKey() */ &PublicKeyDCRTPoly)
+                             publicKey: /* DCRTPolyGenNullPublicKey() */ &PublicKeyDCRTPoly)
                              -> UniquePtr<MapFromIndexToEvalKey>;
         fn EvalSumKeyGen(self: &CryptoContextDCRTPoly, privateKey: &PrivateKeyDCRTPoly,
-                         publicKey: /* GenNullPublicKey() */ &PublicKeyDCRTPoly);
+                         publicKey: /* DCRTPolyGenNullPublicKey() */ &PublicKeyDCRTPoly);
         fn EvalSumRows(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly, rowSize: u32,
                        evalSumKeyMap: &MapFromIndexToEvalKey, subringDim: /* 0 */ u32)
                        -> UniquePtr<CiphertextDCRTPoly>;
         fn EvalSumRowsKeyGen(self: &CryptoContextDCRTPoly, privateKey: &PrivateKeyDCRTPoly,
-                             publicKey: /* GenNullPublicKey() */ &PublicKeyDCRTPoly,
+                             publicKey: /* DCRTPolyGenNullPublicKey() */ &PublicKeyDCRTPoly,
                              rowSize: /* 0 */ u32, subringDim: /* 0 */ u32)
                              -> UniquePtr<MapFromIndexToEvalKey>;
         fn FindAutomorphismIndex(self: &CryptoContextDCRTPoly, idx: u32) -> u32;
@@ -554,13 +554,13 @@ pub mod ffi
                               evalKey: &EvalKeyDCRTPoly, levels: /* 1 */ usize);
         fn MakeCKKSPackedPlaintext(self: &CryptoContextDCRTPoly, value: &CxxVector<f64>,
                                    scaleDeg: /* 1 */ usize, level: /* 0 */ u32,
-                                   params: /* GenNullDCRTPolyParams() */ &DCRTPolyParams,
+                                   params: /* DCRTPolyGenNullParams() */ &DCRTPolyParams,
                                    slots: /* 0 */ u32) -> UniquePtr<Plaintext>;
         fn MakeCKKSPackedPlaintextByVectorOfComplex(self: &CryptoContextDCRTPoly,
                                                     value: &CxxVector<ComplexPair>,
                                                     scaleDeg: /* 1 */ usize, level: /* 0 */ u32,
                                                     params:
-                                                    /* GenNullDCRTPolyParams() */ &DCRTPolyParams,
+                                                    /* DCRTPolyGenNullParams() */ &DCRTPolyParams,
                                                     slots: /* 0 */ u32) -> UniquePtr<Plaintext>;
         fn MakeCoefPackedPlaintext(self: &CryptoContextDCRTPoly, value: &CxxVector<i64>,
                                    noiseScaleDeg: /* 1 */ usize, level: /* 0 */ u32)
@@ -625,7 +625,7 @@ pub mod ffi
                                                  -> UniquePtr<KeyPairDCRTPoly>;
         fn ReEncrypt(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
                      evalKey: &EvalKeyDCRTPoly,
-                     publicKey: /* GenNullPublicKey() */ &PublicKeyDCRTPoly)
+                     publicKey: /* DCRTPolyGenNullPublicKey() */ &PublicKeyDCRTPoly)
                      -> UniquePtr<CiphertextDCRTPoly>;
         fn ReKeyGen(self: &CryptoContextDCRTPoly, oldPrivateKey: &PrivateKeyDCRTPoly,
                     newPublicKey: &PublicKeyDCRTPoly) -> UniquePtr<EvalKeyDCRTPoly>;
@@ -647,47 +647,52 @@ pub mod ffi
         fn SparseKeyGen(self: &CryptoContextDCRTPoly) -> UniquePtr<KeyPairDCRTPoly>;
 
         // cxx currently does not support static class methods
-        fn ClearEvalAutomorphismKeys();
-        fn ClearEvalAutomorphismKeysByCryptoContext(cryptoContext: &CryptoContextDCRTPoly);
-        fn ClearEvalAutomorphismKeysById(id: &CxxString);
-        fn ClearEvalMultKeys();
-        fn ClearEvalMultKeysByCryptoContext(cryptoContext: &CryptoContextDCRTPoly);
-        fn ClearEvalMultKeysById(id: &CxxString);
-        fn ClearEvalSumKeys();
-        fn ClearEvalSumKeysByCryptoContext(cryptoContext: &CryptoContextDCRTPoly);
-        fn ClearEvalSumKeysById(id: &CxxString);
-        fn GetCopyOfAllEvalAutomorphismKeys() -> UniquePtr<MapFromStringToMapFromIndexToEvalKey>;
-        fn GetCopyOfAllEvalMultKeys() -> UniquePtr<MapFromStringToVectorOfEvalKeys>;
-        fn GetCopyOfAllEvalSumKeys() -> UniquePtr<MapFromStringToMapFromIndexToEvalKey>;
-        fn GetCopyOfEvalMultKeyVector(keyID: &CxxString) -> UniquePtr<VectorOfEvalKeys>;
-        fn GetCopyOfEvalSumKeyMap(id: &CxxString) -> UniquePtr<MapFromIndexToEvalKey>;
-        fn GetEvalAutomorphismKeyMap(keyID: &CxxString) -> UniquePtr<MapFromIndexToEvalKey>;
-        fn GetEvalAutomorphismKeyMapPtr(keyID: &CxxString) -> UniquePtr<MapFromIndexToEvalKey>;
-        fn GetExistingEvalAutomorphismKeyIndices(keyTag: &CxxString) -> UniquePtr<CxxVector<u32>>;
-        fn GetPlaintextForDecrypt(pte: PlaintextEncodings, evp: &DCRTPolyParams,
-                                  ep: &EncodingParams) -> UniquePtr<Plaintext>;
-        fn GetUniqueValues(oldValues: &CxxVector<u32>, newValues: &CxxVector<u32>)
-                           -> UniquePtr<CxxVector<u32>>;
-        fn InsertEvalAutomorphismKey(evalKeyMap: &MapFromIndexToEvalKey,
-                                     keyTag: /* "" */ &CxxString);
-        fn InsertEvalMultKey(evalKeyVec: &VectorOfEvalKeys);
-        fn InsertEvalSumKey(mapToInsert: &MapFromIndexToEvalKey, keyTag: /* "" */ &CxxString);
+        fn DCRTPolyClearEvalAutomorphismKeys();
+        fn DCRTPolyClearEvalAutomorphismKeysByCryptoContext(cryptoContext: &CryptoContextDCRTPoly);
+        fn DCRTPolyClearEvalAutomorphismKeysById(id: &CxxString);
+        fn DCRTPolyClearEvalMultKeys();
+        fn DCRTPolyClearEvalMultKeysByCryptoContext(cryptoContext: &CryptoContextDCRTPoly);
+        fn DCRTPolyClearEvalMultKeysById(id: &CxxString);
+        fn DCRTPolyClearEvalSumKeys();
+        fn DCRTPolyClearEvalSumKeysByCryptoContext(cryptoContext: &CryptoContextDCRTPoly);
+        fn DCRTPolyClearEvalSumKeysById(id: &CxxString);
+        fn DCRTPolyGetCopyOfAllEvalAutomorphismKeys()
+            -> UniquePtr<MapFromStringToMapFromIndexToEvalKey>;
+        fn DCRTPolyGetCopyOfAllEvalMultKeys() -> UniquePtr<MapFromStringToVectorOfEvalKeys>;
+        fn DCRTPolyGetCopyOfAllEvalSumKeys() -> UniquePtr<MapFromStringToMapFromIndexToEvalKey>;
+        fn DCRTPolyGetCopyOfEvalMultKeyVector(keyID: &CxxString) -> UniquePtr<VectorOfEvalKeys>;
+        fn DCRTPolyGetCopyOfEvalSumKeyMap(id: &CxxString) -> UniquePtr<MapFromIndexToEvalKey>;
+        fn DCRTPolyGetEvalAutomorphismKeyMap(keyID: &CxxString)
+                                             -> UniquePtr<MapFromIndexToEvalKey>;
+        fn DCRTPolyGetEvalAutomorphismKeyMapPtr(keyID: &CxxString)
+                                                -> UniquePtr<MapFromIndexToEvalKey>;
+        fn DCRTPolyGetExistingEvalAutomorphismKeyIndices(keyTag: &CxxString)
+                                                         -> UniquePtr<CxxVector<u32>>;
+        fn DCRTPolyGetPlaintextForDecrypt(pte: PlaintextEncodings, evp: &DCRTPolyParams,
+                                          ep: &EncodingParams) -> UniquePtr<Plaintext>;
+        fn DCRTPolyGetUniqueValues(oldValues: &CxxVector<u32>, newValues: &CxxVector<u32>)
+                                   -> UniquePtr<CxxVector<u32>>;
+        fn DCRTPolyInsertEvalAutomorphismKey(evalKeyMap: &MapFromIndexToEvalKey,
+                                             keyTag: /* "" */ &CxxString);
+        fn DCRTPolyInsertEvalMultKey(evalKeyVec: &VectorOfEvalKeys);
+        fn DCRTPolyInsertEvalSumKey(mapToInsert: &MapFromIndexToEvalKey,
+                                    keyTag: /* "" */ &CxxString);
 
         // Generator functions
-        fn GenCryptoContextByParamsCKKSRNS(params: &ParamsCKKSRNS)
-                                           -> UniquePtr<CryptoContextDCRTPoly>;
-        fn GenCryptoContextByParamsBFVRNS(params: &ParamsBFVRNS)
-                                          -> UniquePtr<CryptoContextDCRTPoly>;
-        fn GenCryptoContextByParamsBGVRNS(params: &ParamsBGVRNS)
-                                          -> UniquePtr<CryptoContextDCRTPoly>;
-        fn GenNullCryptoContext() -> UniquePtr<CryptoContextDCRTPoly>;
+        fn DCRTPolyGenCryptoContextByParamsCKKSRNS(params: &ParamsCKKSRNS)
+                                                   -> UniquePtr<CryptoContextDCRTPoly>;
+        fn DCRTPolyGenCryptoContextByParamsBFVRNS(params: &ParamsBFVRNS)
+                                                  -> UniquePtr<CryptoContextDCRTPoly>;
+        fn DCRTPolyGenCryptoContextByParamsBGVRNS(params: &ParamsBGVRNS)
+                                                  -> UniquePtr<CryptoContextDCRTPoly>;
+        fn DCRTPolyGenNullCryptoContext() -> UniquePtr<CryptoContextDCRTPoly>;
     }
 
     // DCRTPolyParams
     unsafe extern "C++"
     {
         // Generator functions
-        fn GenNullDCRTPolyParams() -> UniquePtr<DCRTPolyParams>;
+        fn DCRTPolyGenNullParams() -> UniquePtr<DCRTPolyParams>;
     }
 
     // KeyPairDCRTPoly
@@ -1025,61 +1030,63 @@ pub mod ffi
     unsafe extern "C++"
     {
         // Generator functions
-        fn GenNullPublicKey() -> UniquePtr<PublicKeyDCRTPoly>;
+        fn DCRTPolyGenNullPublicKey() -> UniquePtr<PublicKeyDCRTPoly>;
     }
 
     // Serialize / Deserialize
     unsafe extern "C++"
     {
         // Ciphertext
-        fn DeserializeCiphertextFromFile(ciphertextLocation: &CxxString,
-                                         ciphertext: Pin<&mut CiphertextDCRTPoly>,
-                                         serialMode: SerialMode) -> bool;
-        fn SerializeCiphertextToFile(ciphertextLocation: &CxxString,
-                                     ciphertext: &CiphertextDCRTPoly, serialMode: SerialMode)
-                                     -> bool;
+        fn DCRTPolyDeserializeCiphertextFromFile(ciphertextLocation: &CxxString,
+                                                 ciphertext: Pin<&mut CiphertextDCRTPoly>,
+                                                 serialMode: SerialMode) -> bool;
+        fn DCRTPolySerializeCiphertextToFile(ciphertextLocation: &CxxString,
+                                             ciphertext: &CiphertextDCRTPoly,
+                                             serialMode: SerialMode) -> bool;
 
         // CryptoContextDCRTPoly
-        fn DeserializeCryptoContextFromFile(ccLocation: &CxxString,
-                                            cryptoContext: Pin<&mut CryptoContextDCRTPoly>,
-                                            serialMode: SerialMode) -> bool;
-        fn SerializeCryptoContextToFile(ccLocation: &CxxString,
-                                        cryptoContext: &CryptoContextDCRTPoly,
-                                        serialMode: SerialMode) -> bool;
+        fn DCRTPolyDeserializeCryptoContextFromFile(ccLocation: &CxxString,
+                                                    cryptoContext: Pin<&mut CryptoContextDCRTPoly>,
+                                                    serialMode: SerialMode) -> bool;
+        fn DCRTPolySerializeCryptoContextToFile(ccLocation: &CxxString,
+                                                cryptoContext: &CryptoContextDCRTPoly,
+                                                serialMode: SerialMode) -> bool;
 
         // EvalAutomorphismKey
-        fn DeserializeEvalAutomorphismKeyFromFile(automorphismKeyLocation: &CxxString,
+        fn DCRTPolyDeserializeEvalAutomorphismKeyFromFile(automorphismKeyLocation: &CxxString,
+                                                          serialMode: SerialMode) -> bool;
+        fn DCRTPolySerializeEvalAutomorphismKeyByIdToFile(automorphismKeyLocation: &CxxString,
+                                                          serialMode: SerialMode, id: &CxxString)
+                                                          -> bool;
+        fn DCRTPolySerializeEvalAutomorphismKeyToFile(automorphismKeyLocation: &CxxString,
+                                                      cryptoContext: &CryptoContextDCRTPoly,
+                                                      serialMode: SerialMode) -> bool;
+
+        // EvalMultKey
+        fn DCRTPolyDeserializeEvalMultKeyFromFile(multKeyLocation: &CxxString,
                                                   serialMode: SerialMode) -> bool;
-        fn SerializeEvalAutomorphismKeyByIdToFile(automorphismKeyLocation: &CxxString,
+        fn DCRTPolySerializeEvalMultKeyByIdToFile(multKeyLocation: &CxxString,
                                                   serialMode: SerialMode, id: &CxxString) -> bool;
-        fn SerializeEvalAutomorphismKeyToFile(automorphismKeyLocation: &CxxString,
+        fn DCRTPolySerializeEvalMultKeyToFile(multKeyLocation: &CxxString,
                                               cryptoContext: &CryptoContextDCRTPoly,
                                               serialMode: SerialMode) -> bool;
 
-        // EvalMultKey
-        fn DeserializeEvalMultKeyFromFile(multKeyLocation: &CxxString, serialMode: SerialMode)
-                                          -> bool;
-        fn SerializeEvalMultKeyByIdToFile(multKeyLocation: &CxxString, serialMode: SerialMode,
-                                          id: &CxxString) -> bool;
-        fn SerializeEvalMultKeyToFile(multKeyLocation: &CxxString,
-                                      cryptoContext: &CryptoContextDCRTPoly,
-                                      serialMode: SerialMode) -> bool;
-
         // EvalSumKey
-        fn DeserializeEvalSumKeyFromFile(sumKeyLocation: &CxxString, serialMode: SerialMode)
-                                         -> bool;
-        fn SerializeEvalSumKeyByIdToFile(sumKeyLocation: &CxxString, serialMode: SerialMode,
-                                         id: &CxxString) -> bool;
-        fn SerializeEvalSumKeyToFile(sumKeyLocation: &CxxString,
-                                     cryptoContext: &CryptoContextDCRTPoly, serialMode: SerialMode)
-                                     -> bool;
+        fn DCRTPolyDeserializeEvalSumKeyFromFile(sumKeyLocation: &CxxString,
+                                                 serialMode: SerialMode) -> bool;
+        fn DCRTPolySerializeEvalSumKeyByIdToFile(sumKeyLocation: &CxxString,
+                                                 serialMode: SerialMode, id: &CxxString) -> bool;
+        fn DCRTPolySerializeEvalSumKeyToFile(sumKeyLocation: &CxxString,
+                                             cryptoContext: &CryptoContextDCRTPoly,
+                                             serialMode: SerialMode) -> bool;
 
         // PublicKey
-        fn DeserializePublicKeyFromFile(publicKeyLocation: &CxxString,
-                                        publicKey: Pin<&mut PublicKeyDCRTPoly>,
-                                        serialMode: SerialMode) -> bool;
-        fn SerializePublicKeyToFile(publicKeyLocation: &CxxString, publicKey: &PublicKeyDCRTPoly,
-                                    serialMode: SerialMode) -> bool;
+        fn DCRTPolyDeserializePublicKeyFromFile(publicKeyLocation: &CxxString,
+                                                publicKey: Pin<&mut PublicKeyDCRTPoly>,
+                                                serialMode: SerialMode) -> bool;
+        fn DCRTPolySerializePublicKeyToFile(publicKeyLocation: &CxxString,
+                                            publicKey: &PublicKeyDCRTPoly,
+                                            serialMode: SerialMode) -> bool;
     }
 }
 
@@ -1096,7 +1103,7 @@ mod tests
         _cc_params_bfvrns.pin_mut().SetPlaintextModulus(65537);
         _cc_params_bfvrns.pin_mut().SetMultiplicativeDepth(2);
 
-        let _cc = ffi::GenCryptoContextByParamsBFVRNS(&_cc_params_bfvrns);
+        let _cc = ffi::DCRTPolyGenCryptoContextByParamsBFVRNS(&_cc_params_bfvrns);
         _cc.Enable(ffi::PKESchemeFeature::PKE);
         _cc.Enable(ffi::PKESchemeFeature::KEYSWITCH);
         _cc.Enable(ffi::PKESchemeFeature::LEVELEDSHE);
@@ -1109,7 +1116,7 @@ mod tests
         _index_list.pin_mut().push(2);
         _index_list.pin_mut().push(-1);
         _index_list.pin_mut().push(-2);
-        _cc.EvalRotateKeyGen(&_key_pair.GetPrivateKey(), &_index_list, &ffi::GenNullPublicKey());
+        _cc.EvalRotateKeyGen(&_key_pair.GetPrivateKey(), &_index_list, &ffi::DCRTPolyGenNullPublicKey());
 
         let mut _vector_of_ints_1 = CxxVector::<i64>::new();
         _vector_of_ints_1.pin_mut().push(1);
@@ -1214,7 +1221,7 @@ mod tests
         _cc_params_ckksrns.pin_mut().SetScalingModSize(_scale_mod_size);
         _cc_params_ckksrns.pin_mut().SetBatchSize(_batch_size);
 
-        let _cc = ffi::GenCryptoContextByParamsCKKSRNS(&_cc_params_ckksrns);
+        let _cc = ffi::DCRTPolyGenCryptoContextByParamsCKKSRNS(&_cc_params_ckksrns);
         _cc.Enable(ffi::PKESchemeFeature::PKE);
         _cc.Enable(ffi::PKESchemeFeature::KEYSWITCH);
         _cc.Enable(ffi::PKESchemeFeature::LEVELEDSHE);
@@ -1226,7 +1233,7 @@ mod tests
         let mut _index_list = CxxVector::<i32>::new();
         _index_list.pin_mut().push(1);
         _index_list.pin_mut().push(-2);
-        _cc.EvalRotateKeyGen(&_key_pair.GetPrivateKey(), &_index_list, &ffi::GenNullPublicKey());
+        _cc.EvalRotateKeyGen(&_key_pair.GetPrivateKey(), &_index_list, &ffi::DCRTPolyGenNullPublicKey());
 
         let mut _x_1 = CxxVector::<f64>::new();
         _x_1.pin_mut().push(0.25);
@@ -1248,7 +1255,7 @@ mod tests
         _x_2.pin_mut().push(0.5);
         _x_2.pin_mut().push(0.25);
 
-        let _dcrt_poly_params = ffi::GenNullDCRTPolyParams();
+        let _dcrt_poly_params = ffi::DCRTPolyGenNullParams();
         let _p_txt_1 = _cc.MakeCKKSPackedPlaintext(&_x_1, 1, 0, &_dcrt_poly_params, 0);
         let _p_txt_2 = _cc.MakeCKKSPackedPlaintext(&_x_2, 1, 0, &_dcrt_poly_params, 0);
 
@@ -1308,7 +1315,7 @@ mod tests
         _cc_params_ckksrns.pin_mut().SetMultiplicativeDepth(6);
         _cc_params_ckksrns.pin_mut().SetScalingModSize(50);
 
-        let _cc = ffi::GenCryptoContextByParamsCKKSRNS(&_cc_params_ckksrns);
+        let _cc = ffi::DCRTPolyGenCryptoContextByParamsCKKSRNS(&_cc_params_ckksrns);
         _cc.Enable(ffi::PKESchemeFeature::PKE);
         _cc.Enable(ffi::PKESchemeFeature::KEYSWITCH);
         _cc.Enable(ffi::PKESchemeFeature::LEVELEDSHE);
@@ -1373,7 +1380,7 @@ mod tests
         _coefficients_2.pin_mut().push(-0.4);
         _coefficients_2.pin_mut().push(-0.5);
 
-        let _dcrt_poly_params = ffi::GenNullDCRTPolyParams();
+        let _dcrt_poly_params = ffi::DCRTPolyGenNullParams();
         let _plain_text_1 = _cc.MakeCKKSPackedPlaintextByVectorOfComplex(&_input, 1, 0, &_dcrt_poly_params, 0);
         let _key_pair = _cc.KeyGen();
         print!("Generating evaluation key for homomorphic multiplication...");

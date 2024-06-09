@@ -22,7 +22,7 @@ const std::shared_ptr<PublicKeyImpl>& PublicKeyDCRTPoly::GetRef() const noexcept
 }
 
 // Generator functions
-std::unique_ptr<PublicKeyDCRTPoly> GenNullPublicKey()
+std::unique_ptr<PublicKeyDCRTPoly> DCRTPolyGenNullPublicKey()
 {
     return std::make_unique<PublicKeyDCRTPoly>();
 }

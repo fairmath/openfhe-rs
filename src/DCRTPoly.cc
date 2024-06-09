@@ -16,7 +16,7 @@ std::shared_ptr<lbcrypto::DCRTPoly::Params> DCRTPolyParams::GetInternal() const 
 }
 
 // Generator functions
-std::unique_ptr<DCRTPolyParams> GenNullDCRTPolyParams()
+std::unique_ptr<DCRTPolyParams> DCRTPolyGenNullParams()
 {
     return std::make_unique<DCRTPolyParams>();
 }

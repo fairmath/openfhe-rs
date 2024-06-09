@@ -22,7 +22,7 @@ const std::shared_ptr<CiphertextImpl>& CiphertextDCRTPoly::GetRef() const noexce
 }
 
 // Generator functions
-std::unique_ptr<CiphertextDCRTPoly> GenNullCiphertext()
+std::unique_ptr<CiphertextDCRTPoly> DCRTPolyGenNullCiphertext()
 {
     return std::make_unique<CiphertextDCRTPoly>();
 }

@@ -1081,102 +1081,104 @@ const std::shared_ptr<CryptoContextImpl>& CryptoContextDCRTPoly::GetRef() const 
 }
 
 // cxx currently does not support static class methods
-void ClearEvalMultKeys()
+void DCRTPolyClearEvalMultKeys()
 {
     CryptoContextImpl::ClearEvalMultKeys();
 }
-void ClearEvalMultKeysById(const std::string& id)
+void DCRTPolyClearEvalMultKeysById(const std::string& id)
 {
     CryptoContextImpl::ClearEvalMultKeys(id);
 }
-void ClearEvalMultKeysByCryptoContext(const CryptoContextDCRTPoly& cryptoContext)
+void DCRTPolyClearEvalMultKeysByCryptoContext(const CryptoContextDCRTPoly& cryptoContext)
 {
     CryptoContextImpl::ClearEvalMultKeys(cryptoContext.GetInternal());
 }
-void ClearEvalSumKeys()
+void DCRTPolyClearEvalSumKeys()
 {
     CryptoContextImpl::ClearEvalSumKeys();
 }
-void ClearEvalSumKeysById(const std::string& id)
+void DCRTPolyClearEvalSumKeysById(const std::string& id)
 {
     CryptoContextImpl::ClearEvalSumKeys(id);
 }
-void ClearEvalSumKeysByCryptoContext(const CryptoContextDCRTPoly& cryptoContext)
+void DCRTPolyClearEvalSumKeysByCryptoContext(const CryptoContextDCRTPoly& cryptoContext)
 {
     CryptoContextImpl::ClearEvalSumKeys(cryptoContext.GetInternal());
 }
-void ClearEvalAutomorphismKeys()
+void DCRTPolyClearEvalAutomorphismKeys()
 {
     CryptoContextImpl::ClearEvalAutomorphismKeys();
 }
-void ClearEvalAutomorphismKeysById(const std::string& id)
+void DCRTPolyClearEvalAutomorphismKeysById(const std::string& id)
 {
     CryptoContextImpl::ClearEvalAutomorphismKeys(id);
 }
-void ClearEvalAutomorphismKeysByCryptoContext(const CryptoContextDCRTPoly& cryptoContext)
+void DCRTPolyClearEvalAutomorphismKeysByCryptoContext(const CryptoContextDCRTPoly& cryptoContext)
 {
     CryptoContextImpl::ClearEvalAutomorphismKeys(cryptoContext.GetInternal());
 }
-std::unique_ptr<std::vector<uint32_t>> GetExistingEvalAutomorphismKeyIndices(
+std::unique_ptr<std::vector<uint32_t>> DCRTPolyGetExistingEvalAutomorphismKeyIndices(
     const std::string& keyTag)
 {
     return std::make_unique<std::vector<uint32_t>>(
         CryptoContextImpl::GetExistingEvalAutomorphismKeyIndices(keyTag));
 }
-std::unique_ptr<std::vector<uint32_t>> GetUniqueValues(const std::vector<uint32_t>& oldValues,
-    const std::vector<uint32_t>& newValues)
+std::unique_ptr<std::vector<uint32_t>> DCRTPolyGetUniqueValues(
+    const std::vector<uint32_t>& oldValues, const std::vector<uint32_t>& newValues)
 {
     return std::make_unique<std::vector<uint32_t>>(CryptoContextImpl::GetUniqueValues(oldValues,
         newValues));
 }
-std::unique_ptr<MapFromIndexToEvalKey> GetEvalAutomorphismKeyMap(const std::string& keyID)
+std::unique_ptr<MapFromIndexToEvalKey> DCRTPolyGetEvalAutomorphismKeyMap(const std::string& keyID)
 {
-    return std::make_unique<MapFromIndexToEvalKey>(
-        CryptoContextImpl::GetEvalAutomorphismKeyMapPtr(keyID));
+    return std::make_unique<MapFromIndexToEvalKey>(CryptoContextImpl::GetEvalAutomorphismKeyMapPtr(
+        keyID));
 }
-std::unique_ptr<MapFromIndexToEvalKey> GetCopyOfEvalSumKeyMap(const std::string& id)
+std::unique_ptr<MapFromIndexToEvalKey> DCRTPolyGetCopyOfEvalSumKeyMap(const std::string& id)
 {
     return std::make_unique<MapFromIndexToEvalKey>(
         std::make_shared<std::map<uint32_t, std::shared_ptr<EvalKeyImpl>>>(
         CryptoContextImpl::GetEvalSumKeyMap(id)));
 }
-std::unique_ptr<MapFromIndexToEvalKey> GetEvalAutomorphismKeyMapPtr(const std::string& keyID)
+std::unique_ptr<MapFromIndexToEvalKey> DCRTPolyGetEvalAutomorphismKeyMapPtr(
+    const std::string& keyID)
 {
     return std::make_unique<MapFromIndexToEvalKey>(CryptoContextImpl::GetEvalAutomorphismKeyMapPtr(
         keyID));
 }
-void InsertEvalAutomorphismKey(const MapFromIndexToEvalKey& evalKeyMap, const std::string& keyTag)
+void DCRTPolyInsertEvalAutomorphismKey(const MapFromIndexToEvalKey& evalKeyMap,
+    const std::string& keyTag)
 {
     CryptoContextImpl::InsertEvalAutomorphismKey(evalKeyMap.GetInternal(), keyTag);
 }
-void InsertEvalSumKey(const MapFromIndexToEvalKey& mapToInsert, const std::string& keyTag)
+void DCRTPolyInsertEvalSumKey(const MapFromIndexToEvalKey& mapToInsert, const std::string& keyTag)
 {
     CryptoContextImpl::InsertEvalSumKey(mapToInsert.GetInternal(), keyTag);
 }
-std::unique_ptr<VectorOfEvalKeys> GetCopyOfEvalMultKeyVector(const std::string& keyID)
+std::unique_ptr<VectorOfEvalKeys> DCRTPolyGetCopyOfEvalMultKeyVector(const std::string& keyID)
 {
     return std::make_unique<VectorOfEvalKeys>(CryptoContextImpl::GetEvalMultKeyVector(keyID));
 }
-void InsertEvalMultKey(const VectorOfEvalKeys& evalKeyVec)
+void DCRTPolyInsertEvalMultKey(const VectorOfEvalKeys& evalKeyVec)
 {
     CryptoContextImpl::InsertEvalMultKey(evalKeyVec.GetInternal());
 }
-std::unique_ptr<MapFromStringToVectorOfEvalKeys> GetCopyOfAllEvalMultKeys()
+std::unique_ptr<MapFromStringToVectorOfEvalKeys> DCRTPolyGetCopyOfAllEvalMultKeys()
 {
     return std::make_unique<MapFromStringToVectorOfEvalKeys>(
         CryptoContextImpl::GetAllEvalMultKeys());
 }
-std::unique_ptr<MapFromStringToMapFromIndexToEvalKey> GetCopyOfAllEvalSumKeys()
+std::unique_ptr<MapFromStringToMapFromIndexToEvalKey> DCRTPolyGetCopyOfAllEvalSumKeys()
 {
     return std::make_unique<MapFromStringToMapFromIndexToEvalKey>(
         CryptoContextImpl::GetAllEvalSumKeys());
 }
-std::unique_ptr<MapFromStringToMapFromIndexToEvalKey> GetCopyOfAllEvalAutomorphismKeys()
+std::unique_ptr<MapFromStringToMapFromIndexToEvalKey> DCRTPolyGetCopyOfAllEvalAutomorphismKeys()
 {
     return std::make_unique<MapFromStringToMapFromIndexToEvalKey>(
         CryptoContextImpl::GetAllEvalAutomorphismKeys());
 }
-std::unique_ptr<Plaintext> GetPlaintextForDecrypt(const PlaintextEncodings pte,
+std::unique_ptr<Plaintext> DCRTPolyGetPlaintextForDecrypt(const PlaintextEncodings pte,
     const DCRTPolyParams& evp, const EncodingParams& ep)
 {
     return std::make_unique<Plaintext>(CryptoContextImpl::GetPlaintextForDecrypt(pte,
@@ -1184,19 +1186,22 @@ std::unique_ptr<Plaintext> GetPlaintextForDecrypt(const PlaintextEncodings pte,
 }
 
 // Generator functions
-std::unique_ptr<CryptoContextDCRTPoly> GenNullCryptoContext()
+std::unique_ptr<CryptoContextDCRTPoly> DCRTPolyGenNullCryptoContext()
 {
     return std::make_unique<CryptoContextDCRTPoly>();
 }
-std::unique_ptr<CryptoContextDCRTPoly> GenCryptoContextByParamsBFVRNS(const ParamsBFVRNS& params)
+std::unique_ptr<CryptoContextDCRTPoly> DCRTPolyGenCryptoContextByParamsBFVRNS(
+    const ParamsBFVRNS& params)
 {
     return std::make_unique<CryptoContextDCRTPoly>(params);
 }
-std::unique_ptr<CryptoContextDCRTPoly> GenCryptoContextByParamsBGVRNS(const ParamsBGVRNS& params)
+std::unique_ptr<CryptoContextDCRTPoly> DCRTPolyGenCryptoContextByParamsBGVRNS(
+    const ParamsBGVRNS& params)
 {
     return std::make_unique<CryptoContextDCRTPoly>(params);
 }
-std::unique_ptr<CryptoContextDCRTPoly> GenCryptoContextByParamsCKKSRNS(const ParamsCKKSRNS& params)
+std::unique_ptr<CryptoContextDCRTPoly> DCRTPolyGenCryptoContextByParamsCKKSRNS(
+    const ParamsCKKSRNS& params)
 {
     return std::make_unique<CryptoContextDCRTPoly>(params);
 }
