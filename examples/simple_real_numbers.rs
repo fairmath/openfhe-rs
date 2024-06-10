@@ -13,9 +13,9 @@ fn main()
     _cc_params_ckksrns.pin_mut().SetBatchSize(_batch_size);
 
     let _cc = ffi::DCRTPolyGenCryptoContextByParamsCKKSRNS(&_cc_params_ckksrns);
-    _cc.Enable(ffi::PKESchemeFeature::PKE);
-    _cc.Enable(ffi::PKESchemeFeature::KEYSWITCH);
-    _cc.Enable(ffi::PKESchemeFeature::LEVELEDSHE);
+    _cc.EnableByFeature(ffi::PKESchemeFeature::PKE);
+    _cc.EnableByFeature(ffi::PKESchemeFeature::KEYSWITCH);
+    _cc.EnableByFeature(ffi::PKESchemeFeature::LEVELEDSHE);
 
     println!("CKKS scheme is using ring dimension {}\n", _cc.GetRingDimension());
 
@@ -47,8 +47,8 @@ fn main()
     _x_2.pin_mut().push(0.25);
 
     let _dcrt_poly_params = ffi::DCRTPolyGenNullParams();
-    let _p_txt_1 = _cc.MakeCKKSPackedPlaintext(&_x_1, 1, 0, &_dcrt_poly_params, 0);
-    let _p_txt_2 = _cc.MakeCKKSPackedPlaintext(&_x_2, 1, 0, &_dcrt_poly_params, 0);
+    let _p_txt_1 = _cc.MakeCKKSPackedPlaintextByVectorOfDouble(&_x_1, 1, 0, &_dcrt_poly_params, 0);
+    let _p_txt_2 = _cc.MakeCKKSPackedPlaintextByVectorOfDouble(&_x_2, 1, 0, &_dcrt_poly_params, 0);
 
     println!("Input x1: {}", _p_txt_1.GetString());
     println!("Input x2: {}", _p_txt_2.GetString());

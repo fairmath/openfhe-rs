@@ -1,7 +1,7 @@
 fn main()
 {
     cxx_build::bridge("src/lib.rs")
-        .file("src/AssociativeContainerOfOpaqueTypes.cc")
+        .file("src/AssociativeContainers.cc")
         .file("src/Ciphertext.cc")
         .file("src/CryptoContext.cc")
         .file("src/CryptoParametersBase.cc")
@@ -16,7 +16,7 @@ fn main()
         .file("src/PrivateKey.cc")
         .file("src/PublicKey.cc")
         .file("src/SchemeBase.cc")
-        .file("src/SequenceContainerOfOpaqueTypes.cc")
+        .file("src/SequenceContainers.cc")
         .file("src/SerialDeserial.cc")
         .include("/usr/local/include/openfhe")
         .include("/usr/local/include/openfhe/third-party/include")
@@ -35,8 +35,8 @@ fn main()
         .compile("openfhe");
 
     println!("cargo::rerun-if-changed=src/lib.rs");
-    println!("cargo::rerun-if-changed=src/AssociativeContainerOfOpaqueTypes.h");
-    println!("cargo::rerun-if-changed=src/AssociativeContainerOfOpaqueTypes.cc");
+    println!("cargo::rerun-if-changed=src/AssociativeContainers.h");
+    println!("cargo::rerun-if-changed=src/AssociativeContainers.cc");
     println!("cargo::rerun-if-changed=src/Ciphertext.h");
     println!("cargo::rerun-if-changed=src/Ciphertext.cc");
     println!("cargo::rerun-if-changed=src/CryptoContext.h");
@@ -65,8 +65,8 @@ fn main()
     println!("cargo::rerun-if-changed=src/PublicKey.cc");
     println!("cargo::rerun-if-changed=src/SchemeBase.h");
     println!("cargo::rerun-if-changed=src/SchemeBase.cc");
-    println!("cargo::rerun-if-changed=src/SequenceContainerOfOpaqueTypes.h");
-    println!("cargo::rerun-if-changed=src/SequenceContainerOfOpaqueTypes.cc");
+    println!("cargo::rerun-if-changed=src/SequenceContainers.h");
+    println!("cargo::rerun-if-changed=src/SequenceContainers.cc");
     println!("cargo::rerun-if-changed=src/SerialDeserial.h");
     println!("cargo::rerun-if-changed=src/SerialDeserial.cc");
 

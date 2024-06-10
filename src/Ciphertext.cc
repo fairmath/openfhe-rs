@@ -8,15 +8,11 @@ namespace openfhe
 CiphertextDCRTPoly::CiphertextDCRTPoly(std::shared_ptr<CiphertextImpl>&& ciphertext) noexcept
     : m_ciphertext(std::move(ciphertext))
 { }
-std::shared_ptr<CiphertextImpl> CiphertextDCRTPoly::GetInternal() const noexcept
+const std::shared_ptr<CiphertextImpl>& CiphertextDCRTPoly::GetRef() const noexcept
 {
     return m_ciphertext;
 }
 std::shared_ptr<CiphertextImpl>& CiphertextDCRTPoly::GetRef() noexcept
-{
-    return m_ciphertext;
-}
-const std::shared_ptr<CiphertextImpl>& CiphertextDCRTPoly::GetRef() const noexcept
 {
     return m_ciphertext;
 }

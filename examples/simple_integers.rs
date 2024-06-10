@@ -8,9 +8,9 @@ fn main()
     _cc_params_bfvrns.pin_mut().SetMultiplicativeDepth(2);
 
     let _cc = ffi::DCRTPolyGenCryptoContextByParamsBFVRNS(&_cc_params_bfvrns);
-    _cc.Enable(ffi::PKESchemeFeature::PKE);
-    _cc.Enable(ffi::PKESchemeFeature::KEYSWITCH);
-    _cc.Enable(ffi::PKESchemeFeature::LEVELEDSHE);
+    _cc.EnableByFeature(ffi::PKESchemeFeature::PKE);
+    _cc.EnableByFeature(ffi::PKESchemeFeature::KEYSWITCH);
+    _cc.EnableByFeature(ffi::PKESchemeFeature::LEVELEDSHE);
 
     let _key_pair = _cc.KeyGen();
     _cc.EvalMultKeyGen(&_key_pair.GetPrivateKey());

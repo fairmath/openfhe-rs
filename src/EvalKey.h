@@ -18,7 +18,7 @@ public:
     EvalKeyDCRTPoly& operator=(const EvalKeyDCRTPoly&) = delete;
     EvalKeyDCRTPoly& operator=(EvalKeyDCRTPoly&&) = delete;
 
-    [[nodiscard]] std::shared_ptr<EvalKeyImpl> GetInternal() const noexcept;
+    [[nodiscard]] const std::shared_ptr<EvalKeyImpl>& GetRef() const noexcept;
 };
 
 } // openfhe

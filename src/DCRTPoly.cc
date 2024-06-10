@@ -10,7 +10,7 @@ DCRTPoly::DCRTPoly(lbcrypto::DCRTPoly&& poly) noexcept
 DCRTPolyParams::DCRTPolyParams(const std::shared_ptr<lbcrypto::DCRTPoly::Params>& params) noexcept
     : m_params(params)
 { }
-std::shared_ptr<lbcrypto::DCRTPoly::Params> DCRTPolyParams::GetInternal() const noexcept
+const std::shared_ptr<lbcrypto::DCRTPoly::Params>& DCRTPolyParams::GetRef() const noexcept
 {
     return m_params;
 }

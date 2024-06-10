@@ -11,10 +11,10 @@ fn main()
     _cc_params_ckksrns.pin_mut().SetScalingModSize(50);
 
     let _cc = ffi::DCRTPolyGenCryptoContextByParamsCKKSRNS(&_cc_params_ckksrns);
-    _cc.Enable(ffi::PKESchemeFeature::PKE);
-    _cc.Enable(ffi::PKESchemeFeature::KEYSWITCH);
-    _cc.Enable(ffi::PKESchemeFeature::LEVELEDSHE);
-    _cc.Enable(ffi::PKESchemeFeature::ADVANCEDSHE);
+    _cc.EnableByFeature(ffi::PKESchemeFeature::PKE);
+    _cc.EnableByFeature(ffi::PKESchemeFeature::KEYSWITCH);
+    _cc.EnableByFeature(ffi::PKESchemeFeature::LEVELEDSHE);
+    _cc.EnableByFeature(ffi::PKESchemeFeature::ADVANCEDSHE);
 
     let mut _input = CxxVector::<ffi::ComplexPair>::new();
     _input.pin_mut().push(ffi::ComplexPair{re: 0.5, im: 0.0});

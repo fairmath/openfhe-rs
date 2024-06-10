@@ -18,7 +18,8 @@ public:
     PrivateKeyDCRTPoly& operator=(const PrivateKeyDCRTPoly&) = delete;
     PrivateKeyDCRTPoly& operator=(PrivateKeyDCRTPoly&&) = delete;
 
-    [[nodiscard]] std::shared_ptr<PrivateKeyImpl> GetInternal() const noexcept;
+    [[nodiscard]] const std::shared_ptr<PrivateKeyImpl>& GetRef() const noexcept;
+    [[nodiscard]] std::shared_ptr<PrivateKeyImpl>& GetRef() noexcept;
 };
 
 } // openfhe

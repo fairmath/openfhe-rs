@@ -8,15 +8,11 @@ namespace openfhe
 PublicKeyDCRTPoly::PublicKeyDCRTPoly(const std::shared_ptr<PublicKeyImpl>& publicKey) noexcept
     : m_publicKey(publicKey)
 { }
-std::shared_ptr<PublicKeyImpl> PublicKeyDCRTPoly::GetInternal() const noexcept
+const std::shared_ptr<PublicKeyImpl>& PublicKeyDCRTPoly::GetRef() const noexcept
 {
     return m_publicKey;
 }
 std::shared_ptr<PublicKeyImpl>& PublicKeyDCRTPoly::GetRef() noexcept
-{
-    return m_publicKey;
-}
-const std::shared_ptr<PublicKeyImpl>& PublicKeyDCRTPoly::GetRef() const noexcept
 {
     return m_publicKey;
 }

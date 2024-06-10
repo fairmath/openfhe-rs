@@ -19,9 +19,8 @@ public:
     CiphertextDCRTPoly& operator=(const CiphertextDCRTPoly&) = delete;
     CiphertextDCRTPoly& operator=(CiphertextDCRTPoly&&) = delete;
 
-    [[nodiscard]] std::shared_ptr<CiphertextImpl> GetInternal() const noexcept;
-    [[nodiscard]] std::shared_ptr<CiphertextImpl>& GetRef() noexcept;
     [[nodiscard]] const std::shared_ptr<CiphertextImpl>& GetRef() const noexcept;
+    [[nodiscard]] std::shared_ptr<CiphertextImpl>& GetRef() noexcept;
 };
 
 // Generator functions

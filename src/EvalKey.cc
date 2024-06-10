@@ -8,7 +8,7 @@ namespace openfhe
 EvalKeyDCRTPoly::EvalKeyDCRTPoly(std::shared_ptr<EvalKeyImpl>&& evalKey) noexcept
     : m_evalKey(std::move(evalKey))
 { }
-std::shared_ptr<EvalKeyImpl> EvalKeyDCRTPoly::GetInternal() const noexcept
+const std::shared_ptr<EvalKeyImpl>& EvalKeyDCRTPoly::GetRef() const noexcept
 {
     return m_evalKey;
 }

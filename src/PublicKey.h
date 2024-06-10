@@ -19,9 +19,8 @@ public:
     PublicKeyDCRTPoly& operator=(const PublicKeyDCRTPoly&) = delete;
     PublicKeyDCRTPoly& operator=(PublicKeyDCRTPoly&&) = delete;
 
-    [[nodiscard]] std::shared_ptr<PublicKeyImpl> GetInternal() const noexcept;
-    [[nodiscard]] std::shared_ptr<PublicKeyImpl>& GetRef() noexcept;
     [[nodiscard]] const std::shared_ptr<PublicKeyImpl>& GetRef() const noexcept;
+    [[nodiscard]] std::shared_ptr<PublicKeyImpl>& GetRef() noexcept;
 };
 
 // Generator functions

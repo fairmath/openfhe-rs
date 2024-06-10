@@ -17,7 +17,7 @@ public:
     LWEPrivateKey& operator=(const LWEPrivateKey&) = delete;
     LWEPrivateKey& operator=(LWEPrivateKey&&) = delete;
 
-    [[nodiscard]] std::shared_ptr<LWEPrivateKeyImpl> GetInternal() const noexcept;
+    [[nodiscard]] const std::shared_ptr<LWEPrivateKeyImpl>& GetRef() const noexcept;
 };
 
 } // openfhe

@@ -10,15 +10,6 @@ namespace openfhe
 Plaintext::Plaintext(std::shared_ptr<PlaintextImpl>&& plaintext) noexcept
     : m_plaintext(std::move(plaintext))
 { }
-Plaintext& Plaintext::operator=(std::shared_ptr<PlaintextImpl>&& plaintext) noexcept
-{
-    m_plaintext = std::move(plaintext);
-    return *this;
-}
-std::shared_ptr<PlaintextImpl> Plaintext::GetInternal() const noexcept
-{
-    return m_plaintext;
-}
 void Plaintext::SetLength(const size_t newSize) const
 {
     m_plaintext->SetLength(newSize);
@@ -135,6 +126,14 @@ const std::vector<int64_t>& Plaintext::GetCoefPackedValue() const
 const std::string& Plaintext::GetStringValue() const
 {
     return m_plaintext->GetStringValue();
+}
+const std::shared_ptr<PlaintextImpl>& Plaintext::GetRef() const noexcept
+{
+    return m_plaintext;
+}
+std::shared_ptr<PlaintextImpl>& Plaintext::GetRef() noexcept
+{
+    return m_plaintext;
 }
 
 // Generator functions

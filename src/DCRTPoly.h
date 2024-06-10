@@ -27,7 +27,7 @@ public:
     DCRTPolyParams& operator=(const DCRTPolyParams&) = delete;
     DCRTPolyParams& operator=(DCRTPolyParams&&) = delete;
 
-    [[nodiscard]] std::shared_ptr<lbcrypto::DCRTPoly::Params> GetInternal() const noexcept;
+    [[nodiscard]] const std::shared_ptr<lbcrypto::DCRTPoly::Params>& GetRef() const noexcept;
 };
 
 // Generator functions

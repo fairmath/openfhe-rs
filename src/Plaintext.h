@@ -24,9 +24,7 @@ public:
     Plaintext(Plaintext&&) = delete;
     Plaintext& operator=(const Plaintext&) = delete;
     Plaintext& operator=(Plaintext&&) = delete;
-    Plaintext& operator=(std::shared_ptr<PlaintextImpl>&& plaintext) noexcept;
 
-    [[nodiscard]] std::shared_ptr<PlaintextImpl> GetInternal() const noexcept;
     void SetLength(const size_t newSize) const;
     void SetLevel(const size_t l) const noexcept;
     [[nodiscard]] bool IsEncoded() const noexcept;
@@ -49,12 +47,13 @@ public:
     void SetScalingFactor(const double sf) const noexcept;
     void SetSlots(const uint32_t s) const noexcept;
     void SetStringValue(const std::string& value) const;
-
     [[nodiscard]] std::unique_ptr<std::vector<ComplexPair>> GetCopyOfCKKSPackedValue() const;
     [[nodiscard]] const std::vector<int64_t>& GetPackedValue() const;
     [[nodiscard]] std::unique_ptr<std::vector<double>> GetRealPackedValue() const;
     [[nodiscard]] const std::vector<int64_t>& GetCoefPackedValue() const;
     [[nodiscard]] const std::string& GetStringValue() const;
+    [[nodiscard]] const std::shared_ptr<PlaintextImpl>& GetRef() const noexcept;
+    [[nodiscard]] std::shared_ptr<PlaintextImpl>& GetRef() noexcept;
 };
 
 // Generator functions

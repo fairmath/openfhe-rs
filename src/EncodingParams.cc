@@ -8,7 +8,7 @@ namespace openfhe
 EncodingParams::EncodingParams(const std::shared_ptr<EncodingParamsImpl>& encodingParams) noexcept
     : m_encodingParams(encodingParams)
 { }
-std::shared_ptr<EncodingParamsImpl> EncodingParams::GetInternal() const noexcept
+const std::shared_ptr<EncodingParamsImpl>& EncodingParams::GetRef() const noexcept
 {
     return m_encodingParams;
 }

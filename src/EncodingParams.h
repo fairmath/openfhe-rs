@@ -24,7 +24,7 @@ public:
     EncodingParams& operator=(const EncodingParams&) = delete;
     EncodingParams& operator=(EncodingParams&&) = delete;
 
-    [[nodiscard]] std::shared_ptr<EncodingParamsImpl> GetInternal() const noexcept;
+    [[nodiscard]] const std::shared_ptr<EncodingParamsImpl>& GetRef() const noexcept;
 };
 
 } // openfhe

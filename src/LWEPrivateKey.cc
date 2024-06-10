@@ -8,7 +8,7 @@ namespace openfhe
 LWEPrivateKey::LWEPrivateKey(std::shared_ptr<LWEPrivateKeyImpl>&& lwePrivateKey) noexcept
     : m_lwePrivateKey(std::move(lwePrivateKey))
 { }
-std::shared_ptr<LWEPrivateKeyImpl> LWEPrivateKey::GetInternal() const noexcept
+const std::shared_ptr<LWEPrivateKeyImpl>& LWEPrivateKey::GetRef() const noexcept
 {
     return m_lwePrivateKey;
 }
