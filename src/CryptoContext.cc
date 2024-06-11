@@ -863,14 +863,16 @@ std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalAddManyInPlace(
     return std::make_unique<CiphertextDCRTPoly>(m_cryptoContextImplSharedPtr->EvalAddManyInPlace(
         ciphertextVec.GetRef()));
 }
-std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalLinearWSumMutable(
+std::unique_ptr<CiphertextDCRTPoly>
+    CryptoContextDCRTPoly::EvalLinearWSumMutableByVectorOfCiphertextsAndConstants(
     VectorOfCiphertexts& ciphertextVec, const std::vector<double>& constantsVec) const
 {
     return std::make_unique<CiphertextDCRTPoly>(
         m_cryptoContextImplSharedPtr->EvalLinearWSumMutable(ciphertextVec.GetRef(),
         constantsVec));
 }
-std::unique_ptr<CiphertextDCRTPoly> CryptoContextDCRTPoly::EvalLinearWSumMutable(
+std::unique_ptr<CiphertextDCRTPoly>
+    CryptoContextDCRTPoly::EvalLinearWSumMutableByConstantsAndVectorOfCiphertexts(
     const std::vector<double>& constantsVec, VectorOfCiphertexts& ciphertextVec) const
 {
     return std::make_unique<CiphertextDCRTPoly>(

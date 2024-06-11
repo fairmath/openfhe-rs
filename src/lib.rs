@@ -285,6 +285,9 @@ pub mod ffi
                                                   ciphertext: Pin<&mut CiphertextDCRTPoly>);
         fn EvalAddMany(self: &CryptoContextDCRTPoly, ciphertextVec: &VectorOfCiphertexts)
                        -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalAddManyInPlace(self: &CryptoContextDCRTPoly,
+                              ciphertextVec: Pin<&mut VectorOfCiphertexts>)
+                              -> UniquePtr<CiphertextDCRTPoly>;
         fn EvalAddMutableByCiphertextAndPlaintext(self: &CryptoContextDCRTPoly,
                                                   ciphertext: Pin<&mut CiphertextDCRTPoly>,
                                                   plaintext: &Plaintext)
@@ -378,6 +381,16 @@ pub mod ffi
                                                     ciphertext: &CiphertextDCRTPoly,
                                                     batchSize: u32)
                                                     -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalLinearWSumMutableByConstantsAndVectorOfCiphertexts(self: &CryptoContextDCRTPoly,
+                                                                  constantsVec: &CxxVector<f64>,
+                                                                  ciphertextVec:
+                                                                  Pin<&mut VectorOfCiphertexts>)
+                                                                  -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalLinearWSumMutableByVectorOfCiphertextsAndConstants(self: &CryptoContextDCRTPoly,
+                                                                  ciphertextVec:
+                                                                  Pin<&mut VectorOfCiphertexts>,
+                                                                  constantsVec: &CxxVector<f64>)
+                                                                  -> UniquePtr<CiphertextDCRTPoly>;
         fn EvalLogistic(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly, a: f64,
                         b: f64, degree: u32) -> UniquePtr<CiphertextDCRTPoly>;
         fn EvalMaxSchemeSwitching(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly,
@@ -462,9 +475,11 @@ pub mod ffi
         fn EvalSin(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly, a: f64, b: f64,
                    degree: u32) -> UniquePtr<CiphertextDCRTPoly>;
         fn EvalSquare(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly)
-                      -> UniquePtr<CiphertextDCRTPoly>; // OK
-        fn EvalSquareInPlace(self: &CryptoContextDCRTPoly, ciphertext: Pin<&mut CiphertextDCRTPoly>);
-        fn EvalSquareMutable(self: &CryptoContextDCRTPoly, ciphertext: Pin<&mut CiphertextDCRTPoly>)
+                      -> UniquePtr<CiphertextDCRTPoly>;
+        fn EvalSquareInPlace(self: &CryptoContextDCRTPoly,
+                             ciphertext: Pin<&mut CiphertextDCRTPoly>);
+        fn EvalSquareMutable(self: &CryptoContextDCRTPoly,
+                             ciphertext: Pin<&mut CiphertextDCRTPoly>)
                              -> UniquePtr<CiphertextDCRTPoly>;
         fn EvalSubByCiphertextAndConst(self: &CryptoContextDCRTPoly,
                                        ciphertext: &CiphertextDCRTPoly, constant: f64)
