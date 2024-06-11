@@ -38,7 +38,7 @@ class VectorOfEvalKeys final
 {
     std::vector<std::shared_ptr<EvalKeyImpl>> m_evalKeys;
 public:
-    VectorOfEvalKeys(std::vector<std::shared_ptr<EvalKeyImpl>> evalKeys);
+    explicit VectorOfEvalKeys(std::vector<std::shared_ptr<EvalKeyImpl>> evalKeys);
 
     [[nodiscard]] const std::vector<std::shared_ptr<EvalKeyImpl>>& GetRef() const noexcept;
 };

@@ -52,6 +52,7 @@ public:
     [[nodiscard]] std::unique_ptr<std::vector<double>> GetRealPackedValue() const;
     [[nodiscard]] const std::vector<int64_t>& GetCoefPackedValue() const;
     [[nodiscard]] const std::string& GetStringValue() const;
+
     [[nodiscard]] const std::shared_ptr<PlaintextImpl>& GetRef() const noexcept;
     [[nodiscard]] std::shared_ptr<PlaintextImpl>& GetRef() noexcept;
 };

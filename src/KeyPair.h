@@ -25,6 +25,7 @@ public:
 
     [[nodiscard]] std::unique_ptr<PrivateKeyDCRTPoly> GetPrivateKey() const;
     [[nodiscard]] std::unique_ptr<PublicKeyDCRTPoly> GetPublicKey() const;
+
     [[nodiscard]] const KeyPair& GetRef() const noexcept;
 };
 

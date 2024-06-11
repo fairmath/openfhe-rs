@@ -13,9 +13,9 @@ namespace lbcrypto
 template <typename T>
 class CCParams;
 
-class CryptoContextCKKSRNS;
 class CryptoContextBFVRNS;
 class CryptoContextBGVRNS;
+class CryptoContextCKKSRNS;
 class Params;
 
 } // lbcrypto
@@ -62,9 +62,9 @@ class CryptoContextDCRTPoly final
     std::shared_ptr<CryptoContextImpl> m_cryptoContextImplSharedPtr;
 public:
     CryptoContextDCRTPoly() = default;
-    explicit CryptoContextDCRTPoly(const ParamsCKKSRNS& params);
     explicit CryptoContextDCRTPoly(const ParamsBFVRNS& params);
     explicit CryptoContextDCRTPoly(const ParamsBGVRNS& params);
+    explicit CryptoContextDCRTPoly(const ParamsCKKSRNS& params);
     CryptoContextDCRTPoly(const CryptoContextDCRTPoly&) = delete;
     CryptoContextDCRTPoly(CryptoContextDCRTPoly&&) = delete;
     CryptoContextDCRTPoly& operator=(const CryptoContextDCRTPoly&) = delete;
@@ -472,12 +472,12 @@ void DCRTPolyInsertEvalSumKey(const MapFromIndexToEvalKey& mapToInsert,
     const std::string& keyTag /* "" */);
 
 // Generator functions
-[[nodiscard]] std::unique_ptr<CryptoContextDCRTPoly> DCRTPolyGenCryptoContextByParamsCKKSRNS(
-    const ParamsCKKSRNS& params);
 [[nodiscard]] std::unique_ptr<CryptoContextDCRTPoly> DCRTPolyGenCryptoContextByParamsBFVRNS(
     const ParamsBFVRNS& params);
 [[nodiscard]] std::unique_ptr<CryptoContextDCRTPoly> DCRTPolyGenCryptoContextByParamsBGVRNS(
     const ParamsBGVRNS& params);
+[[nodiscard]] std::unique_ptr<CryptoContextDCRTPoly> DCRTPolyGenCryptoContextByParamsCKKSRNS(
+    const ParamsCKKSRNS& params);
 [[nodiscard]] std::unique_ptr<CryptoContextDCRTPoly> DCRTPolyGenNullCryptoContext();
 
 } // openfhe
