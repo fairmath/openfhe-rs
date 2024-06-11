@@ -517,7 +517,7 @@ pub mod ffi
                                                   -> UniquePtr<CiphertextDCRTPoly>;
         fn EvalSubMutableInPlace(self: &CryptoContextDCRTPoly,
                                  ciphertext1: Pin<&mut CiphertextDCRTPoly>,
-                                 ciphertext2: Pin<&mut CiphertextDCRTPoly>);   
+                                 ciphertext2: Pin<&mut CiphertextDCRTPoly>);
         fn EvalSum(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly, batchSize: u32)
                    -> UniquePtr<CiphertextDCRTPoly>;
         fn EvalSumCols(self: &CryptoContextDCRTPoly, ciphertext: &CiphertextDCRTPoly, rowSize: u32,

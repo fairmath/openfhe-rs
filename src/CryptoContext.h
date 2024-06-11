@@ -62,9 +62,9 @@ class CryptoContextDCRTPoly final
     std::shared_ptr<CryptoContextImpl> m_cryptoContextImplSharedPtr;
 public:
     CryptoContextDCRTPoly() = default;
+    explicit CryptoContextDCRTPoly(const ParamsCKKSRNS& params);
     explicit CryptoContextDCRTPoly(const ParamsBFVRNS& params);
     explicit CryptoContextDCRTPoly(const ParamsBGVRNS& params);
-    explicit CryptoContextDCRTPoly(const ParamsCKKSRNS& params);
     CryptoContextDCRTPoly(const CryptoContextDCRTPoly&) = delete;
     CryptoContextDCRTPoly(CryptoContextDCRTPoly&&) = delete;
     CryptoContextDCRTPoly& operator=(const CryptoContextDCRTPoly&) = delete;
@@ -437,15 +437,15 @@ public:
 };
 
 // cxx currently does not support static class methods
+void DCRTPolyClearEvalAutomorphismKeys();
+void DCRTPolyClearEvalAutomorphismKeysByCryptoContext(const CryptoContextDCRTPoly& cryptoContext);
+void DCRTPolyClearEvalAutomorphismKeysById(const std::string& id);
 void DCRTPolyClearEvalMultKeys();
 void DCRTPolyClearEvalMultKeysByCryptoContext(const CryptoContextDCRTPoly& cryptoContext);
 void DCRTPolyClearEvalMultKeysById(const std::string& id);
 void DCRTPolyClearEvalSumKeys();
 void DCRTPolyClearEvalSumKeysByCryptoContext(const CryptoContextDCRTPoly& cryptoContext);
 void DCRTPolyClearEvalSumKeysById(const std::string& id);
-void DCRTPolyClearEvalAutomorphismKeys();
-void DCRTPolyClearEvalAutomorphismKeysByCryptoContext(const CryptoContextDCRTPoly& cryptoContext);
-void DCRTPolyClearEvalAutomorphismKeysById(const std::string& id);
 [[nodiscard]] std::unique_ptr<MapFromStringToMapFromIndexToEvalKey>
     DCRTPolyGetCopyOfAllEvalAutomorphismKeys();
 [[nodiscard]] std::unique_ptr<MapFromStringToVectorOfEvalKeys> DCRTPolyGetCopyOfAllEvalMultKeys();
