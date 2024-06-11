@@ -52,7 +52,7 @@ cd openfhe-development
 2. Configure CMake
 
 ```bash
-cmake -B ${OPENFHE_BUILD:-build} -DBUILD_EXAMPLES=ON -DBUILD_EXTRAS=ON -DBUILD_SHARED=ON .       
+cmake -B ${OPENFHE_BUILD:-build} -DBUILD_SHARED=ON .       
 ```
 
 3. Build and install the C++ OpenFHE library
