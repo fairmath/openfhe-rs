@@ -45,8 +45,8 @@ Build and install OpenFHE library. Right now you need to use the Fair Math fork.
 1. Clone the repository
 
 ```bash
-git clone https://github.com/fairmath/openfhe.git
-cd openfhe
+git clone https://github.com/openfheorg/openfhe-development.git
+cd openfhe-development
 ```
 
 2. Configure CMake
