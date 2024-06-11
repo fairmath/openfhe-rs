@@ -1,86 +1,111 @@
 # About OpenFHE-rs
-☀️ *OpenFHE-rs is a joint project by [FairMath](https://fairmath.xyz/) & [OpenFHE](https://www.openfhe.org/)*
+
+☀️ *OpenFHE-rs is a joint project by [FairMath](https://fairmath.xyz/) & [OpenFHE](https://www.openfhe.org/).*
 
 ---
 [![Discord](https://img.shields.io/discord/1163764915803279360?logo=discord&label=Fair%20Math)](https://discord.com/invite/NfhXwyr9M5)
 [![Twitter](https://img.shields.io/twitter/follow/FairMath)](https://twitter.com/FairMath)
 
-OpenFHE-rs is a Rust interface for the OpenFHE library. OpenFHE is known for its wide range of Fully Homomorphic Encryption (FHE) schemes, 
-all implemented in C++. We're bringing this capability to Rust developers.
+🔔 *Keep in mind that the library is WIP and may contain some unpolished interfaces. If you encounter any issues or have any suggestions, feel free to ping us on our Discord server or open a new issue in the [GitHub repository](https://github.com/fairmath/openfhe-rs/tree/master).*
 
-By offering a Rust wrapper for OpenFHE, we make it easier for Rust devs to use advanced FHE schemes in their projects. 
-Whether you're building secure data processing apps or privacy-focused tools, OpenFHE-rs helps you do that with the power of OpenFHE's encryption technology.
+---
 
-# Current status
+OpenFHE-rs is a Rust interface for the OpenFHE library, which is renowned for its comprehensive suite of Fully Homomorphic Encryption (FHE) schemes, 
+all implemented in C++.
+By providing a Rust wrapper for OpenFHE, we aim to make these advanced FHE capabilities easily accessible to Rust developers.
 
-The library is under development and the ETA of the first version is set to Q2 2024.
+Whether you're developing secure data processing applications or privacy-focused tools, OpenFHE-rs enables you to leverage the powerful encryption technologies of OpenFHE seamlessly within your Rust projects.
 
-# Installation from source
+# Installation
 
-## Install Dependencies
-    
-* CMake >= 3.5.1
-* Clang >= 12.0 or GCC >= 11.4
-* Rust >= 1.78
-* Git
+To use OpenFHE-rs, you'll need to install several dependencies and follow the installation steps for both the core OpenFHE library and the Rust crate.
+
+## Prerequisites
+
+Ensure you have the following dependencies installed:
+
+* `CMake >= 3.5.1`
+* `Clang >= 12.0` or `GCC >= 11.4`
+* `Rust >= 1.78`
+* `Git`
 
 ### Unix
 
-On Debian systems, everything can be installed with the following command:
+On Debian-based systems, you can install the necessary dependencies using:
 
 ```bash
 sudo apt install build-essential libssl-dev cmake clang git
 ```
 
 ## Installation process
+### Core OpenFHE library installation
 
-1. Build and install OpenFHE library. Right now you need to use the Fair Math fork. It contains the required features, which will be included in the next planned release (v1.1.5):
+To build and install the OpenFHE library, follow the steps from the [OpenFHE's installation documentation](https://openfhe-development.readthedocs.io/en/latest/sphinx_rsts/intro/installation/installation.html).
 
-   1. Clone the repository
+## Configuring your project to use the crate
 
-   ```bash
-   git clone https://github.com/fairmath/openfhe.git
-   cd openfhe
-   ```
+To use the OpenFHE crate in your Rust project, add it as a dependency from [crates.io](https://crates.io/crates/openfhe):
 
-   2. Configure CMake
+```bash
+cargo add openfhe
+```
 
-   ```bash
-   cmake -B ${OPENFHE_BUILD:-build} -DBUILD_EXAMPLES=ON -DBUILD_EXTRAS=ON -DBUILD_SHARED=ON .       
-   ```
+You also need to add a small piece of code for the core dependencies' configuration in your `build.rs` file:
 
-   3. Build and install the C++ OpenFHE library
+```rs
+fn main
+{
+    // linking openFHE
+    println!("cargo::rustc-link-arg=-L/usr/local/lib");
+    println!("cargo::rustc-link-arg=-lOPENFHEpke");
+    println!("cargo::rustc-link-arg=-lOPENFHEbinfhe");
+    println!("cargo::rustc-link-arg=-lOPENFHEcore");
+    // linking OpenMP
+    println!("cargo::rustc-link-arg=-fopenmp");
+    // necessary to avoid LD_LIBRARY_PATH
+    println!("cargo::rustc-link-arg=-Wl,-rpath=/usr/local/lib");
+}
+```
 
-   ```bash
-   make -C ${OPENFHE_BUILD:-build} -j$(nproc)
-   make -C ${OPENFHE_BUILD:-build} install
-   ```
+### Template repository
 
-   4. Configure your dynamic linker
+Instead of doing it manually, you can start your project by forking our [template repository](https://github.com/fairmath/openfhe-rs-template/tree/main).
 
-   ```bash
-   sudo ldconfig
-   ```
-2. Make sure you have [rustc](https://www.rust-lang.org/tools/install) with `cargo` installed first.
+# Custom crate installation from the source
 
-3. Clone the Fair Math [openfhe-rs](https://github.com/fairmath/openfhe-rs) repo to your local machine and build:
-   1. Clone the repository
-   ```bash
-   git clone https://github.com/fairmath/openfhe-rs.git
-   cd openfhe-rs
-   ```
+You can adjust the installation process by building the crate manually.
+In that case, you need to clone the Fair Math's [openfhe-rs](https://github.com/fairmath/openfhe-rs) repo to your local machine and build it:
 
-   2. Build the library
-   ```bash
-   cargo build
-   ```
+1. Clone the repository
+```bash
+git clone https://github.com/fairmath/openfhe-rs.git
+cd openfhe-rs
+```
 
-   3. Run tests
-   ```bash
-   cargo test -- --test-threads=1
-   ```
+2. Build the library
+```bash
+cargo build
+```
 
-   4. Run the examples
-   ```bash
-   cargo run --example polynomial_evaluation
-   ```
+3. Run tests
+```bash
+cargo test -- --test-threads=1
+```
+
+4. Run the examples
+```bash
+cargo run --example function_evaluation
+cargo run --example polynomial_evaluation
+cargo run --example simple_integers
+cargo run --example simple_real_integers
+```
+
+# Contributing
+
+Contributions are always welcome!
+If you find bugs, have feature requests, or want to contribute code, please open an issue or pull request on the [GitHub repository](https://github.com/fairmath/openfhe-rs/tree/master).
+
+# License
+
+`OpenFHE-rs` is licensed under the **BSD 2-Clause License**.
+See the [LICENSE](LICENSE) file for more details.
