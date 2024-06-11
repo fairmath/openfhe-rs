@@ -42,6 +42,34 @@ sudo apt install build-essential libssl-dev cmake clang git
 
 To build and install the OpenFHE library, follow the steps from the [OpenFHE's installation documentation](https://openfhe-development.readthedocs.io/en/latest/sphinx_rsts/intro/installation/installation.html).
 
+Basically, what you need to do is:
+
+1. Clone the repository `openfhe-development`
+
+```bash
+git clone https://github.com/openfheorg/openfhe-development.git
+cd openfhe-development
+```
+
+2. Configure CMake
+
+```bash
+cmake -B ${OPENFHE_BUILD:-build} -DBUILD_SHARED=ON .       
+```
+
+3. Build and install the C++ OpenFHE library
+
+```bash
+make -C ${OPENFHE_BUILD:-build} -j$(nproc)
+make -C ${OPENFHE_BUILD:-build} install
+```
+
+4. Configure your dynamic linker
+
+```bash
+sudo ldconfig
+```
+
 ## Configuring your project to use the crate
 
 To use the OpenFHE crate in your Rust project, add it as a dependency from [crates.io](https://crates.io/crates/openfhe):
