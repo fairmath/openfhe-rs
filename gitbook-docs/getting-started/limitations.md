@@ -8,6 +8,7 @@ description:
 See the [Security Notes for Homomorphic Encryption](https://openfhe-development.readthedocs.io/en/latest/sphinx_rsts/intro/security.html) in OpenFHE's documentation.
 
 ## Rust wrapper
+
 The library is WIP and may contain some unpolished interfaces. If you struggle with anything or have suggestions, feel free to ping us on our Discord server or open a new issue in the [Github repository](https://github.com/fairmath/openfhe-rs/tree/master). 
 
 At the moment, only a certain set of OpenFHE functionality has been implemented.

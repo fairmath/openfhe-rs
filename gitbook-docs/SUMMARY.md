@@ -8,7 +8,7 @@
 
 ## OpenFHE-rs
 
-* Getting started
+* [Getting started](getting-started/intro.md)
     * [Limitations](getting-started/limitations.md)
     <!-- * [Toolchain](getting-started/toolchain-architecture.md) -->
     * [Base types and algorithms](getting-started/base-types-and-algorithms.md)
