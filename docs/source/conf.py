@@ -2,9 +2,9 @@
 
 # -- Project information
 
-project = 'Lumache'
-copyright = '2021, Graziella'
-author = 'Graziella'
+project = 'OpenFHE-rs'
+copyright = '2024, Fair Math'
+author = 'Fair Math'
 
 release = '0.1'
 version = '0.1.0'
