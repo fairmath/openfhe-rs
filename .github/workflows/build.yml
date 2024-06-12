@@ -13,10 +13,6 @@ jobs:
       - name: Clone Git repository
         uses: actions/checkout@v4
 
-      - name: Install g++
-        run: |
-          sudo apt-get install -y g++
-
       - name: Install Cmake
         run: |
           sudo apt update
@@ -26,10 +22,10 @@ jobs:
         run: |
           git clone https://github.com/openfheorg/openfhe-development.git
           cd openfhe-development
-          cmake -B ${OPENFHE_BUILD:-build} -DBUILD_SHARED=ON .
+          mkdir install
+          cmake -B ${OPENFHE_BUILD:-build} -DBUILD_SHARED=ON -DCMAKE_INSTALL_PREFIX=`pwd`/install .
           make -C ${OPENFHE_BUILD:-build} -j$(nproc)
           make -C ${OPENFHE_BUILD:-build} install
-          sudo ldconfig
 
       - name: Install Rust
         uses: dtolnay/rust-toolchain@stable
@@ -38,16 +34,16 @@ jobs:
 
       - name: Build openfhe-rs
         run: |
-          cargo build
+          cargo build --verbose
 
       - name: Test openfhe-rs
         run: |
-          cargo test -- --test-threads=1
+          LD_LIBRARY_PATH=`pwd`/openfhe-development/install/lib cargo test -- --test-threads=1
 
       - name: Examples openfhe-rs
-        run: |
-          cargo run --example polynomial_evaluation
-          cargo run --example function_evaluation
-          cargo run --example simple_integers
-          cargo run --example simple_real_numbers
+        run: | 
+          LD_LIBRARY_PATH=`pwd`/openfhe-development/install/lib cargo run --example polynomial_evaluation
+          LD_LIBRARY_PATH=`pwd`/openfhe-development/install/lib cargo run --example function_evaluation
+          LD_LIBRARY_PATH=`pwd`/openfhe-development/install/lib cargo run --example simple_integers
+          LD_LIBRARY_PATH=`pwd`/openfhe-development/install/lib cargo run --example simple_real_numbers
 
