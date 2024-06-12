@@ -141,5 +141,5 @@ Contributions are always welcome! If you find bugs, have feature requests, or wa
 License
 =======
 
-`OpenFHE-rs` is licensed under the **BSD 2-Clause License**. See the `LICENSE <LICENSE>`_ file for more details.
+`OpenFHE-rs` is licensed under the **BSD 2-Clause License**. See the `LICENSE <https://github.com/fairmath/openfhe-rs/blob/master/LICENSE>`_ file for more details.
 
