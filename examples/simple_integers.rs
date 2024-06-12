@@ -2,11 +2,11 @@ use openfhe::cxx::{CxxVector};
 use openfhe::ffi as ffi;
 
 // A simple example showing homomorphic additions, multiplications, and rotations
-// for vectors of integers using BFVrns3
+// for vectors of integers using BFVrns
 
 fn main()
 {
-    // Generate parameters for BFVrns3 scheme
+    // Generate parameters for BFVrns scheme
     let mut _cc_params_bfvrns = ffi::GenParamsBFVRNS();
     _cc_params_bfvrns.pin_mut().SetPlaintextModulus(65537);
     _cc_params_bfvrns.pin_mut().SetMultiplicativeDepth(2);

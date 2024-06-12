@@ -1,6 +1,7 @@
 # Plaintext
 
-This document provides an API reference for the `Plaintext` class, which is a part of the `openfhe` namespace. The `Plaintext` class is a final class that provides various methods to manipulate and query plaintext data.
+This document provides an API reference for the `Plaintext` class, which is a part of the `openfhe` namespace.
+The `Plaintext` class is a final class that provides various methods to manipulate and query plaintext data.
 
 ## Member functions
 ### Constructors and assignment operators
@@ -61,18 +62,43 @@ namespace openfhe
 
 ## Usage example
 
-Here is a simple usage example in Rust:
+Here is a usage example in Rust:
 
 ```rust
-use openfhe::Plaintext;
+use openfhe::cxx::{CxxVector};
+use openfhe::ffi as ffi;
 
-fn main() {
-    let plaintext = Plaintext::new();
-    plaintext.set_length(128);
-    if plaintext.is_encoded() {
-        println!("Plaintext is encoded.");
-    } else {
-        println!("Plaintext is not encoded.");
-    }
+fn main()
+{
+    // Generate parameters for BFVrns scheme
+    let mut _cc_params_bfvrns = ffi::GenParamsBFVRNS();
+    _cc_params_bfvrns.pin_mut().SetPlaintextModulus(65537);
+    _cc_params_bfvrns.pin_mut().SetMultiplicativeDepth(2);
+
+    // Generate crypto context based on those parameters
+    let _cc = ffi::GenCryptoContextByParamsBFVRNS(&_cc_params_bfvrns);
+    _cc.Enable(ffi::PKESchemeFeature::PKE);
+    _cc.Enable(ffi::PKESchemeFeature::KEYSWITCH);
+    _cc.Enable(ffi::PKESchemeFeature::LEVELEDSHE);
+
+    // Create plaintext vectors
+    let mut _vector_of_ints_1 = CxxVector::<i64>::new();
+    _vector_of_ints_1.pin_mut().push(1);
+    _vector_of_ints_1.pin_mut().push(2);
+    _vector_of_ints_1.pin_mut().push(3);
+    _vector_of_ints_1.pin_mut().push(4);
+    _vector_of_ints_1.pin_mut().push(5);
+    _vector_of_ints_1.pin_mut().push(6);
+    _vector_of_ints_1.pin_mut().push(7);
+    _vector_of_ints_1.pin_mut().push(8);
+    _vector_of_ints_1.pin_mut().push(9);
+    _vector_of_ints_1.pin_mut().push(10);
+    _vector_of_ints_1.pin_mut().push(11);
+    _vector_of_ints_1.pin_mut().push(12);
+
+    // Making a packed plaintext
+    let _plain_text_1 = _cc.MakePackedPlaintext(&_vector_of_ints_1, 1, 0);
+
+    println!("Plaintext #1: {}", _plain_text_1.GetString());
 }
 ```
