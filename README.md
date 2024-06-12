@@ -40,8 +40,6 @@ sudo apt install build-essential libssl-dev cmake clang git
 
 ### Core OpenFHE library installation
 
-Build and install OpenFHE library. Right now you need to use the Fair Math fork. It contains the required features, which will be included in the next planned release (v1.1.5):
-
 1. Clone the repository
 
 ```bash
@@ -62,7 +60,7 @@ make -C ${OPENFHE_BUILD:-build} -j$(nproc)
 make -C ${OPENFHE_BUILD:-build} install
 ```
 
-4. Configure your dynamic linker
+4. Update the cache for the linker
 
 ```bash
 sudo ldconfig
