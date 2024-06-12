@@ -1,44 +1,46 @@
 # About OpenFHE-rs
-☀️ *OpenFHE-rs is a joint project by [FairMath](https://fairmath.xyz/) & [OpenFHE](https://www.openfhe.org/)*
+
+☀️ *OpenFHE-rs is a joint project by [FairMath](https://fairmath.xyz/) & [OpenFHE](https://www.openfhe.org/).*
 
 ---
 [![Discord](https://img.shields.io/discord/1163764915803279360?logo=discord&label=Fair%20Math)](https://discord.com/invite/NfhXwyr9M5)
 [![Twitter](https://img.shields.io/twitter/follow/FairMath)](https://twitter.com/FairMath)
 
-🔔 *Keep in mind that the library is WIP and may contain some unpolished interfaces. If you struggle with anything or have suggestions, feel free to ping us on our Discord server or open a new issue in the [Github repository](https://github.com/fairmath/openfhe-rs/tree/master).*
+🔔 *Keep in mind that the library is WIP and may contain some unpolished interfaces. If you encounter any issues or have any suggestions, feel free to ping us on our Discord server or open a new issue in the [GitHub repository](https://github.com/fairmath/openfhe-rs/tree/master).*
 
 ---
 
-OpenFHE-rs is a Rust interface for the OpenFHE library. OpenFHE is known for its wide range of Fully Homomorphic Encryption (FHE) schemes, 
-all implemented in C++. We're bringing this capability to Rust developers.
+OpenFHE-rs is a Rust interface for the OpenFHE library, which is renowned for its comprehensive suite of Fully Homomorphic Encryption (FHE) schemes,
+all implemented in C++.
+By providing a Rust wrapper for OpenFHE, we aim to make these advanced FHE capabilities easily accessible to Rust developers.
 
-By offering a Rust wrapper for OpenFHE, we make it easier for Rust devs to use advanced FHE schemes in their projects. 
-Whether you're building secure data processing apps or privacy-focused tools, OpenFHE-rs helps you do that with the power of OpenFHE's encryption technology.
+Whether you're developing secure data processing applications or privacy-focused tools, OpenFHE-rs enables you to leverage the powerful encryption technologies of OpenFHE seamlessly within your Rust projects.
 
 # Installation
 
-You can use this library as a cargo crate from [crates.io](https://crates.io/crates/openfhe) or build it from the source.
+To use OpenFHE-rs, you'll need to install several dependencies and follow the installation steps for both the core OpenFHE library and the Rust crate.
 
-In both cases you need to have the core OpenFHE library installed on your system to support the low-level optimizations.
-
-## Install dependencies
+## Prerequisites
     
-* CMake >= 3.5.1
-* Clang >= 12.0 or GCC >= 11.4
-* Rust >= 1.78
-* Git
+Ensure you have the following dependencies installed:
+
+* `CMake >= 3.5.1`
+* `Clang >= 12.0` or `GCC >= 11.4`
+* `Rust >= 1.78`
+* `Git`
 
 ### Unix
 
-On Debian systems, everything can be installed with the following command:
+On Debian-based systems, you can install the necessary dependencies using:
 
 ```bash
 sudo apt install build-essential libssl-dev cmake clang git
 ```
 
 ## Installation process
-
 ### Core OpenFHE library installation
+
+To build and install the OpenFHE library, follow the steps below or refer to [OpenFHE's installation documentation](https://openfhe-development.readthedocs.io/en/latest/sphinx_rsts/intro/installation/installation.html).
 
 1. Clone the repository
 
@@ -68,13 +70,13 @@ sudo ldconfig
 
 ## Configuring your project to use the crate
 
-To get the cargo crate from [crates.io](https://crates.io/crates/openfhe), you need to add it as a dependency to you project:
+To use the OpenFHE crate in your Rust project, add it as a dependency from [crates.io](https://crates.io/crates/openfhe):
 
 ```bash
 cargo add openfhe
 ```
 
-You also need to add a small piece of code for core dependencies configuration in your build.rs file:
+You also need to add a small piece of code for the core dependencies' configuration in your `build.rs` file:
 
 ```rs
 fn main
@@ -93,11 +95,12 @@ fn main
 
 ### Template repository
 
-Instead of doing it manually, you start your project by forking our [template repository](https://github.com/fairmath/openfhe-rs-template/tree/main).
+Instead of doing it manually, you can start your project by forking our [template repository](https://github.com/fairmath/openfhe-rs-template/tree/main).
 
-# Custom crate installation from source
+# Custom crate installation from the source
 
-You can adjust the installation process by building the crate mannually. In that case you need to clone the Fair Math [openfhe-rs](https://github.com/fairmath/openfhe-rs) repo to your local machine and build it:
+You can adjust the installation process by building the crate manually.
+In that case, you need to clone the Fair Math's [openfhe-rs](https://github.com/fairmath/openfhe-rs) repo to your local machine and build it:
 
 1. Clone the repository
 ```bash
@@ -117,5 +120,19 @@ cargo test -- --test-threads=1
 
 4. Run the examples
 ```bash
+cargo run --example function_evaluation
 cargo run --example polynomial_evaluation
+cargo run --example simple_integers
+cargo run --example simple_real_integers
 ```
+
+# Contributing
+
+Contributions are always welcome!
+If you find bugs, have feature requests, or want to contribute code, please open an issue or pull request on the [GitHub repository](https://github.com/fairmath/openfhe-rs/tree/master).
+
+# License
+
+`OpenFHE-rs` is licensed under the **BSD 2-Clause License**.
+See the [LICENSE](LICENSE) file for more details.
+
