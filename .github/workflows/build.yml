@@ -1,0 +1,53 @@
+name: openfhe-rs
+
+on: [push, pull_request]
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  openfhe-rs:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clone Git repository
+        uses: actions/checkout@v3
+
+      - name: Install g++
+        run: |
+          sudo apt-get install -y g++
+
+      - name: Install Cmake
+        run: |
+          sudo apt update
+          sudo apt-get install -y cmake
+
+      - name: Build and install OpenFHE
+        run: |
+          git clone https://github.com/openfheorg/openfhe-development.git
+          cd openfhe-development
+          cmake -B ${OPENFHE_BUILD:-build} -DBUILD_SHARED=ON .
+          make -C ${OPENFHE_BUILD:-build} -j$(nproc)
+          make -C ${OPENFHE_BUILD:-build} install
+          sudo ldconfig
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable-gnu
+
+      - name: Build openfhe-rs
+        run: |
+          cargo build
+
+      - name: Test openfhe-rs
+        run: |
+          cargo test -- --test-threads=1
+
+      - name: Examples openfhe-rs
+        run: |
+          cargo run --example polynomial_evaluation
+          cargo run --example function_evaluation
+          cargo run --example simple_integers
+          cargo run --example simple_real_numbers
+
