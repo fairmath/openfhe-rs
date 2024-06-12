@@ -23,12 +23,12 @@ fn main()
         .include("/usr/local/include/openfhe/core")
         .include("/usr/local/include/openfhe/pke")
         .include("/usr/local/include/openfhe/binfhe")
-        .include("./openfhe-development/install/include")
-        .include("./openfhe-development/install/include/openfhe")
-        .include("./openfhe-development/install/include/openfhe/third-party/include")
-        .include("./openfhe-development/install/include/openfhe/core")
-        .include("./openfhe-development/install/include/openfhe/pke")
-        .include("./openfhe-development/install/include/openfhe/binfhe")
+        .include("./openfhe-development/install/include") // GitHub Actions
+        .include("./openfhe-development/install/include/openfhe") // GitHub Actions
+        .include("./openfhe-development/install/include/openfhe/third-party/include") // GitHub Actions
+        .include("./openfhe-development/install/include/openfhe/core") // GitHub Actions
+        .include("./openfhe-development/install/include/openfhe/pke") // GitHub Actions
+        .include("./openfhe-development/install/include/openfhe/binfhe") // GitHub Actions
         .flag_if_supported("-std=c++17")
         .flag_if_supported("-Wall")
         .flag_if_supported("-Werror")
@@ -78,7 +78,7 @@ fn main()
 
     // linking openFHE
     println!("cargo::rustc-link-arg=-L/usr/local/lib");
-    println!("cargo::rustc-link-arg=-L./openfhe-development/install/lib");
+    println!("cargo::rustc-link-arg=-L./openfhe-development/install/lib"); // GitHub Actions
     println!("cargo::rustc-link-arg=-lOPENFHEpke");
     println!("cargo::rustc-link-arg=-lOPENFHEbinfhe");
     println!("cargo::rustc-link-arg=-lOPENFHEcore");
