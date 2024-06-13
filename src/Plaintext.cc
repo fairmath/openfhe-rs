@@ -117,7 +117,7 @@ const std::vector<int64_t>& Plaintext::GetPackedValue() const
 }
 std::unique_ptr<std::vector<double>>Plaintext::GetRealPackedValue() const
 {
-    return std::make_unique<std::vector<double>>(std::move(m_plaintext->GetRealPackedValue()));
+    return std::make_unique<std::vector<double>>(m_plaintext->GetRealPackedValue());
 }
 const std::vector<int64_t>& Plaintext::GetCoefPackedValue() const
 {
