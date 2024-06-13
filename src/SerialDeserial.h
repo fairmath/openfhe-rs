@@ -1,8 +1,8 @@
 #pragma once
 
-#include "bits/stringfwd.h"
-
 #include "SerialMode.h"
+
+#include <string>
 
 namespace openfhe
 {
