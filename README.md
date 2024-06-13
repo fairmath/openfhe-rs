@@ -25,17 +25,9 @@ To use OpenFHE-rs, you'll need to install several dependencies and follow the in
 Ensure you have the following dependencies installed:
 
 * `CMake >= 3.5.1`
-* `Clang >= 12.0` or `GCC >= 11.4`
+* `GCC >= 11.4`
 * `Rust >= 1.78`
 * `Git`
-
-### Unix
-
-On Debian-based systems, you can install the necessary dependencies using:
-
-```bash
-sudo apt install build-essential libssl-dev cmake clang git
-```
 
 ## Installation process
 ### Core OpenFHE library installation
