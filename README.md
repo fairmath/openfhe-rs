@@ -25,7 +25,7 @@ To use OpenFHE-rs, you'll need to install several dependencies and follow the in
 Ensure you have the following dependencies installed:
 
 * `CMake >= 3.5.1`
-* `GCC >= 11.4`
+* `G++ >= 11.4`
 * `Rust >= 1.78`
 * `Git`
 
@@ -44,14 +44,14 @@ cd openfhe-development
 2. Configure CMake
 
 ```bash
-cmake -B ${OPENFHE_BUILD:-build} -DBUILD_SHARED=ON .       
+cmake -B ./build -DBUILD_SHARED=ON .
 ```
 
 3. Build and install the C++ OpenFHE library
 
 ```bash
-make -C ${OPENFHE_BUILD:-build} -j$(nproc)
-make -C ${OPENFHE_BUILD:-build} install
+make -C ./build -j$(nproc)
+make -C ./build install
 ```
 
 4. Update the cache for the linker
@@ -85,9 +85,18 @@ fn main
 }
 ```
 
-### Template repository
+To build and run a complete working example, go to the [crate_usage](https://github.com/fairmath/openfhe-rs/tree/master/create_usage) directory
+(assuming that the OpenFHE library is already installed),
 
-Instead of doing it manually, you can start your project by forking our [template repository](https://github.com/fairmath/openfhe-rs-template/tree/main).
+1. Build the application
+```bash
+cargo build
+```
+
+2. Run
+```bash
+cargo run
+```
 
 # Custom crate installation from the source
 

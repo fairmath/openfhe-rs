@@ -1,0 +1,11 @@
+[package]
+name = "polynomial_evaluation"
+version = "0.1.0"
+edition = "2021"
+description = "An example of using the OpenFHE Fully Homomorphic Encryption Library Rust package."
+license = "BSD-2-Clause"
+documentation = "https://github.com/fairmath/openfhe-rs/blob/master/README.md"
+repository = "https://github.com/fairmath/openfhe-rs"
+
+[dependencies]
+openfhe = "0.1.6"
