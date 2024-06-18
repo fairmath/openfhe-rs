@@ -85,7 +85,7 @@ fn main
 }
 ```
 
-To build and run a complete working example, go to the [crate_usage](https://github.com/fairmath/openfhe-rs/tree/master/create_usage) directory
+To build and run a complete working example, go to the [crate_usage](https://github.com/fairmath/openfhe-rs/tree/master/crate_usage) directory
 (assuming that the OpenFHE library is already installed),
 
 1. Build the application
