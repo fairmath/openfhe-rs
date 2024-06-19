@@ -28,15 +28,14 @@ Our Rust wrapper is based on the original OpenFHE interface; `EvalPoly` function
 For this example, we set the multiplicative depth at 6 and the scaling mod size at 50.
 
 Running the example
--------------------
+~~~~~~~~~~~~~~~~~~~~
 
-1. Ensure the `openfhe-rs` library is installed and properly configured, see the `Installation guide <../getting-started/installation.md>`.
-2. Go to the `examples` directory and make sure that the needed example is there - `polynomial_evaluation.rs`.
-3. Compile and run the Rust file:
+1. Ensure the `openfhe-rs` library is installed and properly configured, see the :doc:`intro` section.
+2. Go to the `openfhe-rs` directory.
+3. Compile and run the `polynomial_evaluation.rs` example:
 
-   .. code-block:: sh
+.. code-block:: sh
 
-      rustc polynomial_evaluation.rs -o polynomial_evaluation
-      ./polynomial_evaluation
+    cargo run --example polynomial_evaluation
 
-   This should output the results of the homomorphic computations to the console.
+This should output the results of the homomorphic computations to the console.

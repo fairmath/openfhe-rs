@@ -21,13 +21,13 @@ Params
 
 The Params policy type stores flags and parameters for the FHE algorithms to use.
 
-There are different ways to generate a Params type instance, but the main way is to create a mutable object by calling ``GetParams%scheme_name%`` and setting the options after that. For the CKKS scheme, it will be ``GetParamsCKKSRNS``.
+There are different ways to generate a Params type instance, but the main way is to create a mutable object by calling ``GenParams%scheme_name%`` and setting the options after that. For the CKKS scheme, it will be ``GenParamsCKKSRNS``.
 
 CryptoContext
 -------------
 
 CryptoContext type, as its name stands, stores the metadata of your FHE context. You usually create its instance using one of the following functions:
 
-- By generating the CryptoContext directly - ``ffi::GenCryptoContextByParamsCKKSRNS``
-- By deserializing a CryptoContext generated somewhere else - ``ffi::DeserializeCryptoContextFromFile``
+- By generating the CryptoContext directly - ``ffi::DCRTPolyGenCryptoContextByParams%scheme_name%``
+- By deserializing a CryptoContext generated somewhere else - ``ffi::DCRTPolyDeserializeCryptoContextFromFile``
 

@@ -26,18 +26,17 @@ Our Rust wrapper is based on the original OpenFHE interface; `EvalLogistic` func
   A higher degree gives a more precise estimate but takes longer to run.
 
 Running the example
--------------------
+~~~~~~~~~~~~~~~~~~~~
 
-1. Ensure the `openfhe-rs` library is installed and properly configured, see the `Installation guide <../getting-started/installation.md>`.
-2. Go to the `examples` directory and make sure that the needed example is there - `function_evaluation.rs`.
-3. Compile and run the Rust file:
+1. Ensure the `openfhe-rs` library is installed and properly configured, see the :doc:`intro` section.
+2. Go to the `openfhe-rs` directory.
+3. Compile and run the `function_evaluation.rs` example:
 
-   .. code-block:: sh
+.. code-block:: sh
 
-      rustc function_evaluation.rs -o function_evaluation
-      ./function_evaluation
+    cargo run --example function_evaluation
 
-   This should output the results of the homomorphic computations to the console.
+This should output the results of the homomorphic computations to the console.
 
 How to choose a multiplicative depth
 -------------------------------------

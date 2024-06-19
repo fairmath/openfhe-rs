@@ -22,18 +22,9 @@ Prerequisites
 Ensure you have the following dependencies installed:
 
 - `CMake >= 3.5.1`
-- `Clang >= 12.0` or `GCC >= 11.4`
+- `G++ >= 11.4`
 - `Rust >= 1.78`
 - `Git`
-
-Unix
-~~~~
-
-On Debian-based systems, you can install the necessary dependencies using:
-
-.. code-block:: bash
-
-    sudo apt install build-essential libssl-dev cmake clang git
 
 Installation process
 ---------------------
@@ -95,10 +86,20 @@ You also need to add a small piece of code for the core dependencies' configurat
         println!("cargo::rustc-link-arg=-Wl,-rpath=/usr/local/lib");
     }
 
-Template repository
-~~~~~~~~~~~~~~~~~~~
+To build and run a complete working example, go to the `crate_usage <https://github.com/fairmath/openfhe-rs/tree/master/crate_usage>`_ directory
+(assuming that the OpenFHE library is already installed),
 
-Instead of doing it manually, you can start your project by forking our `template repository <https://github.com/fairmath/openfhe-rs-template/tree/main>`_.
+1. Build the application
+
+.. code-block:: bash
+
+    cargo build
+
+2. Run
+
+.. code-block:: bash
+
+    cargo run
 
 Custom crate installation from the source
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

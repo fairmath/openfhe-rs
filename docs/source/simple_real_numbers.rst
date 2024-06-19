@@ -6,7 +6,7 @@ Overview
 
 Homomorphic encryption allows computations on encrypted data without decrypting it. The CKKS (Cheon-Kim-Kim-Song) scheme supports approximate arithmetic operations on encrypted data, making it suitable for real number calculations.
 
-The example walks through the setup of cryptographic parameters, key generation, encryption of plaintext vectors, performing homomorphic operations, and decrypting the results. The example for this code is located in :code:`examples/simple_real_numbers.rs`.
+The example walks through the setup of cryptographic parameters, key generation, encryption of plaintext vectors, performing homomorphic operations, and decrypting the results. The example for this code is located in :code:`examples/simple_real_numbers.rs <https://github.com/fairmath/openfhe-rs/blob/master/examples/simple_real_numbers.rs>`_.
 
 Code breakdown
 --------------
@@ -18,7 +18,7 @@ We start by importing the necessary libraries and modules:
 
 .. code-block:: rust
 
-    use openfhe::cxx::{CxxVector, SharedPtr};
+    use openfhe::cxx::{CxxVector};
     use openfhe::ffi as ffi;
 
 The code example
@@ -28,7 +28,8 @@ The :code:`main` function contains the entire workflow for setting up the CKKS s
 
 .. code-block:: rust
 
-    fn main() {
+    fn main()
+    {
         // Define cryptographic parameters for CKKS
         let _mult_depth: u32 = 1;
         let _scale_mod_size: u32 = 50;
@@ -55,10 +56,10 @@ We create a crypto context based on the defined parameters and enable necessary 
 .. code-block:: rust
 
     // Create crypto context based on parameters
-    let _cc = ffi::GenCryptoContextByParamsCKKSRNS(&_cc_params_ckksrns);
-    _cc.Enable(ffi::PKESchemeFeature::PKE);
-    _cc.Enable(ffi::PKESchemeFeature::KEYSWITCH);
-    _cc.Enable(ffi::PKESchemeFeature::LEVELEDSHE);
+    let _cc = ffi::DCRTPolyGenCryptoContextByParamsCKKSRNS(&_cc_params_ckksrns);
+    _cc.EnableByFeature(ffi::PKESchemeFeature::PKE);
+    _cc.EnableByFeature(ffi::PKESchemeFeature::KEYSWITCH);
+    _cc.EnableByFeature(ffi::PKESchemeFeature::LEVELEDSHE);
 
     // Outputing the ring dimension for clarity
     println!("CKKS scheme is using ring dimension {}\n", _cc.GetRingDimension());
@@ -78,7 +79,7 @@ We generate the necessary keys for encryption, including evaluation keys for mul
     let mut _index_list = CxxVector::<i32>::new();
     _index_list.pin_mut().push(1);
     _index_list.pin_mut().push(-2);
-    _cc.EvalRotateKeyGen(&_key_pair.GetPrivateKey(), &_index_list, &ffi::GenNullPublicKey());
+    _cc.EvalRotateKeyGen(&_key_pair.GetPrivateKey(), &_index_list, &ffi::DCRTPolyGenNullPublicKey());
 
 Creating Input Vectors
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -106,8 +107,9 @@ We convert the input vectors into plaintext objects.
 .. code-block:: rust
 
     // Create plaintext objects from vectors
-    let _p_txt_1 = _cc.MakeCKKSPackedPlaintext(&_x_1, 1, 0, SharedPtr::<ffi::DCRTPolyParams>::null(), 0);
-    let _p_txt_2 = _cc.MakeCKKSPackedPlaintext(&_x_2, 1, 0, SharedPtr::<ffi::DCRTPolyParams>::null(), 0);
+    let _dcrt_poly_params = ffi::DCRTPolyGenNullParams();
+    let _p_txt_1 = _cc.MakeCKKSPackedPlaintextByVectorOfDouble(&_x_1, 1, 0, &_dcrt_poly_params, 0);
+    let _p_txt_2 = _cc.MakeCKKSPackedPlaintextByVectorOfDouble(&_x_2, 1, 0, &_dcrt_poly_params, 0);
 
     // Outputing the vectors for clarity
     println!("Input x1: {}", _p_txt_1.GetString());
@@ -181,15 +183,14 @@ Finally, we decrypt the results of the homomorphic computations and print them.
     println!("x1 rotate by -2 = {}", _result.GetString());
 
 Running the example
---------------------
+~~~~~~~~~~~~~~~~~~~~
 
-1. Ensure the `openfhe-rs` library is installed and properly configured, see the `Installation guide <../getting-started/installation.md>`_.
-2. Go to the `examples` directory and make sure that the needed example is there - `simple_real_numbers.rs`.
-3. Compile and run the Rust file:
+1. Ensure the `openfhe-rs` library is installed and properly configured, see the :doc:`intro` section.
+2. Go to the `openfhe-rs` directory.
+3. Compile and run the `simple_real_numbers.rs` example:
 
 .. code-block:: sh
 
-    rustc simple_real_numbers.rs -o simple_real_numbers
-    ./simple_real_numbers
+    cargo run --example simple_real_numbers
 
 This should output the results of the homomorphic computations to the console.

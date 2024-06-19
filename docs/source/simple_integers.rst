@@ -4,7 +4,7 @@ Homomorphic additions, multiplications, and rotations for vectors of integers vi
 Overview
 --------
 
-This Rust example demonstrates basic homomorphic encryption operations such as addition, multiplication, and rotation on vectors of integers using the BFVrns3 scheme provided by the `openfhe` library. The example walks through the setup of cryptographic parameters, key generation, encryption of plaintext vectors, performing homomorphic operations, and decrypting the results. The example for this code is located in :code:`examples/simple_integers.rs`.
+This Rust example demonstrates basic homomorphic encryption operations such as addition, multiplication, and rotation on vectors of integers using the BFVrns3 scheme provided by the `openfhe` library. The example walks through the setup of cryptographic parameters, key generation, encryption of plaintext vectors, performing homomorphic operations, and decrypting the results. The example for this code is located in :code:`examples/simple_integers.rs <https://github.com/fairmath/openfhe-rs/blob/master/examples/simple_integers.rs>`_.
 
 Code breakdown
 --------------
@@ -42,10 +42,10 @@ We create a crypto context based on the defined parameters and enable necessary 
 
 .. code-block:: rust
 
-    let _cc = ffi::GenCryptoContextByParamsBFVRNS(&_cc_params_bfvrns);
-    _cc.Enable(ffi::PKESchemeFeature::PKE);
-    _cc.Enable(ffi::PKESchemeFeature::KEYSWITCH);
-    _cc.Enable(ffi::PKESchemeFeature::LEVELEDSHE);
+    let _cc = ffi::DCRTPolyGenCryptoContextByParamsBFVRNS(&_cc_params_bfvrns);
+    _cc.EnableByFeature(ffi::PKESchemeFeature::PKE);
+    _cc.EnableByFeature(ffi::PKESchemeFeature::KEYSWITCH);
+    _cc.EnableByFeature(ffi::PKESchemeFeature::LEVELEDSHE);
 
 Key Generation
 ~~~~~~~~~~~~~~
@@ -62,7 +62,7 @@ We generate the necessary keys for encryption, including evaluation keys for mul
     _index_list.pin_mut().push(2);
     _index_list.pin_mut().push(-1);
     _index_list.pin_mut().push(-2);
-    _cc.EvalRotateKeyGen(&_key_pair.GetPrivateKey(), &_index_list, &ffi::GenNullPublicKey());
+    _cc.EvalRotateKeyGen(&_key_pair.GetPrivateKey(), &_index_list, &ffi::DCRTPolyGenNullPublicKey());
 
 Plaintext Vector Creation
 ~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -110,12 +110,11 @@ Running the example
 ~~~~~~~~~~~~~~~~~~~~
 
 1. Ensure the `openfhe-rs` library is installed and properly configured, see the :doc:`intro` section.
-2. Go to the `examples` directory and make sure that the needed example is there - `simple_integers.rs`.
-3. Compile and run the Rust file:
+2. Go to the `openfhe-rs` directory.
+3. Compile and run the `simple_integers.rs` example:
 
 .. code-block:: sh
 
-    rustc simple_integers.rs -o simple_integers
-    ./simple_integers
+    cargo run --example simple_integers
 
 This should output the results of the homomorphic computations to the console.
