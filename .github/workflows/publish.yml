@@ -1,0 +1,47 @@
+name: publish
+
+on:
+  workflow_dispatch:
+    inputs:
+      change_type:
+        description: Change type
+        type: choice
+        options:
+        - major
+        - minor
+        - patch
+        default: patch
+
+jobs:
+  publish:
+    name: publish
+    runs-on: ubuntu-latest
+    steps:
+      - run: |
+          echo "Change type: $CHANGE_TYPE"
+        env:
+          CHANGE_TYPE: ${{ inputs.change_type }} 
+
+      - name: Checkout sources
+        uses: actions/checkout@v4
+
+      - name: Install Rust toolchain
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable-gnu
+
+      - name: Changing version in Cargo.toml
+        run: |
+          chmod +x ${GITHUB_WORKSPACE}/.github/change_version.sh
+          bash ${GITHUB_WORKSPACE}/.github/change_version.sh
+
+      - name: Pushing Cargo.toml changes to master
+        run: |
+          git config --local user.name 'Hovsep Papoyan'
+          git config --local user.email 'papoyanhovsep93@gmail.com'
+          git commit -am "Automated version change in Cargo.toml"
+          git push origin master
+
+      - run: cargo publish --no-verify --dry-run --token ${CRATES_TOKEN}
+        env:
+          CRATES_TOKEN: ${{ secrets.CRATES_TOKEN }}
