@@ -8,10 +8,10 @@ version_number="${version_number#*.}"
 minor="${version_number%%.*}"
 patch="${version_number#*.}"
 
-if [ ${CHANGE_TYPE} == major ]
+if [[ ${CHANGE_TYPE} == "major" ]]
 then
   major=$((major+1))
-elif [ ${CHANGE_TYPE} == minor ]
+elif [[ ${CHANGE_TYPE} == "minor" ]]
 then
   minor=$((minor+1))
 else
