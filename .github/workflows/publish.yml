@@ -15,6 +15,8 @@ on:
 jobs:
   publish:
     name: publish
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - run: |
