@@ -18,13 +18,12 @@ jobs:
     permissions:
       contents: write
     runs-on: ubuntu-latest
-    environment: FAIR_MATH_PUBLISHER
     steps:
       - uses: actions/create-github-app-token@v1
         id: app-token
         with:
-          app-id: ${{ vars.FAIR_MATH_PUBLISHER_ID }}
-          private-key: ${{ secrets.FAIR_MATH_PUBLISHER_PRIVATE_KEY }}
+          app-id: ${{ vars.REPO_FAIR_MATH_PUBLISHER_ID }}
+          private-key: ${{ secrets.REPO_FAIR_MATH_PUBLISHER_PRIVATE_KEY }}
 
       - run: |
           echo "Change type: $CHANGE_TYPE"
@@ -53,6 +52,6 @@ jobs:
           git commit -am "Automated version change in Cargo.toml"
           git push origin master
 
-      - run: cargo publish --no-verify --dry-run --token ${CRATES_TOKEN}
+      - run: cargo publish --no-verify --dry-run --token ${REPO_CRATES_TOKEN}
         env:
-          CRATES_TOKEN: ${{ secrets.CRATES_TOKEN }}
+          REPO_CRATES_TOKEN: ${{ secrets.REPO_CRATES_TOKEN }}
