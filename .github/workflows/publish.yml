@@ -25,8 +25,6 @@ jobs:
         with:
           app-id: ${{ vars.FAIR_MATH_PUBLISHER_ID }}
           private-key: ${{ secrets.FAIR_MATH_PUBLISHER_PRIVATE_KEY }}
-          owner: ${{ github.repository_owner }}
-          repositories: "openfhe-rs"
 
       - run: |
           echo "Change type: $CHANGE_TYPE"
