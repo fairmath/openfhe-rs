@@ -53,6 +53,6 @@ jobs:
           git commit -am "Automated version change in Cargo.toml"
           git push origin master
 
-      - run: cargo publish --no-verify --dry-run --token ${CRATES_TOKEN}
+      - run: cargo publish --no-verify --token ${CRATES_TOKEN}
         env:
           CRATES_TOKEN: ${{ secrets.CRATES_TOKEN }}
