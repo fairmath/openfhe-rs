@@ -50,7 +50,7 @@ jobs:
         run: |
           git config --local user.name 'github-actions'
           git config --local user.email 'github-actions@github.com'
-          git commit -am "Automated version change in Cargo.toml"
+          git commit -am "Automated version change in Cargo.toml [skip actions]"
           git push origin master
 
       - run: cargo publish --no-verify --token ${CRATES_TOKEN}
