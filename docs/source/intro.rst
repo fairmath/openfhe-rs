@@ -132,7 +132,7 @@ You can adjust the installation process by building the crate manually. In that 
     cargo run --example function_evaluation
     cargo run --example polynomial_evaluation
     cargo run --example simple_integers
-    cargo run --example simple_real_integers
+    cargo run --example simple_real_numbers
 
 Contributing
 ============

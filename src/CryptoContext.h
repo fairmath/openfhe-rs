@@ -40,6 +40,7 @@ class Plaintext;
 class PrivateKeyDCRTPoly;
 class PublicKeyDCRTPoly;
 class SchemeBaseDCRTPoly;
+class SetOfUints;
 class UnorderedMapFromIndexToDCRTPoly;
 class VectorOfCiphertexts;
 class VectorOfDCRTPolys;
@@ -451,20 +452,18 @@ void DCRTPolyClearEvalSumKeysById(const std::string& id);
 [[nodiscard]] std::unique_ptr<MapFromStringToVectorOfEvalKeys> DCRTPolyGetCopyOfAllEvalMultKeys();
 [[nodiscard]] std::unique_ptr<MapFromStringToMapFromIndexToEvalKey>
     DCRTPolyGetCopyOfAllEvalSumKeys();
+[[nodiscard]] std::unique_ptr<MapFromIndexToEvalKey> DCRTPolyGetCopyOfEvalAutomorphismKeyMap(
+    const std::string& keyID);
 [[nodiscard]] std::unique_ptr<VectorOfEvalKeys> DCRTPolyGetCopyOfEvalMultKeyVector(
     const std::string& keyID);
 [[nodiscard]] std::unique_ptr<MapFromIndexToEvalKey> DCRTPolyGetCopyOfEvalSumKeyMap(
     const std::string& id);
-[[nodiscard]] std::unique_ptr<MapFromIndexToEvalKey> DCRTPolyGetEvalAutomorphismKeyMap(
-    const std::string& keyID);
-[[nodiscard]] std::unique_ptr<MapFromIndexToEvalKey> DCRTPolyGetEvalAutomorphismKeyMapPtr(
-    const std::string& keyID);
-[[nodiscard]] std::unique_ptr<std::vector<uint32_t>> DCRTPolyGetExistingEvalAutomorphismKeyIndices(
+[[nodiscard]] std::unique_ptr<SetOfUints> DCRTPolyGetExistingEvalAutomorphismKeyIndices(
     const std::string& keyTag);
 [[nodiscard]] std::unique_ptr<Plaintext> DCRTPolyGetPlaintextForDecrypt(
     const PlaintextEncodings pte, const DCRTPolyParams& evp, const EncodingParams& ep);
-[[nodiscard]] std::unique_ptr<std::vector<uint32_t>> DCRTPolyGetUniqueValues(
-    const std::vector<uint32_t>& oldValues, const std::vector<uint32_t>& newValues);
+[[nodiscard]] std::unique_ptr<SetOfUints> DCRTPolyGetUniqueValues(
+    const SetOfUints& oldValues, const SetOfUints& newValues);
 void DCRTPolyInsertEvalAutomorphismKey(const MapFromIndexToEvalKey& evalKeyMap,
     const std::string& keyTag /* "" */);
 void DCRTPolyInsertEvalMultKey(const VectorOfEvalKeys& evalKeyVec);

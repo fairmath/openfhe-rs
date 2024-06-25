@@ -98,7 +98,6 @@ pub mod ffi
         INDCPA,
         FIXED_NOISE_HRA,
         NOISE_FLOODING_HRA,
-        DIVIDE_AND_ROUND_HRA,
     }
 
     #[repr(i32)]
@@ -215,6 +214,7 @@ pub mod ffi
         type PrivateKeyDCRTPoly;
         type PublicKeyDCRTPoly;
         type SchemeBaseDCRTPoly;
+        type SetOfUints;
         type UnorderedMapFromIndexToDCRTPoly;
         type VectorOfCiphertexts;
         type VectorOfDCRTPolys;
@@ -693,18 +693,16 @@ pub mod ffi
             -> UniquePtr<MapFromStringToMapFromIndexToEvalKey>;
         fn DCRTPolyGetCopyOfAllEvalMultKeys() -> UniquePtr<MapFromStringToVectorOfEvalKeys>;
         fn DCRTPolyGetCopyOfAllEvalSumKeys() -> UniquePtr<MapFromStringToMapFromIndexToEvalKey>;
+        fn DCRTPolyGetCopyOfEvalAutomorphismKeyMap(keyID: &CxxString)
+                                                   -> UniquePtr<MapFromIndexToEvalKey>;
         fn DCRTPolyGetCopyOfEvalMultKeyVector(keyID: &CxxString) -> UniquePtr<VectorOfEvalKeys>;
         fn DCRTPolyGetCopyOfEvalSumKeyMap(id: &CxxString) -> UniquePtr<MapFromIndexToEvalKey>;
-        fn DCRTPolyGetEvalAutomorphismKeyMap(keyID: &CxxString)
-                                             -> UniquePtr<MapFromIndexToEvalKey>;
-        fn DCRTPolyGetEvalAutomorphismKeyMapPtr(keyID: &CxxString)
-                                                -> UniquePtr<MapFromIndexToEvalKey>;
         fn DCRTPolyGetExistingEvalAutomorphismKeyIndices(keyTag: &CxxString)
-                                                         -> UniquePtr<CxxVector<u32>>;
+                                                         -> UniquePtr<SetOfUints>;
         fn DCRTPolyGetPlaintextForDecrypt(pte: PlaintextEncodings, evp: &DCRTPolyParams,
                                           ep: &EncodingParams) -> UniquePtr<Plaintext>;
-        fn DCRTPolyGetUniqueValues(oldValues: &CxxVector<u32>, newValues: &CxxVector<u32>)
-                                   -> UniquePtr<CxxVector<u32>>;
+        fn DCRTPolyGetUniqueValues(oldValues: &SetOfUints, newValues: &SetOfUints)
+                                   -> UniquePtr<SetOfUints>;
         fn DCRTPolyInsertEvalAutomorphismKey(evalKeyMap: &MapFromIndexToEvalKey,
                                              keyTag: /* "" */ &CxxString);
         fn DCRTPolyInsertEvalMultKey(evalKeyVec: &VectorOfEvalKeys);
@@ -750,7 +748,6 @@ pub mod ffi
         fn GetKeySwitchCount(self: &Params) -> u32;
         fn GetKeySwitchTechnique(self: &Params) -> KeySwitchTechnique;
         fn GetMaxRelinSkDeg(self: &Params) -> u32;
-        fn GetMultiHopModSize(self: &Params) -> u32;
         fn GetMultipartyMode(self: &Params) -> MultipartyMode;
         fn GetMultiplicationTechnique(self: &Params) -> MultiplicationTechnique;
         fn GetMultiplicativeDepth(self: &Params) -> u32;
@@ -783,7 +780,6 @@ pub mod ffi
         fn SetKeySwitchCount(self: Pin<&mut Params>, keySwitchCount0: u32);
         fn SetKeySwitchTechnique(self: Pin<&mut Params>, ksTech0: KeySwitchTechnique);
         fn SetMaxRelinSkDeg(self: Pin<&mut Params>, maxRelinSkDeg0: u32);
-        fn SetMultiHopModSize(self: Pin<&mut Params>, multiHopModSize0: u32);
         fn SetMultipartyMode(self: Pin<&mut Params>, multipartyMode0: MultipartyMode);
         fn SetMultiplicationTechnique(self: Pin<&mut Params>,
                                       multiplicationTechnique0: MultiplicationTechnique);
@@ -822,7 +818,6 @@ pub mod ffi
         fn GetKeySwitchCount(self: &ParamsBFVRNS) -> u32;
         fn GetKeySwitchTechnique(self: &ParamsBFVRNS) -> KeySwitchTechnique;
         fn GetMaxRelinSkDeg(self: &ParamsBFVRNS) -> u32;
-        fn GetMultiHopModSize(self: &ParamsBFVRNS) -> u32;
         fn GetMultipartyMode(self: &ParamsBFVRNS) -> MultipartyMode;
         fn GetMultiplicationTechnique(self: &ParamsBFVRNS) -> MultiplicationTechnique;
         fn GetMultiplicativeDepth(self: &ParamsBFVRNS) -> u32;
@@ -855,7 +850,6 @@ pub mod ffi
         fn SetKeySwitchCount(self: Pin<&mut ParamsBFVRNS>, keySwitchCount0: u32);
         fn SetKeySwitchTechnique(self: Pin<&mut ParamsBFVRNS>, ksTech0: KeySwitchTechnique);
         fn SetMaxRelinSkDeg(self: Pin<&mut ParamsBFVRNS>, maxRelinSkDeg0: u32);
-        fn SetMultiHopModSize(self: Pin<&mut ParamsBFVRNS>, multiHopModSize0: u32);
         fn SetMultipartyMode(self: Pin<&mut ParamsBFVRNS>, multipartyMode0: MultipartyMode);
         fn SetMultiplicationTechnique(self: Pin<&mut ParamsBFVRNS>,
                                       multiplicationTechnique0: MultiplicationTechnique);
@@ -894,7 +888,6 @@ pub mod ffi
         fn GetKeySwitchCount(self: &ParamsBGVRNS) -> u32;
         fn GetKeySwitchTechnique(self: &ParamsBGVRNS) -> KeySwitchTechnique;
         fn GetMaxRelinSkDeg(self: &ParamsBGVRNS) -> u32;
-        fn GetMultiHopModSize(self: &ParamsBGVRNS) -> u32;
         fn GetMultipartyMode(self: &ParamsBGVRNS) -> MultipartyMode;
         fn GetMultiplicationTechnique(self: &ParamsBGVRNS) -> MultiplicationTechnique;
         fn GetMultiplicativeDepth(self: &ParamsBGVRNS) -> u32;
@@ -927,7 +920,6 @@ pub mod ffi
         fn SetKeySwitchCount(self: Pin<&mut ParamsBGVRNS>, keySwitchCount0: u32);
         fn SetKeySwitchTechnique(self: Pin<&mut ParamsBGVRNS>, ksTech0: KeySwitchTechnique);
         fn SetMaxRelinSkDeg(self: Pin<&mut ParamsBGVRNS>, maxRelinSkDeg0: u32);
-        fn SetMultiHopModSize(self: Pin<&mut ParamsBGVRNS>, multiHopModSize0: u32);
         fn SetMultipartyMode(self: Pin<&mut ParamsBGVRNS>, multipartyMode0: MultipartyMode);
         fn SetMultiplicationTechnique(self: Pin<&mut ParamsBGVRNS>,
                                       multiplicationTechnique0: MultiplicationTechnique);
@@ -966,7 +958,6 @@ pub mod ffi
         fn GetKeySwitchCount(self: &ParamsCKKSRNS) -> u32;
         fn GetKeySwitchTechnique(self: &ParamsCKKSRNS) -> KeySwitchTechnique;
         fn GetMaxRelinSkDeg(self: &ParamsCKKSRNS) -> u32;
-        fn GetMultiHopModSize(self: &ParamsCKKSRNS) -> u32;
         fn GetMultipartyMode(self: &ParamsCKKSRNS) -> MultipartyMode;
         fn GetMultiplicationTechnique(self: &ParamsCKKSRNS) -> MultiplicationTechnique;
         fn GetMultiplicativeDepth(self: &ParamsCKKSRNS) -> u32;
@@ -999,7 +990,6 @@ pub mod ffi
         fn SetKeySwitchCount(self: Pin<&mut ParamsCKKSRNS>, keySwitchCount0: u32);
         fn SetKeySwitchTechnique(self: Pin<&mut ParamsCKKSRNS>, ksTech0: KeySwitchTechnique);
         fn SetMaxRelinSkDeg(self: Pin<&mut ParamsCKKSRNS>, maxRelinSkDeg0: u32);
-        fn SetMultiHopModSize(self: Pin<&mut ParamsCKKSRNS>, multiHopModSize0: u32);
         fn SetMultipartyMode(self: Pin<&mut ParamsCKKSRNS>, multipartyMode0: MultipartyMode);
         fn SetMultiplicationTechnique(self: Pin<&mut ParamsCKKSRNS>,
                                       multiplicationTechnique0: MultiplicationTechnique);
