@@ -4,6 +4,7 @@
 #include "openfhe/pke/key/evalkey-fwd.h"
 
 #include <map>
+#include <set>
 #include <unordered_map>
 
 // cxx currently does not support std::unordered_map and std::map
@@ -42,6 +43,14 @@ public:
     explicit MapFromStringToVectorOfEvalKeys(
         std::map<std::string, std::vector<std::shared_ptr<EvalKeyImpl>>>
         stringToVectorOfEvalKeysMap);
+};
+
+class SetOfUints final
+{
+    std::set<uint32_t> m_uintsSet;
+public:
+    explicit SetOfUints(std::set<uint32_t>&& uintsSet) noexcept;
+    [[nodiscard]] const std::set<uint32_t>& GetRef() const noexcept;
 };
 
 class UnorderedMapFromIndexToDCRTPoly final

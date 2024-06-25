@@ -14,6 +14,24 @@ const std::shared_ptr<std::map<uint32_t, std::shared_ptr<EvalKeyImpl>>>&
     return m_sharedPtrToindexToEvalKeyDCRTPolyMap;
 }
 
+MapFromStringToMapFromIndexToEvalKey::MapFromStringToMapFromIndexToEvalKey(
+    std::map<std::string, std::shared_ptr<std::map<uint32_t, std::shared_ptr<EvalKeyImpl>>>>
+    stringToMapFromIndexToEvalKeyMap)
+    : m_stringToMapFromIndexToEvalKeyMap(std::move(stringToMapFromIndexToEvalKeyMap))
+{ }
+MapFromStringToVectorOfEvalKeys::MapFromStringToVectorOfEvalKeys(
+    std::map<std::string, std::vector<std::shared_ptr<EvalKeyImpl>>> stringToVectorOfEvalKeysMap)
+    : m_stringToVectorOfEvalKeysMap(std::move(stringToVectorOfEvalKeysMap))
+{ }
+
+SetOfUints::SetOfUints(std::set<uint32_t>&& uintsSet) noexcept
+    : m_uintsSet(std::move(uintsSet))
+{ }
+const std::set<uint32_t>& SetOfUints::GetRef() const noexcept
+{
+    return m_uintsSet;
+}
+
 UnorderedMapFromIndexToDCRTPoly::UnorderedMapFromIndexToDCRTPoly(
     std::unordered_map<uint32_t, lbcrypto::DCRTPoly>&& indexToDCRTPolyUnorderedMap) noexcept
     : m_indexToDCRTPolyUnorderedMap(std::move(indexToDCRTPolyUnorderedMap))
@@ -23,16 +41,5 @@ std::unordered_map<uint32_t, lbcrypto::DCRTPoly>&
 {
     return m_indexToDCRTPolyUnorderedMap;
 }
-
-MapFromStringToMapFromIndexToEvalKey::MapFromStringToMapFromIndexToEvalKey(
-    std::map<std::string, std::shared_ptr<std::map<uint32_t, std::shared_ptr<EvalKeyImpl>>>>
-    stringToMapFromIndexToEvalKeyMap)
-    : m_stringToMapFromIndexToEvalKeyMap(std::move(stringToMapFromIndexToEvalKeyMap))
-{ }
-
-MapFromStringToVectorOfEvalKeys::MapFromStringToVectorOfEvalKeys(
-    std::map<std::string, std::vector<std::shared_ptr<EvalKeyImpl>>> stringToVectorOfEvalKeysMap)
-    : m_stringToVectorOfEvalKeysMap(std::move(stringToVectorOfEvalKeysMap))
-{ }
 
 } // openfhe
