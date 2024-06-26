@@ -26,11 +26,6 @@ jobs:
           app-id: ${{ vars.FAIR_MATH_PUBLISHER_ID }}
           private-key: ${{ secrets.FAIR_MATH_PUBLISHER_PRIVATE_KEY }}
 
-      - run: |
-          echo "Change type: $CHANGE_TYPE"
-        env:
-          CHANGE_TYPE: ${{ inputs.change_type }} 
-
       - name: Checkout sources
         uses: actions/checkout@v4
         with:
@@ -45,6 +40,8 @@ jobs:
         run: |
           chmod +x ${GITHUB_WORKSPACE}/.github/change_version.sh
           bash ${GITHUB_WORKSPACE}/.github/change_version.sh
+        env:
+          CHANGE_TYPE: ${{ inputs.change_type }}
 
       - name: Pushing Cargo.toml changes to master
         run: |
