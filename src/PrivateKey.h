@@ -22,4 +22,6 @@ public:
     [[nodiscard]] std::shared_ptr<PrivateKeyImpl>& GetRef() noexcept;
 };
 
+[[nodiscard]] std::unique_ptr<PrivateKeyDCRTPoly> DCRTPolyGenNullPrivateKey();
+
 } // openfhe

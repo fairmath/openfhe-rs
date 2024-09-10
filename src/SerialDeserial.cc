@@ -5,6 +5,7 @@
 #include "Ciphertext.h"
 #include "CryptoContext.h"
 #include "PublicKey.h"
+#include "PrivateKey.h"
 
 namespace openfhe
 {
@@ -235,6 +236,18 @@ bool DCRTPolySerializePublicKeyToFile(const std::string& publicKeyLocation,
     const PublicKeyDCRTPoly& publicKey, const SerialMode serialMode)
 {
     return Serial(publicKeyLocation, publicKey, serialMode);
+}
+
+bool DCRTPolyDeserializePrivateKeyFromFile(const std::string& privateKeyLocation,
+    PrivateKeyDCRTPoly& privateKey, const SerialMode serialMode)
+{
+    return Deserial(privateKeyLocation, privateKey, serialMode);
+}
+
+bool DCRTPolySerializePrivateKeyToFile(const std::string& privateKeyLocation,
+    const PrivateKeyDCRTPoly& privateKey, const SerialMode serialMode)
+{
+    return Serial(privateKeyLocation, privateKey, serialMode);
 }
 
 } // openfhe

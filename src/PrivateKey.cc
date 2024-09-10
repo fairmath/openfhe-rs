@@ -17,4 +17,8 @@ std::shared_ptr<PrivateKeyImpl>& PrivateKeyDCRTPoly::GetRef() noexcept
     return m_privateKey;
 }
 
+std::unique_ptr<PrivateKeyDCRTPoly> DCRTPolyGenNullPrivateKey()
+{
+    return std::make_unique<PrivateKeyDCRTPoly>();
+
 } // openfhe
