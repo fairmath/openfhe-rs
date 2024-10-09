@@ -12,6 +12,7 @@ class PrivateKeyDCRTPoly final
 {
     std::shared_ptr<PrivateKeyImpl> m_privateKey;
 public:
+    PrivateKeyDCRTPoly() = default;
     PrivateKeyDCRTPoly(const std::shared_ptr<PrivateKeyImpl>& privateKey) noexcept;
     PrivateKeyDCRTPoly(const PrivateKeyDCRTPoly&) = delete;
     PrivateKeyDCRTPoly(PrivateKeyDCRTPoly&&) = delete;
@@ -21,5 +22,7 @@ public:
     [[nodiscard]] const std::shared_ptr<PrivateKeyImpl>& GetRef() const noexcept;
     [[nodiscard]] std::shared_ptr<PrivateKeyImpl>& GetRef() noexcept;
 };
+
+[[nodiscard]] std::unique_ptr<PrivateKeyDCRTPoly> DCRTPolyGenNullPrivateKey();
 
 } // openfhe

@@ -9,6 +9,7 @@ namespace openfhe
 
 class CiphertextDCRTPoly;
 class CryptoContextDCRTPoly;
+class PrivateKeyDCRTPoly;
 class PublicKeyDCRTPoly;
 
 // Ciphertext
@@ -54,5 +55,10 @@ class PublicKeyDCRTPoly;
     PublicKeyDCRTPoly& publicKey, const SerialMode serialMode);
 [[nodiscard]] bool DCRTPolySerializePublicKeyToFile(const std::string& publicKeyLocation,
     const PublicKeyDCRTPoly& publicKey, const SerialMode serialMode);
+
+[[nodiscard]] bool DCRTPolyDeserializePrivateKeyFromFile(const std::string& privateKeyLocation,
+    PrivateKeyDCRTPoly& privateKey, const SerialMode serialMode);
+[[nodiscard]] bool DCRTPolySerializePrivateKeyToFile(const std::string& privateKeyLocation,
+    const PrivateKeyDCRTPoly& cryptoContext, const SerialMode serialMode);
 
 } // openfhe
