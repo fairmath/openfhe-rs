@@ -1,9 +1,12 @@
 #pragma once
 
+#include "openfhe/core/utils/exception.h"
 #include "openfhe/pke/scheme/gen-cryptocontext-params.h"
 #include "openfhe/pke/scheme/bfvrns/gen-cryptocontext-bfvrns-params.h"
 #include "openfhe/pke/scheme/bgvrns/gen-cryptocontext-bgvrns-params.h"
 #include "openfhe/pke/scheme/ckksrns/gen-cryptocontext-ckksrns-params.h"
+
+#include <memory>
 
 namespace openfhe
 {

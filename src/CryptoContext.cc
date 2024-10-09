@@ -1,5 +1,6 @@
 #include "CryptoContext.h"
 
+#include "openfhe/pke/cryptocontext.h"
 #include "openfhe/pke/gen-cryptocontext.h"
 #include "openfhe/pke/scheme/bfvrns/gen-cryptocontext-bfvrns.h"
 #include "openfhe/pke/scheme/bgvrns/gen-cryptocontext-bgvrns.h"
