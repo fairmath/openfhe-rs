@@ -1056,6 +1056,13 @@ pub mod ffi
         fn DCRTPolyGenNullPublicKey() -> UniquePtr<PublicKeyDCRTPoly>;
     }
 
+    // PrivateKeyDCRTPoly
+    unsafe extern "C++"
+    {
+        // Generator functions
+        fn DCRTPolyGenNullPrivateKey() -> UniquePtr<PrivateKeyDCRTPoly>;
+    }
+
     // Serialize / Deserialize
     unsafe extern "C++"
     {
@@ -1110,6 +1117,14 @@ pub mod ffi
         fn DCRTPolySerializePublicKeyToFile(publicKeyLocation: &CxxString,
                                             publicKey: &PublicKeyDCRTPoly,
                                             serialMode: SerialMode) -> bool;
+
+        // PrivateKey
+        fn DCRTPolyDeserializePrivateKeyFromFile(privateKeyLocation: &CxxString,
+                                                 privateKey: Pin<&mut PrivateKeyDCRTPoly>,
+                                                 serialMode: SerialMode) -> bool;
+        fn DCRTPolySerializePrivateKeyToFile(privateKeyLocation: &CxxString,
+                                             privateKey: &PrivateKeyDCRTPoly,
+                                             serialMode: SerialMode) -> bool;
     }
 }
 
