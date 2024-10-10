@@ -1,6 +1,6 @@
 [package]
 name = "openfhe"
-version = "0.2.0"
+version = "0.3.0"
 edition = "2021"
 description = "Rust package of the OpenFHE Fully Homomorphic Encryption Library."
 license = "BSD-2-Clause"
