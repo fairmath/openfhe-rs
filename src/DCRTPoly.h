@@ -32,5 +32,6 @@ public:
 
 // Generator functions
 [[nodiscard]] std::unique_ptr<DCRTPolyParams> DCRTPolyGenNullParams();
-
+[[nodiscard]] std::unique_ptr<DCRTPolyParams> DCRTPolyGenParamsByOrderSizeBits(
+    const uint32_t order, const uint32_t size, const uint32_t bits);
 } // openfhe

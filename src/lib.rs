@@ -724,6 +724,7 @@ pub mod ffi
     {
         // Generator functions
         fn DCRTPolyGenNullParams() -> UniquePtr<DCRTPolyParams>;
+        fn DCRTPolyGenParamsByOrderSizeBits(order: u32, size: u32, bits: u32) -> UniquePtr<DCRTPolyParams>;
     }
 
     // KeyPairDCRTPoly
