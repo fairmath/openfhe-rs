@@ -1459,6 +1459,12 @@ pub mod ffi {
     unsafe extern "C++" {
         fn GetMatrixR(self: &RLWETrapdoorPairDRCTPoly) -> UniquePtr<MatrixDCRTPoly>;
         fn GetMatrixE(self: &RLWETrapdoorPairDRCTPoly) -> UniquePtr<MatrixDCRTPoly>;
+        fn DCRTPolyTrapdoorGen(
+            params: &DCRTPolyParams,
+            stddev: f64,
+            base: i64,
+            balanced: bool,
+        ) -> UniquePtr<RLWETrapdoorPairDRCTPoly>;
     }
 
     // Serialize / Deserialize
