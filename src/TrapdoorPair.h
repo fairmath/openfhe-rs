@@ -6,12 +6,7 @@
 namespace openfhe
 {
 
-// class PrivateKeyDCRTPoly;
-// class PublicKeyDCRTPoly;
-
 using RLWETrapdoorPair = lbcrypto::RLWETrapdoorPair<lbcrypto::DCRTPoly>;
-// using PrivateKeyImpl = lbcrypto::PrivateKeyImpl<lbcrypto::DCRTPoly>;
-// using PublicKeyImpl = lbcrypto::PublicKeyImpl<lbcrypto::DCRTPoly>;
 
 class RLWETrapdoorPairDRCTPoly final
 {
@@ -22,9 +17,6 @@ public:
     RLWETrapdoorPairDRCTPoly(RLWETrapdoorPairDRCTPoly&&) = delete;
     RLWETrapdoorPairDRCTPoly& operator=(const RLWETrapdoorPairDRCTPoly&) = delete;
     RLWETrapdoorPairDRCTPoly& operator=(RLWETrapdoorPairDRCTPoly&&) = delete;
-
-    // [[nodiscard]] std::unique_ptr<Matrix<DCRTPoly>> GetMatrixR() const;
-    // [[nodiscard]] std::unique_ptr<Matrix<DCRTPoly>> GetMatrixE() const;
 };
 
 } // openfhe

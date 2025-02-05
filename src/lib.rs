@@ -155,6 +155,7 @@ pub mod ffi {
         include!("openfhe/src/SequenceContainers.h");
         include!("openfhe/src/SerialDeserial.h");
         include!("openfhe/src/TrapdoorPair.h");
+        include!("openfhe/src/Matrix.h");
 
         // enums
         type COMPRESSION_LEVEL;
@@ -205,6 +206,7 @@ pub mod ffi {
         type VectorOfPrivateKeys;
         type VectorOfVectorOfCiphertexts;
         type RLWETrapdoorPairDRCTPoly;
+        type MatrixDCRTPoly;
     }
 
     // CiphertextDCRTPoly
