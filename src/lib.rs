@@ -156,6 +156,7 @@ pub mod ffi {
         include!("openfhe/src/SequenceContainers.h");
         include!("openfhe/src/SerialDeserial.h");
         include!("openfhe/src/TrapdoorPair.h");
+        include!("openfhe/src/ILDCRTParams.h");
 
         // enums
         type COMPRESSION_LEVEL;
@@ -207,6 +208,7 @@ pub mod ffi {
         type VectorOfVectorOfCiphertexts;
         type RLWETrapdoorPairDRCTPoly;
         type MatrixDCRTPoly;
+        type ILDCRTParamsWrap;
     }
 
     // CiphertextDCRTPoly
@@ -1086,11 +1088,15 @@ pub mod ffi {
     unsafe extern "C++" {
         // Generator functions
         fn DCRTPolyGenNullParams() -> UniquePtr<DCRTPolyParams>;
-        fn DCRTPolyGenParamsByOrderSizeBits(
+    }
+
+    // ILDCRTParamsWrap
+    unsafe extern "C++" {
+        fn GenILDCRTParamsByOrderSizeBits(
             order: u32,
             size: u32,
             bits: u32,
-        ) -> UniquePtr<DCRTPolyParams>;
+        ) -> UniquePtr<ILDCRTParamsWrap>;
     }
 
     // KeyPairDCRTPoly
@@ -1460,7 +1466,7 @@ pub mod ffi {
         fn GetMatrixR(self: &RLWETrapdoorPairDRCTPoly) -> UniquePtr<MatrixDCRTPoly>;
         fn GetMatrixE(self: &RLWETrapdoorPairDRCTPoly) -> UniquePtr<MatrixDCRTPoly>;
         fn DCRTPolyTrapdoorGen(
-            params: &DCRTPolyParams,
+            params: &ILDCRTParamsWrap,
             stddev: f64,
             base: i64,
             balanced: bool,

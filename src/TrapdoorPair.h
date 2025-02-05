@@ -4,7 +4,7 @@
 #include "openfhe/core/lattice/trapdoor.h"
 #include "Matrix.h"
 #include "DCRTPoly.h"
-
+#include "ILDCRTParams.h"
 namespace openfhe
 {
 
@@ -28,7 +28,7 @@ public:
 };
 
 [[nodiscard]] std::unique_ptr<RLWETrapdoorPairDRCTPoly> DCRTPolyTrapdoorGen(
-    const DCRTPolyParams& params,
+    const ILDCRTParamsWrap& params,
     double stddev,
     int64_t base = 2,
     bool balanced = false);

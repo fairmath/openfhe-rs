@@ -8,6 +8,7 @@ fn main() {
         .file("src/DecryptResult.cc")
         .file("src/EncodingParams.cc")
         .file("src/EvalKey.cc")
+        .file("src/ILDCRTParams.cc")
         .file("src/KeyPair.cc")
         .file("src/LWEPrivateKey.cc")
         .file("src/Matrix.cc")

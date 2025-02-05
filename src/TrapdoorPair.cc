@@ -17,7 +17,7 @@ std::unique_ptr<MatrixDCRTPoly> RLWETrapdoorPairDRCTPoly::GetMatrixE() const
 }
 
 std::unique_ptr<RLWETrapdoorPairDRCTPoly> DCRTPolyTrapdoorGen(
-    const DCRTPolyParams& params,
+    const ILDCRTParamsWrap& params,
     double stddev,
     int64_t base,
     bool balanced)
