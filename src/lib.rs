@@ -147,6 +147,7 @@ pub mod ffi {
         include!("openfhe/src/EvalKey.h");
         include!("openfhe/src/KeyPair.h");
         include!("openfhe/src/LWEPrivateKey.h");
+        include!("openfhe/src/Matrix.h");
         include!("openfhe/src/Params.h");
         include!("openfhe/src/Plaintext.h");
         include!("openfhe/src/PrivateKey.h");
@@ -155,7 +156,6 @@ pub mod ffi {
         include!("openfhe/src/SequenceContainers.h");
         include!("openfhe/src/SerialDeserial.h");
         include!("openfhe/src/TrapdoorPair.h");
-        include!("openfhe/src/Matrix.h");
 
         // enums
         type COMPRESSION_LEVEL;
@@ -1453,6 +1453,12 @@ pub mod ffi {
     unsafe extern "C++" {
         // Generator functions
         fn DCRTPolyGenNullPrivateKey() -> UniquePtr<PrivateKeyDCRTPoly>;
+    }
+
+    // TrapdoorPairDRCTPoly
+    unsafe extern "C++" {
+        fn GetMatrixR(self: &RLWETrapdoorPairDRCTPoly) -> UniquePtr<MatrixDCRTPoly>;
+        fn GetMatrixE(self: &RLWETrapdoorPairDRCTPoly) -> UniquePtr<MatrixDCRTPoly>;
     }
 
     // Serialize / Deserialize

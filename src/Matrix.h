@@ -13,6 +13,7 @@ class MatrixDCRTPoly final
     Matrix m_matrix;
 public:
     MatrixDCRTPoly(Matrix&& matrix) noexcept;
+    MatrixDCRTPoly(const Matrix& matrix);
     MatrixDCRTPoly(const MatrixDCRTPoly&) = delete;
     MatrixDCRTPoly(MatrixDCRTPoly&&) = delete;
     MatrixDCRTPoly& operator=(const MatrixDCRTPoly&) = delete;
