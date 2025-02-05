@@ -3,8 +3,8 @@
 namespace openfhe
 {
 
-MatrixDCRTPoly::MatrixDCRTPoly(Matrix&& matrix) noexcept
-    : m_matrix(std::move(matrix))
+MatrixDCRTPoly::MatrixDCRTPoly(const Matrix& matrix)
+    : m_matrix(matrix)
 { }
 
 } // openfhe 
