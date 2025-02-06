@@ -17,5 +17,8 @@ public:
     MatrixDCRTPoly(MatrixDCRTPoly&&) = delete;
     MatrixDCRTPoly& operator=(const MatrixDCRTPoly&) = delete;
     MatrixDCRTPoly& operator=(MatrixDCRTPoly&&) = delete;
+    
+    [[nodiscard]] size_t GetRows() const noexcept;
+    [[nodiscard]] size_t GetCols() const noexcept;
 };
 } // openfhe
