@@ -1,0 +1,6 @@
+{
+    "files.associations": {
+        "*.mpc": "python",
+        "*.rs": "cpp"
+    }
+}

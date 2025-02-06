@@ -144,6 +144,7 @@ pub mod ffi {
         include!("openfhe/src/DCRTPoly.h");
         include!("openfhe/src/DecryptResult.h");
         include!("openfhe/src/DiscreteUniformGenerator.h");
+        include!("openfhe/src/DiscreteGaussianGenerator.h");
         include!("openfhe/src/EncodingParams.h");
         include!("openfhe/src/EvalKey.h");
         include!("openfhe/src/KeyPair.h");
@@ -185,6 +186,7 @@ pub mod ffi {
         type DCRTPolyParams;
         type DecryptResult;
         type DiscreteUniformGeneratorDCRTPoly;
+        type DiscreteGaussianGeneratorDCRTPoly;
         type EncodingParams;
         type EvalKeyDCRTPoly;
         type ILDCRTParamsWrap;
@@ -1096,6 +1098,13 @@ pub mod ffi {
     // DiscreteUniformGeneratorDCRTPoly
     unsafe extern "C++" {
         fn GenNullDiscreteUniformGenerator() -> UniquePtr<DiscreteUniformGeneratorDCRTPoly>;
+    }
+
+    // DiscreteGaussianGeneratorDCRTPoly
+    unsafe extern "C++" {
+        fn GenDiscreteGaussianGenerator(
+            stddev: f64,
+        ) -> UniquePtr<DiscreteGaussianGeneratorDCRTPoly>;
     }
 
     // ILDCRTParamsWrap

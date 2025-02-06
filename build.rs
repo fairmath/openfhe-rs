@@ -7,6 +7,7 @@ fn main() {
         .file("src/DCRTPoly.cc")
         .file("src/DecryptResult.cc")
         .file("src/DiscreteUniformGenerator.cc")
+        .file("src/DiscreteGaussianGenerator.cc")
         .file("src/EncodingParams.cc")
         .file("src/EvalKey.cc")
         .file("src/ILDCRTParams.cc")

@@ -23,5 +23,6 @@ fn main() {
         matrix_e.GetCols()
     );
 
-    let dug = ffi::GenNullDiscreteUniformGenerator();
+    let _dug = ffi::GenNullDiscreteUniformGenerator();
+    let _dgg = ffi::GenDiscreteGaussianGenerator(4.57825);
 }
