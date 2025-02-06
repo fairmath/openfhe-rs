@@ -185,11 +185,13 @@ pub mod ffi {
         type DecryptResult;
         type EncodingParams;
         type EvalKeyDCRTPoly;
+        type ILDCRTParamsWrap;
         type KeyPairDCRTPoly;
         type LWEPrivateKey;
         type MapFromIndexToEvalKey;
         type MapFromStringToMapFromIndexToEvalKey;
         type MapFromStringToVectorOfEvalKeys;
+        type MatrixDCRTPoly;
         type Params;
         type ParamsBFVRNS;
         type ParamsBGVRNS;
@@ -207,8 +209,7 @@ pub mod ffi {
         type VectorOfPrivateKeys;
         type VectorOfVectorOfCiphertexts;
         type RLWETrapdoorPairDRCTPoly;
-        type MatrixDCRTPoly;
-        type ILDCRTParamsWrap;
+        type RLWETrapdoorResultDRCTPoly;
     }
 
     // CiphertextDCRTPoly
@@ -1467,16 +1468,24 @@ pub mod ffi {
         fn DCRTPolyGenNullPrivateKey() -> UniquePtr<PrivateKeyDCRTPoly>;
     }
 
-    // TrapdoorPairDRCTPoly
+    // RLWETrapdoorPairDRCTPoly
     unsafe extern "C++" {
         fn GetMatrixR(self: &RLWETrapdoorPairDRCTPoly) -> UniquePtr<MatrixDCRTPoly>;
         fn GetMatrixE(self: &RLWETrapdoorPairDRCTPoly) -> UniquePtr<MatrixDCRTPoly>;
+    }
+
+    // RLWETrapdoorResultDRCTPoly
+    unsafe extern "C++" {
+        fn GetUniformMatrix(self: &RLWETrapdoorResultDRCTPoly) -> UniquePtr<MatrixDCRTPoly>;
+        fn GetTrapdoorPair(
+            self: &RLWETrapdoorResultDRCTPoly,
+        ) -> UniquePtr<RLWETrapdoorPairDRCTPoly>;
         fn DCRTPolyTrapdoorGen(
             params: &ILDCRTParamsWrap,
             stddev: f64,
             base: i64,
             balanced: bool,
-        ) -> UniquePtr<RLWETrapdoorPairDRCTPoly>;
+        ) -> UniquePtr<RLWETrapdoorResultDRCTPoly>;
     }
 
     // Serialize / Deserialize

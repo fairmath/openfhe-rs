@@ -27,7 +27,22 @@ public:
 
 };
 
-[[nodiscard]] std::unique_ptr<RLWETrapdoorPairDRCTPoly> DCRTPolyTrapdoorGen(
+class RLWETrapdoorResultDRCTPoly final
+{
+    Matrix m_uniformMatrix;
+    RLWETrapdoorPair m_trapdoorPair;
+public:
+    RLWETrapdoorResultDRCTPoly(Matrix&& uniformMatrix, RLWETrapdoorPair&& trapdoorPair) noexcept;
+    RLWETrapdoorResultDRCTPoly(const RLWETrapdoorResultDRCTPoly&) = delete;
+    RLWETrapdoorResultDRCTPoly(RLWETrapdoorResultDRCTPoly&&) = delete;
+    RLWETrapdoorResultDRCTPoly& operator=(const RLWETrapdoorResultDRCTPoly&) = delete;
+    RLWETrapdoorResultDRCTPoly& operator=(RLWETrapdoorResultDRCTPoly&&) = delete;
+
+    [[nodiscard]] std::unique_ptr<MatrixDCRTPoly> GetUniformMatrix() const;
+    [[nodiscard]] std::unique_ptr<RLWETrapdoorPairDRCTPoly> GetTrapdoorPair() const;
+};
+
+[[nodiscard]] std::unique_ptr<RLWETrapdoorResultDRCTPoly> DCRTPolyTrapdoorGen(
     const ILDCRTParamsWrap& params,
     double stddev,
     int64_t base = 2,
