@@ -18,6 +18,6 @@ public:
 };
 
 // Generator functions
-std::unique_ptr<DiscreteUniformGeneratorDCRTPoly> DCRTPolyGenNullDiscreteUniformGenerator();
+std::unique_ptr<DiscreteUniformGeneratorDCRTPoly> GenNullDiscreteUniformGenerator();
 
 } // openfhe 

@@ -165,7 +165,6 @@ pub mod ffi {
         type EncryptionTechnique;
         type ExecutionMode;
         type Format;
-        type DiscreteUniformGeneratorDCRTPoly;
         type KeySwitchTechnique;
         type MultipartyMode;
         type MultiplicationTechnique;
@@ -185,6 +184,7 @@ pub mod ffi {
         type DCRTPoly;
         type DCRTPolyParams;
         type DecryptResult;
+        type DiscreteUniformGeneratorDCRTPoly;
         type EncodingParams;
         type EvalKeyDCRTPoly;
         type ILDCRTParamsWrap;
@@ -1095,7 +1095,7 @@ pub mod ffi {
 
     // DiscreteUniformGeneratorDCRTPoly
     unsafe extern "C++" {
-        fn DCRTPolyGenNullDiscreteUniformGenerator() -> UniquePtr<DiscreteUniformGeneratorDCRTPoly>;
+        fn GenNullDiscreteUniformGenerator() -> UniquePtr<DiscreteUniformGeneratorDCRTPoly>;
     }
 
     // ILDCRTParamsWrap

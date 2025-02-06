@@ -23,5 +23,5 @@ fn main() {
         matrix_e.GetCols()
     );
 
-    let dug = ffi::DCRTPolyGenNullDiscreteUniformGenerator();
+    let dug = ffi::GenNullDiscreteUniformGenerator();
 }
