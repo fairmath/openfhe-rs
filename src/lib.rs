@@ -1105,6 +1105,7 @@ pub mod ffi {
         fn GetPublicKey(self: &KeyPairDCRTPoly) -> UniquePtr<PublicKeyDCRTPoly>;
     }
 
+    // MatrixDCRTPoly
     unsafe extern "C++" {
         fn GetRows(self: &MatrixDCRTPoly) -> usize;
         fn GetCols(self: &MatrixDCRTPoly) -> usize;
