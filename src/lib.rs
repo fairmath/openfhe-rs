@@ -143,6 +143,7 @@ pub mod ffi {
         include!("openfhe/src/CryptoParametersBase.h");
         include!("openfhe/src/DCRTPoly.h");
         include!("openfhe/src/DecryptResult.h");
+        include!("openfhe/src/DiscreteUniformGenerator.h");
         include!("openfhe/src/EncodingParams.h");
         include!("openfhe/src/EvalKey.h");
         include!("openfhe/src/KeyPair.h");
@@ -164,6 +165,7 @@ pub mod ffi {
         type EncryptionTechnique;
         type ExecutionMode;
         type Format;
+        type DiscreteUniformGeneratorDCRTPoly;
         type KeySwitchTechnique;
         type MultipartyMode;
         type MultiplicationTechnique;
@@ -1089,6 +1091,11 @@ pub mod ffi {
     unsafe extern "C++" {
         // Generator functions
         fn DCRTPolyGenNullParams() -> UniquePtr<DCRTPolyParams>;
+    }
+
+    // DiscreteUniformGeneratorDCRTPoly
+    unsafe extern "C++" {
+        fn DCRTPolyGenNullDiscreteUniformGenerator() -> UniquePtr<DiscreteUniformGeneratorDCRTPoly>;
     }
 
     // ILDCRTParamsWrap

@@ -6,6 +6,7 @@ fn main() {
         .file("src/CryptoParametersBase.cc")
         .file("src/DCRTPoly.cc")
         .file("src/DecryptResult.cc")
+        .file("src/DiscreteUniformGenerator.cc")
         .file("src/EncodingParams.cc")
         .file("src/EvalKey.cc")
         .file("src/ILDCRTParams.cc")

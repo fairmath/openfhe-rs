@@ -20,10 +20,4 @@ std::unique_ptr<DCRTPolyParams> DCRTPolyGenNullParams()
 {
     return std::make_unique<DCRTPolyParams>();
 }
-// std::unique_ptr<DCRTPolyParams> DCRTPolyGenParamsByOrderSizeBits(
-//     const uint32_t order, const uint32_t size, const uint32_t bits)
-// {
-//     return std::make_unique<DCRTPolyParams>(
-//         std::make_shared<lbcrypto::ILDCRTParams<lbcrypto::BigInteger>>(order, size, bits));
-// }
 } // openfhe

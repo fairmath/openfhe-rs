@@ -1,8 +1,8 @@
 use openfhe::ffi;
 
 fn main() {
-    let _params = ffi::GenILDCRTParamsByOrderSizeBits(2 * 16, 8, 51);
-    let trapdoor = ffi::DCRTPolyTrapdoorGen(&_params, 3.19, 2, false);
+    let _params = ffi::GenILDCRTParamsByOrderSizeBits(2 * 16, 4, 51);
+    let trapdoor = ffi::DCRTPolyTrapdoorGen(&_params, 4.57825, 8, false);
     let trapdoor_pair = trapdoor.GetTrapdoorPair();
     let uniform_matrix = trapdoor.GetUniformMatrix();
     let matrix_r = trapdoor_pair.GetMatrixR();
@@ -22,4 +22,6 @@ fn main() {
         matrix_e.GetRows(),
         matrix_e.GetCols()
     );
+
+    let dug = ffi::DCRTPolyGenNullDiscreteUniformGenerator();
 }
