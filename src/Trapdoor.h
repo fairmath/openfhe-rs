@@ -20,7 +20,11 @@ struct TrapdoorOutput
 // Generator functions
 [[nodiscard]] std::unique_ptr<TrapdoorOutput> DCRTPolyTrapdoorGen(
     const ILDCRTParams& params,
-    double stddev,
     int64_t base,
     bool balanced);
+
+// [[nodiscard]]
+void DCRTPolyGaussSamp(size_t n, size_t k, int64_t base);
+    
+    
 } // openfhe

@@ -1147,7 +1147,8 @@ pub mod ffi
     unsafe extern "C++"
     {   
         // Generator functions
-        fn DCRTPolyTrapdoorGen(params: &ILDCRTParams, stddev: f64, base: i64, balanced: bool) -> UniquePtr<TrapdoorOutput>;
+        fn DCRTPolyTrapdoorGen(params: &ILDCRTParams, base: i64, balanced: bool) -> UniquePtr<TrapdoorOutput>;
+        fn DCRTPolyGaussSamp(n: usize, k: usize, base: i64);
     }
 }
 
