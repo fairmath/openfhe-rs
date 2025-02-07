@@ -36,5 +36,9 @@ std::unique_ptr<ParamsCKKSRNS> GenParamsCKKSRNSbyVectorOfString(
 {
     return std::make_unique<ParamsCKKSRNS>(vals);
 }
-
+std::unique_ptr<ILDCRTParams> GenILDCRTParamsByOrderSizeBits(
+    uint32_t corder, uint32_t depth, uint32_t bits)
+{   
+    return std::make_unique<ILDCRTParams>(corder, depth, bits);
+}
 } // openfhe
