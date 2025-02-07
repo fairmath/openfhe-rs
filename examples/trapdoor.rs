@@ -9,4 +9,6 @@ fn main() {
     let params = ffi::GenILDCRTParamsByOrderSizeBits(2 * n, size, k_res);
 
     let u = ffi::DCRTPolyGenFromDug(&params);
+
+    let trapdoor = ffi::DCRTPolyTrapdoorGen(&params, 4.57825, 8, false);
 }
