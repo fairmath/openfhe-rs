@@ -197,6 +197,7 @@ pub mod ffi
         type CryptoContextDCRTPoly;
         type CryptoParametersBaseDCRTPoly;
         type DCRTPoly;
+        type DCRTPolyImpl;
         type DCRTPolyParams;
         type DecryptResult;
         type EncodingParams;
@@ -725,6 +726,12 @@ pub mod ffi
     {
         // Generator functions
         fn DCRTPolyGenNullParams() -> UniquePtr<DCRTPolyParams>;
+    }
+
+    // DCRTPolyImpl
+    unsafe extern "C++"
+    {
+        fn DCRTPolyGenFromDug(params: &ILDCRTParams) -> UniquePtr<DCRTPolyImpl>;
     }
 
     // KeyPairDCRTPoly
