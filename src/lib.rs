@@ -202,6 +202,7 @@ pub mod ffi
         type EncodingParams;
         type EvalKeyDCRTPoly;
         type KeyPairDCRTPoly;
+        type ILDCRTParams;
         type LWEPrivateKey;
         type MapFromIndexToEvalKey;
         type MapFromStringToMapFromIndexToEvalKey;
@@ -731,6 +732,12 @@ pub mod ffi
     {
         fn GetPrivateKey(self: &KeyPairDCRTPoly) -> UniquePtr<PrivateKeyDCRTPoly>;
         fn GetPublicKey(self: &KeyPairDCRTPoly) -> UniquePtr<PublicKeyDCRTPoly>;
+    }
+
+    // ILDCRTParams
+    unsafe extern "C++"
+    {
+        fn GenILDCRTParamsByOrderSizeBits(corder: u32, depth: u32, bits: u32) -> UniquePtr<ILDCRTParams>;
     }
 
     // Params
