@@ -173,6 +173,7 @@ pub mod ffi
         include!("openfhe/src/SchemeBase.h");
         include!("openfhe/src/SequenceContainers.h");
         include!("openfhe/src/SerialDeserial.h");
+        include!("openfhe/src/Trapdoor.h");
 
         // enums
         type COMPRESSION_LEVEL;
@@ -224,6 +225,7 @@ pub mod ffi
         type VectorOfLWECiphertexts;
         type VectorOfPrivateKeys;
         type VectorOfVectorOfCiphertexts;
+        type TrapdoorOutput;
     }
 
     // CiphertextDCRTPoly
@@ -1139,6 +1141,13 @@ pub mod ffi
         fn DCRTPolySerializePrivateKeyToFile(privateKeyLocation: &CxxString,
                                              privateKey: &PrivateKeyDCRTPoly,
                                              serialMode: SerialMode) -> bool;
+    }
+
+    // Trapdoor
+    unsafe extern "C++"
+    {   
+        // Generator functions
+        fn DCRTPolyTrapdoorGen(params: &ILDCRTParams, stddev: f64, base: i64, balanced: bool) -> UniquePtr<TrapdoorOutput>;
     }
 }
 

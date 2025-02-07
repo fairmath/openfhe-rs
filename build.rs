@@ -1,5 +1,4 @@
-fn main()
-{
+fn main() {
     cxx_build::bridge("src/lib.rs")
         .file("src/AssociativeContainers.cc")
         .file("src/Ciphertext.cc")
@@ -18,6 +17,7 @@ fn main()
         .file("src/SchemeBase.cc")
         .file("src/SequenceContainers.cc")
         .file("src/SerialDeserial.cc")
+        .file("src/Trapdoor.cc")
         .include("/usr/local/include/openfhe")
         .include("/usr/local/include/openfhe/third-party/include")
         .include("/usr/local/include/openfhe/core")
@@ -85,7 +85,7 @@ fn main()
 
     // linking OpenMP
     println!("cargo::rustc-link-arg=-fopenmp");
-    
+
     // necessary to avoid LD_LIBRARY_PATH
     println!("cargo::rustc-link-arg=-Wl,-rpath,/usr/local/lib");
 }
