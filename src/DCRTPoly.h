@@ -1,6 +1,9 @@
 #pragma once
 
 #include "openfhe/core/lattice/hal/lat-backend.h"
+#include "openfhe/core/lattice/hal/default/dcrtpoly.h"
+#include "openfhe/core/math/math-hal.h"
+#include "Params.h"
 
 namespace openfhe
 {
@@ -32,5 +35,10 @@ public:
 
 // Generator functions
 [[nodiscard]] std::unique_ptr<DCRTPolyParams> DCRTPolyGenNullParams();
+
+using DCRTPolyImpl = lbcrypto::DCRTPolyImpl<lbcrypto::BigVector>;
+
+// Generator functions
+[[nodiscard]] std::unique_ptr<DCRTPolyImpl> DCRTPolyGenFromDug(const ILDCRTParams& params);
 
 } // openfhe
