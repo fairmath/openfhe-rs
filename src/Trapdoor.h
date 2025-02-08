@@ -3,6 +3,7 @@
 #include "openfhe/core/lattice/hal/lat-backend.h"
 #include "openfhe/core/math/matrix.h"
 #include "openfhe/core/lattice/trapdoor.h"
+#include "DCRTPoly.h"
 
 namespace openfhe
 {
@@ -23,8 +24,6 @@ struct TrapdoorOutput
     int64_t base,
     bool balanced);
 
-// [[nodiscard]]
-void DCRTPolyGaussSamp(size_t n, size_t k, int64_t base);
-    
+[[nodiscard]] std::unique_ptr<Matrix> DCRTPolyGaussSamp(size_t n, size_t k, const TrapdoorOutput& trapdoor, const DCRTPolyImpl& u, int64_t base);
     
 } // openfhe
