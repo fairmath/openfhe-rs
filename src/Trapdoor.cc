@@ -1,5 +1,4 @@
 #include "Trapdoor.h"
-#include "DCRTPoly.h"
 #include "openfhe/core/lattice/trapdoor.h"
 #include "openfhe/core/lattice/dgsampling.h"
 
@@ -27,22 +26,25 @@ std::unique_ptr<TrapdoorOutput> DCRTPolyTrapdoorGen(
     });
 }
 
-void DCRTPolyGaussSamp(size_t n, size_t k, base)
+std::unique_ptr<Matrix> DCRTPolyGaussSamp(size_t n, size_t k, const TrapdoorOutput& trapdoor, const DCRTPolyImpl& u, int64_t base)
 {
     DCRTPolyImpl::DggType dgg(lbcrypto::SIGMA);
 
     double c = (base + 1) * lbcrypto::SIGMA;
     double s = lbcrypto::SPECTRAL_BOUND(n, k, base);
     DCRTPolyImpl::DggType dggLargeSigma(sqrt(s * s - c * c));
+
+    auto result = lbcrypto::RLWETrapdoorUtility<lbcrypto::DCRTPoly>::GaussSamp(
+        n,
+        k,
+        trapdoor.m,
+        trapdoor.tp,
+        u,
+        dgg,
+        dggLargeSigma,
+        base
+    );
+
+    return std::make_unique<Matrix>(std::move(result));
 }
-
-// [x] n
-// [x] k
-// [ ] trapPair.first
-// [ ] trapPair.second
-// [ ] u
-// [x] dgg 
-// [x] dggLargeSigma
-// [x] base
-
 } // openfhe 

@@ -209,6 +209,7 @@ pub mod ffi
         type MapFromIndexToEvalKey;
         type MapFromStringToMapFromIndexToEvalKey;
         type MapFromStringToVectorOfEvalKeys;
+        type Matrix;
         type Params;
         type ParamsBFVRNS;
         type ParamsBGVRNS;
@@ -1148,7 +1149,7 @@ pub mod ffi
     {   
         // Generator functions
         fn DCRTPolyTrapdoorGen(params: &ILDCRTParams, base: i64, balanced: bool) -> UniquePtr<TrapdoorOutput>;
-        fn DCRTPolyGaussSamp(n: usize, k: usize, base: i64);
+        fn DCRTPolyGaussSamp(n: usize, k: usize, trapdoor: &TrapdoorOutput, u: &DCRTPolyImpl, base: i64) -> UniquePtr<Matrix>;
     }
 }
 

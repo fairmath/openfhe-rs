@@ -15,5 +15,5 @@ fn main() {
 
     let k = 68; // to calculate
 
-    ffi::DCRTPolyGaussSamp(n.try_into().unwrap(), k, base);
+    let _res = ffi::DCRTPolyGaussSamp(n.try_into().unwrap(), k, &trapdoor, &u, base);
 }
